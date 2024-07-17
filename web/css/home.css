@@ -1,0 +1,159 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Jul 3, 2024, 12:03:31 PM
+    Author     : Aplal
+*/
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+
+header, footer {
+    background-color: #f8f9fa;
+    padding: 10px 0;
+}
+
+
+.card {
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    transition: box-shadow 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+.section-title {
+    color: #333;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+
+.price {
+    color: #dc3545;
+    font-size: 1.25rem;
+}
+
+
+.badge {
+    font-size: 0.875rem;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+
+.img-fluid {
+    max-width: 100%;
+    height: auto;
+}
+
+
+.book-category-card {
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    padding: 20px;
+    text-align: center;
+    transition: box-shadow 0.3s ease;
+}
+
+.book-category-card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.book-category-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #333;
+}
+
+
+.item-grid .col-xl-3, .item-grid .col-lg-4, .item-grid .col-md-6 {
+    display: flex;
+}
+
+.item-grid .card {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.item-grid .img-wrap {
+    flex-grow: 1;
+}
+
+.item-grid .info-wrap {
+    text-align: center;
+    width: 100%;
+}
+
+.item-grid .title {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #333;
+}
+
+.original-price {
+    font-size: 1rem;
+    font-weight: 700;
+}
+.category-title {
+    color: #000;
+}
+
+.banner-container {
+    width: 67%;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+    height: auto;
+}
+
+
+.banner-container img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    display: block;
+}
+
+
+.control-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 24px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border: none;
+    outline: none;
+    z-index: 1;
+}
+.next-btn {
+    right: 0;
+}
+.prev-btn {
+    left: 0;
+}
