@@ -134,4 +134,29 @@ public class AccountDao extends DBContext {
         }
         return a;
     }
+       //Lấy thông tin người dùng bằng Id
+    public Accounts getAccountByUserID(int id) {
+        String sql = "SELECT * FROM Users WHERE UserID = ?";
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setInt(1, id);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                Accounts account = new Accounts();
+                account.setUserID(rs.getInt("UserID"));
+                account.setPassword(rs.getString("Password"));
+                account.setEmail(rs.getString("Email"));
+                account.setFullName(rs.getString("FullName"));
+                account.setAddress(rs.getString("Address"));
+                account.setPhone(rs.getString("Phone"));
+                account.setRoleID(rs.getInt("RoleID"));
+                account.setCreatedAt(rs.getTimestamp("CreatedAt").toLocalDateTime());
+                account.setUpdatedAt(rs.getTimestamp("UpdatedAt").toLocalDateTime());
+                return account;
+            }
+        } catch (Exception e) {
+            System.out.println("getAccountByUserID: " + e.getMessage());
+        }
+        return null;
+    }
 }

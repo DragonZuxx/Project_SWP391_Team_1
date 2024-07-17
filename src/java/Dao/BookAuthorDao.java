@@ -19,5 +19,38 @@ public class BookAuthorDao extends DBContext {
 
     PreparedStatement stm;
     ResultSet rs;
-
+public BookAuthors getBookAuthorById(int id) {
+        BookAuthors bookauthor = null;
+        String sql = "SELECT * FROM BookAuthors WHERE BookID = ?";
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setInt(1, id);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                bookauthor = new BookAuthors();
+                bookauthor.setBookID(rs.getInt("BookID"));
+                bookauthor.setAuthorID(rs.getInt("AuthorID"));
+                bookauthor.setCreatedAt(rs.getTimestamp("CreatedAt").toLocalDateTime());
+                bookauthor.setUpdatedAt(rs.getTimestamp("UpdatedAt").toLocalDateTime());
+            }
+        } catch (SQLException e) {
+            System.out.println("getBookAuthorById: " + e.getMessage());
+        } finally {
+            try {
+                // Đóng ResultSet, PreparedStatement và kết nối sau khi sử dụng
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stm != null) {
+                    stm.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error closing database resources: " + e);
+            }
+        }
+        return bookauthor;
+    }
 }

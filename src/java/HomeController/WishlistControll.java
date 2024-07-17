@@ -22,7 +22,7 @@ import java.util.List;
  *
  * @author Admin
  */
-@WebServlet(name = "WishlistControll", urlPatterns = {"/wishlist"})
+@WebServlet(name = "WishlistControll", urlPatterns = {"/wishlisttop"})
 public class WishlistControll extends HttpServlet {
 
     /**

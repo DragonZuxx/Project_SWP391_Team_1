@@ -43,7 +43,7 @@
                             <a class="nav-link" href="listSelling">Sản phẩm bán chạy</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="wishlist">Sản phẩm được yêu thích nhất</a>
+                            <a class="nav-link" href="wishlisttop">Sản phẩm được yêu thích nhất</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="${pageContext.request.contextPath}/couponView ">Khuyến mãi</a>
