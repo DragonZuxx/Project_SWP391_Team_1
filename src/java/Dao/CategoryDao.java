@@ -56,4 +56,39 @@ public class CategoryDao extends DBContext {
         }
         return categories;
     }
+    //Lấy tên Category theo CategoryID
+    public Categories getCategoryByID(int id) {
+        Categories category = null;
+        String sql = "SELECT * FROM Categories WHERE CategoryID = ?";
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setInt(1, id);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                category = new Categories();
+                category.setCategoryID(rs.getInt("CategoryID"));
+                category.setCategoryName(rs.getString("CategoryName"));
+                category.setCreatedAt(rs.getTimestamp("CreatedAt").toLocalDateTime());
+                category.setUpdatedAt(rs.getTimestamp("UpdatedAt").toLocalDateTime());
+            }
+        } catch (SQLException e) {
+            System.out.println("getCategoryByID: " + e.getMessage());
+        } finally {
+            try {
+                // Đóng ResultSet, PreparedStatement và kết nối sau khi sử dụng
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stm != null) {
+                    stm.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error closing database resources: " + e);
+            }
+        }
+        return category;
+    }
 }
