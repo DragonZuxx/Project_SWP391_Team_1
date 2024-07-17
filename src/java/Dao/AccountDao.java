@@ -71,4 +71,67 @@ public class AccountDao extends DBContext {
         return null;
     }
    
+      public boolean updatePasswordByPassAndEmail(String currentPassword, String newPassword, String email) {
+        String query = "UPDATE Users SET Password = ? WHERE Password = ? AND Email = ?";
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, newPassword);
+            statement.setString(2, currentPassword);
+            statement.setString(3, email);
+
+            int result = statement.executeUpdate();
+
+            return result > 0;
+        } catch (SQLException e) {
+            System.out.println("updatePasswordByPassAndEmail: " + e.getMessage());
+        }
+        return false;
+    }
+      public void updateUser(String pass, String fullname, String address, String phone,
+            int userID) {
+        String sql = "UPDATE [dbo].[Users]\n"
+                + "   SET  [Password] = ?\n"
+                + "      ,[FullName] = ?\n"
+                + "      ,[Address] = ?\n"
+                + "      ,[Phone] = ?\n"
+                + " WHERE UserID = ?";
+
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setString(1, pass);
+            stm.setString(2, fullname);
+            stm.setString(3, address);
+            stm.setString(4, phone);
+            stm.setInt(5, userID);
+            stm.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+       public Accounts getAccountByID(int id) {
+        String sql = "SELECT * FROM Users WHERE UserID = ?";
+        Accounts a = null;
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setInt(1, id);
+            rs = stm.executeQuery();
+            if (rs.next()) {
+                a = new Accounts();
+                a.setUserID(rs.getInt("UserID"));
+                a.setPassword(rs.getString("Password"));
+                a.setEmail(rs.getString("Email"));
+                a.setFullName(rs.getString("FullName"));
+                a.setAddress(rs.getString("Address"));
+                a.setPhone(rs.getString("Phone"));
+                a.setRoleID(rs.getInt("RoleID"));
+                a.setIsActive(rs.getBoolean("IsActive"));
+                a.setCreatedAt(rs.getTimestamp("CreatedAt").toLocalDateTime());
+                a.setUpdatedAt(rs.getTimestamp("UpdatedAt").toLocalDateTime());
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return a;
+    }
 }
