@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -159,4 +160,30 @@ public class AccountDao extends DBContext {
         }
         return null;
     }
+     public List<Accounts> getAll() {
+        List<Accounts> accounts = new ArrayList<>();
+        String sql = "SELECT * FROM Users";
+        try {
+            PreparedStatement pr = connection.prepareStatement(sql);
+            ResultSet rs = pr.executeQuery();
+            while (rs.next()) {
+                Accounts a = new Accounts();
+                a.setUserID(rs.getInt("UserID"));
+                a.setPassword(rs.getString("Password"));
+                a.setEmail(rs.getString("Email"));
+                a.setFullName(rs.getString("FullName"));
+                a.setAddress(rs.getString("Address"));
+                a.setPhone(rs.getString("Phone"));
+                a.setRoleID(rs.getInt("RoleID"));
+                a.setIsActive(rs.getBoolean("IsActive"));
+                a.setCreatedAt(rs.getTimestamp("CreatedAt").toLocalDateTime());
+                a.setUpdatedAt(rs.getTimestamp("UpdatedAt").toLocalDateTime());
+                accounts.add(a);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return accounts;
+    }
+
 }

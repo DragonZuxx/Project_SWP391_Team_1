@@ -36,4 +36,39 @@ public class ShippingDao extends DBContext {
         }
         return false;
     }
+    public ArrayList<ShippingDetails> getAllShip() {
+        ArrayList<ShippingDetails> list = new ArrayList();
+        String sql = "select * from ShippingDetails";
+        try {
+            stm = connection.prepareStatement(sql);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                ShippingDetails shipping = new ShippingDetails(rs.getInt(1),
+                        rs.getInt(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getDate(5),
+                        rs.getTimestamp("CreatedAt").toLocalDateTime(),
+                        rs.getTimestamp("UpdatedAt").toLocalDateTime());
+                list.add(shipping);
+            }
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+    public boolean UpdateShipping(String address, int orderid){
+        String sql= "Update ShippingDetails SET ShippingAddress = ? where OrderID = ?";
+        try{
+            stm= connection.prepareStatement(sql);
+            stm.setString(1, address);
+            stm.setInt(2, orderid);
+            int result = stm.executeUpdate();
+            return result > 0;
+        }catch(Exception e){
+            System.out.println(e);
+        }
+        return false;
+    }
 }

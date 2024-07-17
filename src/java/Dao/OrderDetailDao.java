@@ -34,4 +34,31 @@ public class OrderDetailDao extends DBContext {
         }
         return false;
     }
+    public ArrayList<OrderDetail> getAllOrderDetail(){
+        ArrayList<OrderDetail> list= new ArrayList<>();
+        String sql= "select * from OrderDetails";
+        try{
+            stm= connection.prepareStatement(sql);
+            rs= stm.executeQuery();
+            while(rs.next()){
+                OrderDetail order= new OrderDetail(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getInt(4), rs.getString(5), rs.getString(6), rs.getString(7));
+                list.add(order);
+            }
+        }catch(Exception e){
+            System.out.println(e);
+        }
+        return list;
+    }
+     public boolean DeleteOrderDetail(int orderid){
+         String sql="Delete from OrderDetails where OrderID= ?";
+         try{
+             stm= connection.prepareStatement(sql);
+             stm.setInt(1, orderid);
+             int result= stm.executeUpdate();
+             return result > 0;
+         }catch(Exception e){
+             System.out.println(e);
+         }
+         return false;
+     }
 }
