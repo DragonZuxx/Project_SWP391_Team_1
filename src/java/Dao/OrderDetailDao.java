@@ -14,26 +14,10 @@ import java.util.ArrayList;
  *
  * @author LENOVO
  */
-public class OrderDetailDao extends DBContext {
-
-    PreparedStatement stm;//thực hiên câu lệnh sql
+public class OrderDetailDao extends DBContext{
+       PreparedStatement stm;//thực hiên câu lệnh sql
     ResultSet rs;//lưu trữ dữ liệu lấy về từ câu ljeenh select
 
-    public boolean addNewOrderDetail(OrderDetail orderDetail) {
-        try {
-            String sql = "INSERT INTO OrderDetails(OrderID, BookID, Quantity, UnitPrice) VALUES(?,?,?,?)";
-            stm = connection.prepareStatement(sql);
-            stm.setInt(1, orderDetail.getOrderid());
-            stm.setInt(2, orderDetail.getBookid());
-            stm.setInt(3, orderDetail.getQuantity());
-            stm.setString(4, orderDetail.getUnitPrice());
-            int result = stm.executeUpdate();
-            return result > 0;
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        return false;
-    }
     public ArrayList<OrderDetail> getAllOrderDetail(){
         ArrayList<OrderDetail> list= new ArrayList<>();
         String sql= "select * from OrderDetails";
@@ -61,4 +45,11 @@ public class OrderDetailDao extends DBContext {
          }
          return false;
      }
+    
+    public static void main(String[] args) {
+        OrderDetailDao orderdao= new OrderDetailDao();
+        ArrayList<OrderDetail> list= new ArrayList<>();
+        list= orderdao.getAllOrderDetail();
+        System.out.println(list.size());
+    }
 }

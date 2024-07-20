@@ -78,6 +78,7 @@ public class searchAccountControll extends HttpServlet {
         String txtSearch = request.getParameter("txtSearch");
 
         List<Accounts> list = dal.getUserByEmail(txtSearch);
+        int totalAccounts = dal.getAll().size();
 
         request.setAttribute("data", list);
 

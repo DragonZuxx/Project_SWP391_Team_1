@@ -1,79 +1,90 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package Model;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
+/**
+ *
+ * @author DMX THANH SON
+ */
 public class Promotions {
-    private int PromotionID;
-    private String Title;
-    private String Description;
-    private LocalDateTime StartDate;
-    private LocalDateTime EndDate;
-    private String DiscountPercentage;
-    private boolean isActive;
-    private LocalDateTime CreatedAt;
-    private LocalDateTime UpdatedAt;
 
+    private int promotionId;
+    private String title;
+    private String description;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
+    private String discountPercentage;
+    private boolean isActive;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
+    // Constructors
     public Promotions() {
     }
 
-    public Promotions(int PromotionID, String Title, String Description, LocalDateTime StartDate, LocalDateTime EndDate, String DiscountPercentage, boolean isActive, LocalDateTime CreatedAt, LocalDateTime UpdatedAt) {
-        this.PromotionID = PromotionID;
-        this.Title = Title;
-        this.Description = Description;
-        this.StartDate = StartDate;
-        this.EndDate = EndDate;
-        this.DiscountPercentage = DiscountPercentage;
+    public Promotions(int promotionId, String title, String description, LocalDateTime startDate, LocalDateTime endDate, String discountPercentage, boolean isActive, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.promotionId = promotionId;
+        this.title = title;
+        this.description = description;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.discountPercentage = discountPercentage;
         this.isActive = isActive;
-        this.CreatedAt = CreatedAt;
-        this.UpdatedAt = UpdatedAt;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
-    public int getPromotionID() {
-        return PromotionID;
+    public int getPromotionId() {
+        return promotionId;
     }
 
-    public void setPromotionID(int PromotionID) {
-        this.PromotionID = PromotionID;
+    public void setPromotionId(int promotionId) {
+        this.promotionId = promotionId;
     }
 
     public String getTitle() {
-        return Title;
+        return title;
     }
 
-    public void setTitle(String Title) {
-        this.Title = Title;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getDescription() {
-        return Description;
+        return description;
     }
 
-    public void setDescription(String Description) {
-        this.Description = Description;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public LocalDateTime getStartDate() {
-        return StartDate;
+        return startDate;
     }
 
-    public void setStartDate(LocalDateTime StartDate) {
-        this.StartDate = StartDate;
+    public void setStartDate(LocalDateTime startDate) {
+        this.startDate = startDate;
     }
 
     public LocalDateTime getEndDate() {
-        return EndDate;
+        return endDate;
     }
 
-    public void setEndDate(LocalDateTime EndDate) {
-        this.EndDate = EndDate;
+    public void setEndDate(LocalDateTime endDate) {
+        this.endDate = endDate;
     }
 
     public String getDiscountPercentage() {
-        return DiscountPercentage;
+        return discountPercentage;
     }
 
-    public void setDiscountPercentage(String DiscountPercentage) {
-        this.DiscountPercentage = DiscountPercentage;
+    public void setDiscountPercentage(String discountPercentage) {
+        this.discountPercentage = discountPercentage;
     }
 
     public boolean isIsActive() {
@@ -85,25 +96,26 @@ public class Promotions {
     }
 
     public LocalDateTime getCreatedAt() {
-        return CreatedAt;
+        return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime CreatedAt) {
-        this.CreatedAt = CreatedAt;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public LocalDateTime getUpdatedAt() {
-        return UpdatedAt;
+        return updatedAt;
     }
 
-    public void setUpdatedAt(LocalDateTime UpdatedAt) {
-        this.UpdatedAt = UpdatedAt;
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     @Override
     public String toString() {
-        return "Promotions{" + "PromotionID=" + PromotionID + ", Title=" + Title + ", Description=" + Description + ", StartDate=" + StartDate + ", EndDate=" + EndDate + ", DiscountPercentage=" + DiscountPercentage + ", isActive=" + isActive + ", CreatedAt=" + CreatedAt + ", UpdatedAt=" + UpdatedAt + '}';
+        return "Promotions{" + "promotionId=" + promotionId + ", title=" + title + ", description=" + description + ", startDate=" + startDate + ", endDate=" + endDate + ", discountPercentage=" + discountPercentage + ", isActive=" + isActive + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + '}';
     }
 
-
+   
+    
 }

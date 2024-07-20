@@ -28,7 +28,7 @@
                     <main class="col-lg-9 mb-lg-0 mb-3">
                         <div class="card">
                             <div class="card-body">
-                                <form action="${pageContext.request.contextPath}/orderSucessfull" method="get">
+                                <form action="${pageContext.request.contextPath}/testCheckOut" method="get">
                                     <h4>Thông tin giao hàng</h4>
                                     <div class="mb-3">
                                         <label for="fullName" class="form-label">Họ và tên</label>
@@ -166,8 +166,6 @@
             const totalPriceElement = document.getElementById("total-price");
             const couponCodeInput = document.getElementById("coupon-code");
             const applyCouponButton = document.getElementById("apply-coupon");
-            const deliveryMethodNameField = document.getElementById('delivery-method-name');
-            const deliveryTimeField = document.getElementById('delivery-time');
 
             let discount = 0;
 
@@ -180,27 +178,12 @@
                     const price = parseFloat(priceString);
                     tempPrice += quantity * price;
                 });
-
                 let deliveryPrice = 0;
                 deliveryMethodInputs.forEach(input => {
                     if (input.checked) {
                         deliveryPrice = parseFloat(input.value);
-                        deliveryMethodNameField.value = input.nextElementSibling.textContent.trim();
-
-                        // Calculate estimated delivery date
-                        let daysToAdd = 0;
-                        if (input.id === 'delivery-method-1') {
-                            daysToAdd = 5;
-                        } else if (input.id === 'delivery-method-2') {
-                            daysToAdd = 3;
-                        }
-                        const currentDate = new Date();
-                        const estimatedDeliveryDate = new Date(currentDate.setDate(currentDate.getDate() + daysToAdd));
-                        const formattedDate = estimatedDeliveryDate.toISOString().split('T')[0];
-                        deliveryTimeField.value = formattedDate;
                     }
                 });
-
                 const discountedPrice = tempPrice - (tempPrice * discount);
                 const totalPrice = discountedPrice + deliveryPrice;
 
@@ -214,9 +197,30 @@
                 input.addEventListener("change", calculateTotalPrice);
             });
 
-            
+            applyCouponButton.addEventListener("click", () => {
+                const couponCode = couponCodeInput.value.trim();
+                // TODO: Validate coupon code and set discount
+                // Assuming a valid coupon gives a 10% discount for demonstration
+                discount = 0.1;
+                calculateTotalPrice();
+            });
+
             calculateTotalPrice(); // Initial calculation
         });
+        const deliveryMethods = document.querySelectorAll('.delivery-method');
+        const deliveryMethodNameField = document.getElementById('delivery-method-name');
+        const deliveryTimeField = document.getElementById('delivery-time');
 
+        deliveryMethods.forEach(method => {
+            method.addEventListener('change', (event) => {
+                if (event.target.id === 'delivery-method-1') {
+                    deliveryMethodNameField.value = 'Giao tiêu chuẩn';
+                    deliveryTimeField.value = '5 ngày';
+                } else if (event.target.id === 'delivery-method-2') {
+                    deliveryMethodNameField.value = 'Giao nhanh';
+                    deliveryTimeField.value = '3 ngày';
+                }
+            });
+        });
     </script>
 </html>

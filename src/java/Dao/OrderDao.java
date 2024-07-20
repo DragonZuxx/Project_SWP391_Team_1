@@ -8,13 +8,7 @@ import Dal.DBContext;
 import Model.Order;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-
-import java.sql.SQLException;
-import java.sql.Timestamp;
-
-
 
 /**
  *
@@ -25,60 +19,7 @@ public class OrderDao extends DBContext {
     PreparedStatement stm;//thực hiên câu lệnh sql
     ResultSet rs;//lưu trữ dữ liệu lấy về từ câu ljeenh select
 
-    public boolean addNewOrder(Order order) {
-        String sql = "INSERT INTO Orders(UserID,FullName,Address,Phone,TotalAmount,Status) VALUES(?,?,?,?,?,?)";
-        try {
-            stm = connection.prepareStatement(sql);
-            stm.setInt(1, order.getUserid());
-            stm.setString(2, order.getFullname());
-            stm.setString(3, order.getAddress());
-            stm.setString(4, order.getPhone());
-            stm.setString(5, order.getAmount());
-            stm.setString(6, order.getStatus());
-            int result = stm.executeUpdate();
-            return result > 0;
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        return false;
-    }
-
-    public int getOrderIdbyUserID(int userid) {
-        String sql = "SELECT OrderID FROM Orders WHERE UserID = ? ORDER BY CreatedAt DESC";
-        try {
-            stm = connection.prepareStatement(sql);
-            stm.setInt(1, userid);
-            rs = stm.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1);
-            }
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        return 0;
-    }
-
-
-  public void autoUpdateOrderStatus(int orderId) {
-        String sql = "UPDATE Orders SET Status = N'Đã nhận được hàng' WHERE OrderID = ? AND Status = N'Đang giao hàng' AND UpdatedAt <= ?";
-        LocalDateTime tenDaysAgo = LocalDateTime.now().minusSeconds(10); // Cập nhật sau 10 ngày
-        Timestamp tenDaysAgoTimestamp = Timestamp.valueOf(tenDaysAgo);
-
-        try (PreparedStatement stm = connection.prepareStatement(sql)) {
-            stm.setInt(1, orderId);
-            stm.setTimestamp(2, tenDaysAgoTimestamp);
-            int rowsAffected = stm.executeUpdate();
-            if (rowsAffected > 0) {
-                System.out.println("Đã cập nhật trạng thái đơn hàng tự động thành công.");
-            } else {
-                System.out.println("Không có đơn hàng nào cần cập nhật.");
-            }
-        } catch (SQLException e) {
-            System.err.println("Lỗi khi cập nhật trạng thái đơn hàng tự động: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-  public Order getOrder(int id) {
+    public Order getOrder(int id) {
 
         String sql = "select * from Orders where OrderID= ?";
         try {
@@ -133,7 +74,7 @@ public class OrderDao extends DBContext {
 
     public ArrayList<Order> getOrderSuccessfull() {
         ArrayList<Order> list = new ArrayList<>();
-        String sql = "select * from Orders where Status = N'Đã nhận được hàng' order by CreatedAt DESC";
+        String sql = "select * from Orders where Status = 'Completed' order by CreatedAt DESC";
         try {
             stm = connection.prepareStatement(sql);
             rs = stm.executeQuery();
@@ -162,7 +103,7 @@ public class OrderDao extends DBContext {
         int offset = (pageNumber - 1) * pageSize;
         String sql = "SELECT * \n"
                 + "FROM Orders \n"
-                + "WHERE Status = N'Đã nhận được hàng'\n"
+                + "WHERE Status = 'Completed' \n"
                 + "ORDER BY CreatedAt DESC \n"
                 + "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
         try {
@@ -193,7 +134,7 @@ public class OrderDao extends DBContext {
     public ArrayList<Order> getOrderUser(int pageNumber, int pageSize, int id) {
         ArrayList<Order> list = new ArrayList<>();
         int offset = (pageNumber - 1) * pageSize;
-        String sql = "SELECT * FROM Orders WHERE Status = N'Đã nhận được hàng' and UserID = ? ORDER BY CreatedAt OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        String sql = "SELECT * FROM Orders WHERE Status = 'Completed' and UserID = ? ORDER BY CreatedAt OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
         try {
             stm = connection.prepareStatement(sql);
             stm.setInt(1, id);
@@ -221,7 +162,7 @@ public class OrderDao extends DBContext {
     }
 
     public int getTotalPagesUser(int pageSize, int id) {
-        String sql = "select count(*) from Orders where Status = N'Đã nhận được hàng' and UserID= ?";
+        String sql = "select count(*) from Orders where Status = 'Completed' and UserID= ?";
         try {
             stm = connection.prepareStatement(sql);
             stm.setInt(1, id);
@@ -237,7 +178,7 @@ public class OrderDao extends DBContext {
     }
 
     public int getTotalPages(int pageSize) {
-        String sql = "select count(*) from Orders where Status = N'Đã nhận được hàng'";
+        String sql = "select count(*) from Orders where Status = 'Completed'";
         try {
             stm = connection.prepareStatement(sql);
             rs = stm.executeQuery();
@@ -324,7 +265,7 @@ public class OrderDao extends DBContext {
 
     public ArrayList<Order> getOrderShipping() {
         ArrayList<Order> list = new ArrayList<>();
-        String sql = "select * from Orders where Status= N'Đang giao hàng'";
+        String sql = "select * from Orders where Status= N'Đang giao hàng";
         try {
             stm = connection.prepareStatement(sql);
             rs = stm.executeQuery();
@@ -470,9 +411,10 @@ public class OrderDao extends DBContext {
             stm = connection.prepareStatement(sql);
             stm.setString(1, newReason);
             stm.setString(2, status);
-            stm.setInt(3, orderId);
-            int result = stm.executeUpdate();
+            stm.setInt(3,orderId);
+             int result = stm.executeUpdate();
             return result > 0;
+            
 
         } catch (Exception e) {
             System.out.println(e);
@@ -480,96 +422,10 @@ public class OrderDao extends DBContext {
         return false;
     }
 
-    public Boolean updateOrderSucces(int orderId, String status) {
-        String sql = "UPDATE Orders SET Status = ? WHERE OrderID = ?";
-        try {
-            stm = connection.prepareStatement(sql);
-            stm.setString(1, status);
-            stm.setInt(2, orderId);
-            int result = stm.executeUpdate();
-            return result > 0;
-
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        return false;
-    }
-
-    //OrderCancelManager
-    public ArrayList<Order> getOrderCancelled(int pageNumber, int pageSize) {
+    public static void main(String[] args) {
+        OrderDao orderdao = new OrderDao();
         ArrayList<Order> list = new ArrayList<>();
-        int offset = (pageNumber - 1) * pageSize;
-        String sql = "SELECT * FROM Orders WHERE Status = N'Hủy đơn hàng' ORDER BY CreatedAt DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
-        try {
-            stm = connection.prepareStatement(sql);
-            stm.setInt(1, offset);
-            stm.setInt(2, pageSize);
-            rs = stm.executeQuery();
-            while (rs.next()) {
-                Order order = new Order(
-                        rs.getInt(1),
-                        rs.getInt(2),
-                        rs.getString(3),
-                        rs.getString(4),
-                        rs.getString(5),
-                        rs.getString(6),
-                        rs.getString(7),
-                        rs.getString(8),
-                        rs.getString(9),
-                        rs.getString(10)
-                );
-                list.add(order);
-            }
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        return list;
+        list = orderdao.getOrderSuccessfull();
+        System.out.println(list.get(1).getAmount());
     }
-    
-     public ArrayList<Order> getOrderCancel() {
-        ArrayList<Order> list = new ArrayList<>();
-        String sql = "select * from Orders where Status= N'Hủy đơn hàng'";
-        try {
-            stm = connection.prepareStatement(sql);
-            rs = stm.executeQuery();
-            while (rs.next()) {
-                Order order = new Order(
-                        rs.getInt(1),
-                        rs.getInt(2),
-                        rs.getString(3),
-                        rs.getString(4),
-                        rs.getString(5),
-                        rs.getString(6),
-                        rs.getString(7),
-                        rs.getString(8),
-                        rs.getString(9),
-                        rs.getString(10));
-                list.add(order);
-
-            }
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        return list;
-    }
-    
-    
-
-    public int getTotalCancelledPages(int pageSize) {
-        String sql = "SELECT COUNT(*) FROM Orders WHERE Status = N'Hủy đơn hàng'";
-        try {
-            stm = connection.prepareStatement(sql);
-            rs = stm.executeQuery();
-            if (rs.next()) {
-                int totalOrders = rs.getInt(1);
-                return (int) Math.ceil((double) totalOrders / pageSize);
-            }
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        return 1; // default to 1 if there is an error
-    }
-    
-  
-
 }

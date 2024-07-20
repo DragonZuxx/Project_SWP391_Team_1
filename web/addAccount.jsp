@@ -22,7 +22,14 @@
                 <main class="row mb-5"> 
                     <form class="col-lg-6" action="add">
                         <!-- Các trường input khác -->
-                        
+                        <div class="mb-3">
+                            <label for="user-username" class="form-label">User Name<span class="text-danger">*</span></label>
+                            <input type="text"
+                                   class="form-control"
+                                   id="user-username"
+                                   name="name"
+                                   required>
+                        </div>
                         <div class="mb-3">
                             <label for="user-password" class="form-label">Password<span class="text-danger">*</span></label>
                             <input type="password"
@@ -71,7 +78,7 @@
                                    value=""
                                    required>
                         </div>
-                        <span class="text-danger">${requestScope.errorMessage3}</span> 
+                        <span class="text-danger">${requestScope.errorMessage3s}</span> 
                         <div class="mb-3">
                             <label for="user-role" class="form-label">Quyền <span class="text-danger">*</span></label>
                             <select class="form-select"
@@ -87,7 +94,8 @@
                         <button type="submit" class="btn btn-primary">Thêm</button>
                         <button type="reset" class="btn btn-warning">Mặc định</button>
                         <a class="btn btn-danger" href="${pageContext.request.contextPath}/admin/userManager">Hủy</a>
-                        
+                        <h3>${requestScope.errorMessage}</h3>
+                        <h3>${requestScope.mess}</h3>
                     </form>
                     
                 </main>
