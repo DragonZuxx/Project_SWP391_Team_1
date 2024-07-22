@@ -1,3 +1,4 @@
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
@@ -8,14 +9,13 @@ import Dao.BookDao;
 import Dao.CartDao;
 import Dao.CartItemDao;
 import Dao.OrderDao;
-import Dao.PaymentDetailDao;
 import Dao.PromotionDao;
 import Dao.ShippingDao;
 import Model.Accounts;
 import Model.Books;
 import Model.CartItem;
 import Model.Order;
-import Model.PaymentDetail;
+
 import Model.Promotions;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -31,7 +31,7 @@ import java.util.List;
  *
  * @author Aplal
  */
-@WebServlet(name = "CheckOutSerrvlet", urlPatterns = {"/checkOut"})
+@WebServlet(name = "CheckOutSerrvlet", urlPatterns = {"/cartItem"})
 public class CheckOutSerrvlet extends HttpServlet {
 
     private Accounts getAccountsInfoSession(HttpServletRequest request) {
