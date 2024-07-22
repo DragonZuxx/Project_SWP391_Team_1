@@ -35,7 +35,7 @@
                 <h2 class="title-page">Tài khoản</h2>
             </div> <!-- container.// -->
         </section> <!-- section-pagetop.// -->
-        <h3 style="color: red; font-size: 24px; font-weight: bold; text-align: center; margin-top: 20px;">
+        <h3 id="message" style="color: #0d6efd; margin-top: 20px; font-size: 24px; font-family: Arial, sans-serif; text-align: center;">
             ${requestScope.mess}
         </h3>
         <section class="section-content padding-y">
@@ -107,10 +107,23 @@
                 </div>
             </div>
         </div>
+        <script type="text/javascript">
+            document.addEventListener("DOMContentLoaded", function () {
+                setTimeout(function () {
+                    var messageElement = document.getElementById("message");
+                    if (messageElement) {
+                        messageElement.style.display = "none";
+                    }
+                }, 5000); 
+            });
+        </script>
+
 
         <jsp:include page="_footer.jsp"/>
         <!-- Thêm JavaScript của Bootstrap -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
     </body>
 
 </html>

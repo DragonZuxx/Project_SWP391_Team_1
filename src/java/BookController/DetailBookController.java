@@ -37,11 +37,12 @@ import java.util.Set;
 
 /**
  *
- * @author LENOVO
+ * @author Aplal
  */
 @WebServlet(name="DetailBookController", urlPatterns={"/detailbook"})
 public class DetailBookController extends HttpServlet {
-   private AccountDao accountDao;
+
+    private AccountDao accountDao;
     private BookDao bookDao;
     private AuthorDao authorDao;
     private CategoryDao categoryDao;
@@ -110,7 +111,6 @@ public class DetailBookController extends HttpServlet {
                 addedUserIDs.add(userId);
             }
         }
-        
 
         ArrayList<BookCategories> bookCategories = bookCategorieDao.getBookCategoriesByCategoryID(cateID);
         List<Books> bookgetbyid = new ArrayList<>();
@@ -142,4 +142,5 @@ public class DetailBookController extends HttpServlet {
         request.setAttribute("countReview", countReview);
         request.getRequestDispatcher("productView.jsp").forward(request, response);
     }
+
 }

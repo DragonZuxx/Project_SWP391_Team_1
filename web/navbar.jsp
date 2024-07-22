@@ -3,7 +3,6 @@
     Created on : May 23, 2024, 10:12:43 PM
     Author     : Admin
 --%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
@@ -28,10 +27,9 @@
                                 <strong><i class="bi bi-list"></i> Danh mục sản phẩm</strong>
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="#">Sách giáo khoa</a></li>
-                                <li><a class="dropdown-item" href="#">Sách khoa học</a></li>
-                                <li><a class="dropdown-item" href="#">Truyện tranh</a></li>
-                                <li><a class="dropdown-item" href="#">Tiểu thuyết</a></li>
+                                <c:forEach var="category" items="${category}">
+                                    <li><a class="dropdown-item" href="#">${category.getCategoryName()}</a></li>
+                                    </c:forEach>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
@@ -45,13 +43,10 @@
                             <a class="nav-link" href="listSelling">Sản phẩm bán chạy</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="wishlistview">Sản phẩm được yêu thích nhất</a>
+                            <a class="nav-link" href="wishlisttop">Sản phẩm được yêu thích nhất</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Khuyến mãi</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="./chat-bot">Chat bot</a>
+                            <a class="nav-link" href="${pageContext.request.contextPath}/couponView ">Khuyến mãi</a>
                         </li>
                     </ul>
                 </div>

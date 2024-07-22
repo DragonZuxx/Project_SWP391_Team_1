@@ -17,11 +17,19 @@ public class Reviews {
     private int BookID;
     private int UserID;
     private String Comment;
-    private LocalDateTime ReviewDate;
     private LocalDateTime CreatedAt;
     private LocalDateTime UpdatedAt;
 
     public Reviews() {
+    }
+
+    public Reviews(int ReviewID, int BookID, int UserID, String Comment, LocalDateTime CreatedAt, LocalDateTime UpdatedAt) {
+        this.ReviewID = ReviewID;
+        this.BookID = BookID;
+        this.UserID = UserID;
+        this.Comment = Comment;
+        this.CreatedAt = CreatedAt;
+        this.UpdatedAt = UpdatedAt;
     }
 
     public int getReviewID() {
@@ -56,14 +64,6 @@ public class Reviews {
         this.Comment = Comment;
     }
 
-    public LocalDateTime getReviewDate() {
-        return ReviewDate;
-    }
-
-    public void setReviewDate(LocalDateTime ReviewDate) {
-        this.ReviewDate = ReviewDate;
-    }
-
     public LocalDateTime getCreatedAt() {
         return CreatedAt;
     }
@@ -80,10 +80,10 @@ public class Reviews {
         this.UpdatedAt = UpdatedAt;
     }
 
-    
     @Override
     public String toString() {
-        return "Reviews{" + "ReviewID=" + ReviewID + ", BookID=" + BookID + ", UserID=" + UserID + ", Comment=" + Comment + ", ReviewDate=" + ReviewDate + ", CreatedAt=" + CreatedAt + ", UpdatedAt=" + UpdatedAt + '}';
+        return "Reviews{" + "ReviewID=" + ReviewID + ", BookID=" + BookID + ", UserID=" + UserID + ", Comment=" + Comment + ", CreatedAt=" + CreatedAt + ", UpdatedAt=" + UpdatedAt + '}';
     }
-   
+
+    
 }

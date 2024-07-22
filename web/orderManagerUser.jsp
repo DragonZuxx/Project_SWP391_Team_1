@@ -42,7 +42,10 @@
                         <div class="tab-content" id="myTabContent">
                             <%-- hiển thị danh sách đơn hàng đang chờ xác thực  --%>
 
-                           <h1 style="color: #0d6efd;margin-top: 20px ;font-size: 24px; font-family: Arial, sans-serif; text-align: center;">${requestScope.mess}</h1>
+                            <h1 id="message" style="color: #0d6efd; margin-top: 20px; font-size: 24px; font-family: Arial, sans-serif; text-align: center;">
+                                ${requestScope.mess}
+                            </h1>
+
                             <div class="tab-pane fade show active order-section" id="Pending" role="tabpanel" aria-labelledby="Pending-tab">
                                 <div class="table-responsive-xxl mt-4">
                                     <table class="table table-bordered table-striped table-hover align-middle">
@@ -71,9 +74,6 @@
                                                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#cancelOrderModal${order.id}">
                                                             Hủy đơn hàng
                                                         </button>
-
-
-
                                                     </td>
                                                 </tr>
                                             </c:forEach>
@@ -108,7 +108,7 @@
                                                     </td>
                                                     <td class="text-center text-nowrap">
                                                         <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#orderInforModell${order.id}">Xem</button>
-                                                        <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#">Đã nhận được hàng</button>
+                                                        <button type="button" class="btn btn-info btn-sm"  onclick="confirmReceived(${order.id})">Đã nhận được hàng</button>
                                                     </td>
                                                 </tr>
                                             </c:forEach>
@@ -116,6 +116,41 @@
                                     </table>
                                 </div>
                             </div>
+
+                            <script type="text/javascript">
+                                function confirmReceived(orderId) {
+                                    if (confirm("Bạn có chắc chắn đã nhận được hàng không?")) {
+                                        var form = document.createElement("form");
+                                        form.method = "POST";
+                                        form.action = "orderUser";
+
+                                        var actionField = document.createElement("input");
+                                        actionField.type = "hidden";
+                                        actionField.name = "action";
+                                        actionField.value = "success";
+                                        form.appendChild(actionField);
+
+                                        var orderIdField = document.createElement("input");
+                                        orderIdField.type = "hidden";
+                                        orderIdField.name = "orderId";
+                                        orderIdField.value = orderId;
+                                        form.appendChild(orderIdField);
+
+                                        document.body.appendChild(form);
+                                        form.submit();
+                                    }
+                                }
+                                document.addEventListener("DOMContentLoaded", function () {
+                                    setTimeout(function () {
+                                        var messageElement = document.getElementById("message");
+                                        if (messageElement) {
+                                            messageElement.style.display = "none";
+                                        }
+                                    }, 5000); 
+                                });
+                            </script>
+
+
 
                             <%-- Hiển thị danh sách giao hàng thành công --%>
                             <div class="tab-pane fade order-section" id="Successful" role="tabpanel" aria-labelledby="Successful-tab">
@@ -139,7 +174,7 @@
                                                     <td>${order.userid}</td>
                                                     <td>₫${order.amount}</td>
                                                     <td>
-                                                        <span class="badge bg-success">Giao hàng thành công</span>
+                                                        ${order.status}
                                                     </td>
                                                     <td class="text-center text-nowrap">
                                                         <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#orderInforModell${order.id}">Xem</button>
@@ -279,6 +314,7 @@
                         </div>
                         <div class="modal-body">
                             <form id="cancelOrderForm${order.id}" action="orderUser" method="post">
+                                <input type="hidden" name="action" value="cancel">
                                 <div class="form-group">
                                     <label for="orderId${order.id}">Mã đơn hàng:</label>
                                     <input type="text" class="form-control" id="orderId${order.id}" name="orderid" value="${order.id}" readonly>
@@ -302,7 +338,6 @@
                                 </div>
                             </form>
                         </div>
-
                     </div>
                 </div>
             </div>
