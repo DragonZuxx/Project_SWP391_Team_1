@@ -22,24 +22,30 @@
         <section class="section-content padding-y">
             <div class="container">
                 <div class="row">
-                    <c:if test="${not empty sessionScope.successDeleteBookInCart}">
+                     <c:if test="${not empty sessionScope.updateOutCartSucssec}">
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            ${sessionScope.successDeleteBookInCart}
+                            ${sessionScope.updateOutCartSucssec}
                         </div>
                     </c:if>
-                    <c:if test="${not empty sessionScope.messErorr}">
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            ${sessionScope.messErorr}
-                        </div>
-                    </c:if>
-                    <c:if test="${not empty sessionScope.errorDeleteBookInCart}">
+                    <c:if test="${not empty sessionScope.updateOutCartError}">
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            ${sessionScope.errorDeleteBookInCart}
+                            ${sessionScope.updateOutCartError}
                         </div>
                     </c:if>
-                    <c:remove var="successDeleteBookInCart" scope="session" />
-                    <c:remove var="messErorr" scope="session" />
-                    <c:remove var="errorDeleteBookInCart" scope="session" />
+                    <c:if test="${not empty sessionScope.deleteOutCartSucssec}">
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            ${sessionScope.deleteOutCartSucssec}
+                        </div>
+                    </c:if>
+                    <c:if test="${not empty sessionScope.deleteOutCartError}">
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            ${sessionScope.deleteOutCartError}
+                        </div>
+                    </c:if>
+                    <c:remove var="updateOutCartSucssec" scope="session" />
+                    <c:remove var="deleteOutCartError" scope="session" />
+                    <c:remove var="updateOutCartError" scope="session" />
+                    <c:remove var="updateOutCartSucssec" scope="session" />
                     <c:choose>
                         <c:when test="${empty sessionScope.account}">
                             <p>
