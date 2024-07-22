@@ -124,40 +124,6 @@ public class OrderManagerUser extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-         String action= request.getParameter("action");
-                if (action != null) {
-            switch (action) {
-                case "cancel":
-                    CancelOrder(request, response);
-                    break;
-                case "success":
-                    OrderSucces(request, response);
-                    break;
-            }
-        } else {
-            // Handle missing action parameter
-            request.setAttribute("mess", "Thay đổi không thành công.");
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-        }
-  
-         
-    }
-    
-    private void OrderSucces(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-         String id= request.getParameter("orderId");
-         String status= "Đã nhận được hàng";
-         int orderid= Integer.parseInt(id);
-         OrderDao orderDao= new OrderDao();
-        Boolean check= orderDao.updateOrderSucces(orderid, status);
-          if(check){
-             request.setAttribute("mess", "Chúc mừng bạn đã nhận hàng thành công.");
-         }else{
-             request.setAttribute("mess", "Sửa trạng thái của đơn hàng chưa thành công.Vui lòng thử lại.");
-         }
-         doGet(request, response);
-    }
-    
-    private void CancelOrder(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
          String reson= request.getParameter("cancelReasonSelect");
          String id= request.getParameter("orderid");
          String status= "Hủy đơn hàng";

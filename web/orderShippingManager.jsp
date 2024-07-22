@@ -12,7 +12,7 @@
 <html lang="vi_VN">
     <head>
         <jsp:include page="_meta.jsp" />
-        <title>Đơn hàng đang vận chuyển</title>
+        <title>Đơn hàng chờ xử lí.</title>
     </head>
     <body>
         <jsp:include page="_headerAdmin.jsp" />
@@ -32,7 +32,7 @@
                     <div class="col-md-4">
                         <form action="orderShipping" method="post" class="searchauthoradmin">
                             <div class="input-group">
-                                <input type="number" name="searchorder" class="form-control" placeholder="Nhập mã đơn hàng....." aria-label="Nhập từ khóa cần tìm ..." aria-describedby="button-addon2">
+                                <input type="text" name="searchorder" class="form-control" placeholder="Nhập mã đơn hàng....." aria-label="Nhập từ khóa cần tìm ..." aria-describedby="button-addon2">
                                 <button class="btn btn-outline-primary" type="submit" id="button-addon2">
                                     <i class="bi bi-search"></i>
                                 </button>
@@ -97,7 +97,7 @@
                                                 <td>${order.createdat}</td>
                                                 <td><fmt:formatNumber pattern="#,##0" value="${order.amount}"/>₫</td>
                                                 <td>
-                                                    <span class="badge bg-success">${order.status}</span>
+                                                    <span class="badge bg-success">Đã giao hàng.</span>
                                                 </td>
                                                 <td class="text-center text-nowrap">
                                                     <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#orderInforModell${order.id}">Xem</button>

@@ -5,13 +5,12 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-3 py-3">
-                    <a class="text-body d-flex align-items-center" href="home" >
-                        <img src="img/11zon_cropped.png" style="width: 50px; margin-right: 10px;" />
-                        <h3 class="m-0">Book Haven Shop</h3>
+                    <a class="text-body" href="home">
+                        <h3>Book Haven Shop</h3>
                     </a>
                 </div> <!-- col.// -->
                 <div class="col-lg-4 col-xl-5 ${empty sessionScope.account ? 'mb-3 mb-lg-0' : ''}">
-                    <form action="${pageContext.request.contextPath}/search" method="get" class="search">
+                    <form action="${pageContext.request.contextPath}/search" method="post" class="search">
                         <div class="input-group w-100">
                             <input type="text"
                                    class="form-control"
@@ -31,7 +30,7 @@
                     <c:if test="${not empty sessionScope.account}">
                         <ul class="nav col-12 col-lg-auto my-2 my-lg-0 justify-content-center justify-content-lg-end text-small">
                             <li>
-                                <a href="${pageContext.request.contextPath}/user" class="nav-link text-body">
+                                <a href="${pageContext.request.contextPath}/userView.jsp" class="nav-link text-body">
                                     <i class="bi bi-person d-block text-center fs-3"></i>
                                     Tài khoản
                                 </a>
@@ -44,6 +43,9 @@
                             </li>
                             <li>
                                 <a href="${pageContext.request.contextPath}/cart" class="nav-link text-body position-relative">
+                                    <span id="total-cart-items-quantity" class="position-absolute top-0 end-0 mt-2 badge rounded-pill bg-primary">
+                                        ...
+                                    </span>
                                     <i class="bi bi-cart d-block text-center fs-3 position-relative"></i>
                                     Giỏ hàng
                                 </a>

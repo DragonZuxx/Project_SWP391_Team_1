@@ -7,9 +7,7 @@
     <head>
         <jsp:include page="_meta.jsp"/>
         <title>Giỏ hàng</title>
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/cart.css">
-
-
+        <link rel="stylesheet" href="css/carrt.css">
     </head>
     <body>
         <jsp:include page="_header.jsp"/>
@@ -18,7 +16,6 @@
                 <h2 class="title-page" style="color: #000">Giỏ hàng</h2>
             </div>
         </section>
-
         <section class="section-content padding-y">
             <div class="container">
                 <div class="row">
@@ -27,18 +24,13 @@
                             ${sessionScope.successDeleteBookInCart}
                         </div>
                     </c:if>
-                    <c:if test="${not empty sessionScope.messErorr}">
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            ${sessionScope.messErorr}
-                        </div>
-                    </c:if>
+
                     <c:if test="${not empty sessionScope.errorDeleteBookInCart}">
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
                             ${sessionScope.errorDeleteBookInCart}
                         </div>
                     </c:if>
                     <c:remove var="successDeleteBookInCart" scope="session" />
-                    <c:remove var="messErorr" scope="session" />
                     <c:remove var="errorDeleteBookInCart" scope="session" />
                     <c:choose>
                         <c:when test="${empty sessionScope.account}">
@@ -50,7 +42,7 @@
                             <main class="col-lg-9 mb-lg-0 mb-3">
                                 <div class="card">
                                     <div class="table-responsive">
-                                        <form id="checkoutForm" action="${pageContext.request.contextPath}/checkOut" method="post">
+                                        <form action="${pageContext.request.contextPath}/cartItem" method="post">
                                             <table class="table table-borderless table-shopping-cart">
                                                 <thead class="text-muted">
                                                     <tr class="small text-uppercase">
@@ -59,7 +51,7 @@
                                                         <th scope="col">Sản phẩm</th>
                                                         <th scope="col" width="120">Số lượng</th>
                                                         <th scope="col" width="150">Giá</th>
-                                                        <th scope="col" class="text-end" width="130" colspan="2">Thao tác</th>
+                                                        <th scope="col" class="text-end" width="130">Thao tác</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -88,7 +80,7 @@
                                                                         </figure>
                                                                     </td>
                                                                     <td>
-                                                                        <input type="number" class="form-control quantity-input" value="${item.getQuantity()}" min="1" max="${book.stock}">
+                                                                        <input type="number" class="form-control quantity-input" value="${item.quantity}" min="1" max="${book.stock}">
                                                                     </td>
                                                                     <td>
                                                                         <div class="price-wrap">
@@ -115,12 +107,16 @@
                                                                         </div>
                                                                     </td>
                                                                     <td class="text-end">
-                                                                        <a href="${pageContext.request.contextPath}/cart" class="btn btn-outline-secondary" onclick="updateCartItem(${item.cartID}, ${book.bookID}, ${item.quantity})">Cập nhật</a>
-                                                                        <a href="${pageContext.request.contextPath}/cart" class="btn btn-outline-danger" onclick="confirmDelete(${item.cartID}, ${book.bookID})">Xóa</a>
+                                                                        <form action="${pageContext.request.contextPath}/deleteOutCart" method="post" style="display:inline;">
+                                                                            <input type="hidden" name="cartID" value="${item.cartID}">
+                                                                            <input type="hidden" name="bookID" value="${book.bookID}">
+                                                                            <button type="submit" class="btn btn-light btn-round">Xóa</button>
+                                                                        </form>
                                                                     </td>
-                                                                </c:if>
-                                                            </c:forEach>
+                                                                </tr>
+                                                            </c:if>
                                                         </c:forEach>
+                                                    </c:forEach>
                                                 </tbody>
                                             </table>
                                             <div class="card-body border-top">
@@ -160,6 +156,7 @@
             const deliveryMethodRadios = document.querySelectorAll('.delivery-method');
             const deliveryPriceElement = document.getElementById('delivery-price');
             let deliveryPrice = 0;
+
             checkboxes.forEach(checkbox => {
                 checkbox.addEventListener('change', updateTotalSelectedPrice);
             });
@@ -172,6 +169,7 @@
                     updateTotalSelectedPrice();
                 });
             });
+
             function updateTotalSelectedPrice() {
                 let totalSelectedPrice = 0;
                 checkboxes.forEach(checkbox => {
@@ -185,67 +183,6 @@
                 tempPriceElement.textContent = totalSelectedPrice.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'});
                 deliveryPriceElement.textContent = deliveryPrice.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'});
             }
-            document.getElementById('checkoutForm').addEventListener('submit', function (event) {
-                const anyChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
-                if (!anyChecked) {
-                    alert('Vui lòng chọn ít nhất một cuốn sách trước khi đặt hàng.');
-                    event.preventDefault();
-                }
-            });
         });
-        function updateCartItem(cartID, bookID, quantity) {
-            const newQuantity = prompt("Nhập số lượng mới:", quantity);
-            if (newQuantity !== null && newQuantity !== "" && !isNaN(newQuantity)) {
-                const data = new URLSearchParams();
-                data.append('cartID', cartID);
-                data.append('bookID', bookID);
-                data.append('quantity', newQuantity);
-
-                fetch(`${pageContext.request.contextPath}/updateCartItem`, {
-                    method: 'POST',
-                    body: data,
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    }
-                })
-                        .then(response => response.json())
-                        .then(result => {
-                            if (result.success) {
-                                // Cập nhật giao diện người dùng tương ứng
-                                location.reload(); // Tải lại trang để hiển thị cập nhật
-                            } else {
-                                alert("Cập nhật thất bại: " + result.message);
-                            }
-                        })
-                        .catch(error => console.error('Error:', error));
-            }
-        }
-
-        function confirmDelete(cartID, bookID) {
-            if (confirm("Bạn có chắc chắn muốn xóa mục này không?")) {
-                const data = new URLSearchParams();
-                data.append('cartID', cartID);
-                data.append('bookID', bookID);
-
-                fetch(`${pageContext.request.contextPath}/deleteCartItem`, {
-                    method: 'POST',
-                    body: data,
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    }
-                })
-                        .then(response => response.json())
-                        .then(result => {
-                            if (result.success) {
-                                // Cập nhật giao diện người dùng tương ứng
-                                location.reload(); // Tải lại trang để hiển thị cập nhật
-                            } else {
-                                alert("Xóa thất bại: " + result.message);
-                            }
-                        })
-                        .catch(error => console.error('Error:', error));
-            }
-        }
-
     </script>
 </html>

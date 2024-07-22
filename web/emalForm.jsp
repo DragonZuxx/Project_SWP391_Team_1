@@ -36,7 +36,7 @@
                 border-radius: 4px;
             }
         </style>
-        <jsp:include page="_header1.jsp"/>
+        <jsp:include page="_header.jsp"/>
 
         <h1 style="color: red; display: flex; align-items: center; justify-content: center;">${requestScope.mess}</h1>
         <section class="section-content" style="margin: 100px 0;">
