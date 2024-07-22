@@ -1,5 +1,4 @@
 import createToast, { toastComponent } from "./toast.js";
-import { setTotalCartItemsQuantity } from "./header.js";
 
 // STATIC DATA
 const contextPathMetaTag = document.querySelector("meta[name='contextPath']");

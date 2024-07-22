@@ -1,38 +1,34 @@
-
-package CartController;
-
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
+
+package CartController;
+
 import Dao.BookDao;
 import Dao.CartDao;
 import Dao.CartItemDao;
-import Dao.CouponDao;
 import Dao.PromotionDao;
 import Model.Accounts;
 import Model.Books;
-import Model.Cart;
 import Model.CartItem;
-import Model.Coupons;
 import Model.Promotions;
 import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
  * @author Aplal
  */
-@WebServlet(urlPatterns = {"/cart"})
+@WebServlet(name="CartView", urlPatterns={"/cart"})
 public class CartView extends HttpServlet {
-
+  
     private Accounts getAccountsInfoSession(HttpServletRequest request) {
 
         return (Accounts) request.getSession().getAttribute("account");
@@ -61,19 +57,16 @@ public class CartView extends HttpServlet {
             int cartid = cartDao.getCartIdByUserID(userid);
 
             ArrayList<CartItem> cartItems = cartitemDao.getCartItemsByCartID(cartid);
-            List<Books> books = new ArrayList<>();
-            for (int i = 0; i < cartItems.size(); i++) {
-                CartItem cartitem = cartItems.get(i);
-                Books bookbyid = bookDao.getBookByID(i);
-                books.add(bookbyid);
-            }
-            Promotions promotion = promotionDao.getPromotionValid();
 
+            ArrayList<Books> books = bookDao.getAllBooks();
+            Promotions promotion = promotionDao.getPromotionValid();
+            
             request.setAttribute("promotion", promotion);
             request.setAttribute("books", books);
             request.setAttribute("cartItems", cartItems);
             request.setAttribute("cartid", cartid);
-            
+            request.getSession().setAttribute("cartItems", cartItems);
+            request.getSession().setAttribute("books", books);
 
         } else {
             request.getRequestDispatcher("signinView.jsp").forward(request, response);

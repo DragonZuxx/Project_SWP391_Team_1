@@ -6,6 +6,7 @@ package Dao;
 
 import Dal.DBContext;
 import Model.ShippingDetails;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.LocalDateTime;
@@ -20,6 +21,21 @@ public class ShippingDao extends DBContext {
     PreparedStatement stm;//thực hiên câu lệnh sql
     ResultSet rs;//lưu trữ dữ liệu lấy về từ câu ljeenh select
 
+    public boolean addShippingDetail(ShippingDetails shippingDetails) {
+        try {
+            String sql = "INSERT INTO ShippingDetails(OrderID, ShippingMethod, ShippingCost, EstimatedDeliveryDate) VALUES(?,?,?,?)";
+            stm = connection.prepareStatement(sql);
+            stm.setInt(1, shippingDetails.getOrderId());
+            stm.setString(2, shippingDetails.getShippingMethod());
+            stm.setString(3, shippingDetails.getShippingCost());
+            stm.setDate(4, (Date) shippingDetails.getEstimatedDeliveryDate());
+            int result = stm.executeUpdate();
+            return result > 0;
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return false;
+    }
     public ArrayList<ShippingDetails> getAllShip() {
         ArrayList<ShippingDetails> list = new ArrayList();
         String sql = "select * from ShippingDetails";
@@ -54,10 +70,5 @@ public class ShippingDao extends DBContext {
             System.out.println(e);
         }
         return false;
-    }
-    public static void main(String[] args) {
-        ShippingDao shipdao= new ShippingDao();
-       boolean re= shipdao.UpdateShipping("Thường Tín, Hà Nội", 2);
-        System.out.println(re);
     }
 }

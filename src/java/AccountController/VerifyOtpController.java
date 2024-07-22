@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package AccountController;
 
 import Dao.AccountDao;
@@ -22,11 +18,7 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-/**
- *
- * @author LENOVO
- */
-@WebServlet(name = "VerifyOtpController", urlPatterns = {"/verify"})
+@WebServlet(name="VerifyOtpController", urlPatterns={"/verify"})
 public class VerifyOtpController extends HttpServlet {
 
     private static final String USERNAME = "bookhavenshop03@gmail.com";
@@ -34,20 +26,10 @@ public class VerifyOtpController extends HttpServlet {
     private static final String SMTP_HOST = "smtp.gmail.com";
     private static final String SMTP_PORT = "587";
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
@@ -60,20 +42,11 @@ public class VerifyOtpController extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Integer check = (Integer) request.getSession().getAttribute("Check");
-        if (check != null && check ==1) {
+        if (check != null && check == 1) {
             String email = (String) request.getSession().getAttribute("email");
             String otp = generateOtp();
             request.getSession().setAttribute("otp2", otp);
@@ -81,38 +54,39 @@ public class VerifyOtpController extends HttpServlet {
                 response.sendRedirect("emalForm.jsp");
             } else {
                 request.setAttribute("mess", "Gửi OTP thất bại.");
-               request.getRequestDispatcher("signinView.jsp").forward(request, response);
+                request.getRequestDispatcher("signinView.jsp").forward(request, response);
             }
-        }else{
+        } else {
             response.sendRedirect("home");
         }
-
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int check = (int) request.getSession().getAttribute("Check");
-        if (check == 1) {
-        String email = (String) request.getSession().getAttribute("email");
-        String enteredOtp = request.getParameter("otp");
-        String expectedOtp = (String) request.getSession().getAttribute("otp2");
-         AccountDao accountdao= new AccountDao();
-        Accounts user= accountdao.checkEmail(email);
+                 checkOtp(request, response);
+    }
+
+    @Override
+    public String getServletInfo() {
+        return "VerifyOtpServlet handles OTP verification for user authentication.";
+    }
+    
+    private void checkOtp(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+         Integer check = (Integer) request.getSession().getAttribute("Check");
+        if (check != null && check == 1) {
+            String email = (String) request.getSession().getAttribute("email");
+            String enteredOtp = request.getParameter("otp");
+            String expectedOtp = (String) request.getSession().getAttribute("otp2");
+            AccountDao accountdao = new AccountDao();
+            Accounts user = accountdao.checkEmail(email);
             if (enteredOtp.equals(expectedOtp)) {
                 request.getSession().setAttribute("account", user);
                 request.getSession().removeAttribute("otp2");
                 request.getSession().removeAttribute("email");
                 request.getSession().removeAttribute("Check");
-                request.getRequestDispatcher("home").forward(request, response);
+                response.sendRedirect("home");
             } else {
                 String mess = "OTP không đúng. Mời thử lại.";
                 request.setAttribute("mess", mess);
@@ -121,17 +95,7 @@ public class VerifyOtpController extends HttpServlet {
         } else {
             response.sendRedirect("Notfound.jsp");
         }
-        
-    }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "VerifyOtpServlet handles OTP verification for user authentication.";
     }
 
     private String generateOtp() {
@@ -170,5 +134,4 @@ public class VerifyOtpController extends HttpServlet {
             return false;
         }
     }
-
 }

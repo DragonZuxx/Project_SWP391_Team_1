@@ -30,7 +30,7 @@
                         <form action="orderRequest" method="post" class="searchauthoradmin">
                             <div class="input-group">
                                 <input type="hidden" name="action" value="search">
-                                <input type="text" name="searchorder" class="form-control" placeholder="Nhập từ khóa cần tìm ..." aria-label="Nhập từ khóa cần tìm ..." aria-describedby="button-addon2">
+                                <input type="number" name="searchorder" class="form-control" placeholder="Nhập từ khóa cần tìm ..." aria-label="Nhập từ khóa cần tìm ..." aria-describedby="button-addon2">
                                 <button class="btn btn-outline-primary" type="submit" id="button-addon2">
                                     <i class="bi bi-search"></i>
                                 </button>

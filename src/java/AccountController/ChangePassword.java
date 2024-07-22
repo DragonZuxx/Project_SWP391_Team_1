@@ -93,6 +93,9 @@ public class ChangePassword extends HttpServlet {
                     if (newpass.equals(newpass2)) {
                         AccountDao accountdao = new AccountDao();
                         if (accountdao.updatePasswordByPassAndEmail(currentpass, newpass, email)) {
+                            int userid = account.getUserID();
+                            Accounts account2= accountdao.getAccountByID(userid);
+                              request.getSession().setAttribute("account", account2);
                             request.setAttribute("mess", "Đổi mật khẩu thành công!");
                             request.getRequestDispatcher("changePasswordView.jsp").forward(request, response);
                         } else {

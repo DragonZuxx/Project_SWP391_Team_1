@@ -81,12 +81,9 @@ public class LoginController extends HttpServlet {
         int check = 1;
         if (user != null) {
             if (user.isIsActive()) {
-                //            request.getSession().setAttribute("Check", check);
-//           request.getSession().setAttribute("email", email);
-//           response.sendRedirect("verify");
-                request.getSession().setAttribute("account", user);
-                response.sendRedirect("home");
-
+                request.getSession().setAttribute("Check", check);
+                request.getSession().setAttribute("email", email);
+                response.sendRedirect("verify");
             } else {
                 request.setAttribute("mess", "Tài khoản của bạn đang có dầu hiệu bất thường. Vui lòng liên hệ hotline để được hỗ trợ.");
                 request.getRequestDispatcher("signinView.jsp").forward(request, response);

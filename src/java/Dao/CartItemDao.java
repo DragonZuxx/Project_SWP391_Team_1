@@ -1,4 +1,3 @@
-
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
@@ -13,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -22,89 +22,6 @@ public class CartItemDao extends DBContext {
 
     PreparedStatement stm;
     ResultSet rs;
-
-    public boolean addNewCartItem(CartItem cartItem) {
-        String sql = "INSERT INTO [dbo].[CartItems] ([CartID],[BookID],[Quantity]) VALUES (?,?,?)";
-        try {
-            stm = connection.prepareStatement(sql);
-            stm.setInt(1, cartItem.getCartID());
-            stm.setInt(2, cartItem.getBookID());
-            stm.setInt(3, cartItem.getQuantity());
-            int result = stm.executeUpdate();
-            return result > 0;
-        } catch (SQLException e) {
-            System.out.println("addNewCartItem: " + e.getMessage());
-        }
-        return false;
-    }
-
-    public CartItem getCartItemByBookID(int bookID, int cartID) {
-        String sql = "SELECT * FROM CartItems WHERE BookID = ? AND CartID = ?";
-        try {
-            stm = connection.prepareStatement(sql);
-            stm.setInt(1, bookID);
-            stm.setInt(2, cartID);
-            rs = stm.executeQuery();
-            if (rs.next()) {
-                return new CartItem(rs.getInt("CartItemID"),
-                        cartID,
-                        bookID,
-                        rs.getInt("Quantity"),
-                        rs.getTimestamp("CreatedAt").toLocalDateTime(),
-                        rs.getTimestamp("UpdatedAt").toLocalDateTime());
-            }
-        } catch (SQLException e) {
-            System.out.println("getCartItemByBookID: " + e.getMessage());
-        }
-        return null;
-    }
-
-
-
-    public int getBookIdFromCartItem(int cartID, int bookID) {
-        String sql = "SELECT * FROM CartItems WHERE BookID = ? AND CartID = ?";
-        try {
-            stm=connection.prepareStatement(sql);
-            stm.setInt(1, bookID);
-            stm.setInt(2, cartID);
-            rs = stm.executeQuery();
-            if(rs.next()){
-                return rs.getInt("BookID");
-            }
-        } catch (SQLException e) {
-            System.out.println("getBookIdFromCartItem: " + e.getMessage());
-        }
-        return  0;
-    }
-
-    public int getQuantityFromCart(int cartID, int bookID) {
-        String sql = "SELECT * FROM CartItems WHERE CartID = ? AND BookID = ? ";
-        try {
-            stm=connection.prepareStatement(sql);
-            stm.setInt(1, cartID);
-            stm.setInt(2, bookID);
-            rs=stm.executeQuery();
-            if(rs.next()) return rs.getInt("Quantity");
-        } catch (SQLException e) {
-            System.out.println("getQuantityFromCart: " + e.getMessage());
-        }
-        return 0;
-    }
-
-    public boolean updateQuantityCartItem(CartItem cartItem) {
-        String sql ="UPDATE CartItems SET Quantity = ? WHERE CartID = ? AND BookID = ? ";
-        try {
-            stm=connection.prepareStatement(sql);
-            stm.setInt(1, cartItem.getQuantity());
-            stm.setInt(2, cartItem.getCartID());
-            stm.setInt(3, cartItem.getBookID());
-            int result = stm.executeUpdate();
-            return result > 0;
-        } catch (SQLException e) {
-            System.out.println("updateQuantityCartItem: " + e.getMessage());
-        }
-        return false;
-    }
 
     public ArrayList<CartItem> getCartItemsByCartID(int cartid) {
         String sql = "SELECT * FROM CartItems WHERE CartID = ?";
@@ -127,7 +44,6 @@ public class CartItemDao extends DBContext {
         }
         return cartItems;
     }
-
     //Xóa CartItem theo CartID và BookID
     public boolean deleteCartItem(int cartID, int bookID) {
         String sql = "DELETE FROM CartItems WHERE CartID = ? AND BookID = ?";
@@ -142,21 +58,90 @@ public class CartItemDao extends DBContext {
         }
         return false;
     }
-
-    //Lấy ra số sản phẩm trong giỏ hàng theo CartID
-    public int getQuantityByCartID(int cartID) {
-        String sql = "SELECT COUNT(CartID) AS Quantity FROM CartItems WHERE CartID = ?";
+    public boolean addNewCartItem(CartItem cartItem) {
+        String sql = "INSERT INTO [dbo].[CartItems] ([CartID],[BookID],[Quantity]) VALUES (?,?,?)";
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setInt(1, cartItem.getCartID());
+            stm.setInt(2, cartItem.getBookID());
+            stm.setInt(3, cartItem.getQuantity());
+            stm.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("addNewCartItem: " + e.getMessage());
+        }
+        return false;
+    }
+    public int getBookIdFromCartItem(int cartID, int bookID) {
+        String sql = "SELECT * FROM CartItems WHERE BookID = ? AND CartID = ?";
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setInt(1, bookID);
+            stm.setInt(2, cartID);
+            rs = stm.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("BookID");
+            }
+        } catch (SQLException e) {
+            System.out.println("getBookIdFromCartItem: " + e.getMessage());
+        }
+        return 0;
+    }
+    public int getQuantityFromCart(int cartID, int bookID) {
+        String sql = "SELECT * FROM CartItems WHERE CartID = ? AND BookID = ? ";
         try {
             stm = connection.prepareStatement(sql);
             stm.setInt(1, cartID);
+            stm.setInt(2, bookID);
             rs = stm.executeQuery();
             if (rs.next()) {
                 return rs.getInt("Quantity");
             }
         } catch (SQLException e) {
-            System.out.println("getQuantityByCartID: " + e.getMessage());
+            System.out.println("getQuantityFromCart: " + e.getMessage());
         }
         return 0;
     }
-    //Test add
+    public boolean updateQuantityCartItem(CartItem cartItem) {
+        String sql = "UPDATE CartItems SET Quantity = ? WHERE CartID = ? AND BookID = ? ";
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setInt(1, cartItem.getQuantity());
+            stm.setInt(2, cartItem.getCartID());
+            stm.setInt(3, cartItem.getBookID());
+            int result = stm.executeUpdate();
+            return result > 0;
+        } catch (SQLException e) {
+            System.out.println("updateQuantityCartItem: " + e.getMessage());
+        }
+        return false;
+    }
+    public boolean deleteCartItemsByUserID(int userid, int bookid, int quantity) {
+        String sql = "DELETE FROM CartItems WHERE CartID = ? AND BookID = ? AND Quantity = ?";
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setInt(1, userid);
+            stm.setInt(2, bookid);
+            stm.setInt(3, quantity);
+            int result = stm.executeUpdate();
+            return result > 0;
+        } catch (SQLException e) {
+            System.out.println("deleteCartItemsByUserID: " + e.getMessage());
+        }
+        return false;
+        
+    }
+public boolean updateCartItem(CartItem cartitem) {
+        String sql = "UPDATE CartItems SET Quantity = ? WHERE CartID = ? AND BookID = ?";
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setInt(1, cartitem.getQuantity());
+            stm.setInt(2, cartitem.getCartID());
+            stm.setInt(3, cartitem.getBookID());
+            int result = stm.executeUpdate();
+            return result > 0;
+        } catch (SQLException e) {
+            System.out.println("updateCartItem: " + e.getMessage());
+        }
+        return false;
+    }
 }
