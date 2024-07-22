@@ -91,4 +91,94 @@ public class CategoryDao extends DBContext {
         }
         return category;
     }
+    public void addCategory(String categoryName, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        String sql = "INSERT INTO Categories(CategoryName, CreatedAt, UpdatedAt) VALUES(?, ?, ?)";
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setString(1, categoryName);
+            stm.setTimestamp(2, java.sql.Timestamp.valueOf(createdAt));
+            stm.setTimestamp(3, java.sql.Timestamp.valueOf(updatedAt));
+            stm.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("addCategory: " + e.getMessage());
+        }
+    }
+
+    public void updateCategory(String categoryName, LocalDateTime updatedAt, int id) {
+        String sql = "UPDATE Categories SET CategoryName = ?, UpdatedAt = ? WHERE CategoryID = ?";
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setString(1, categoryName);
+            stm.setTimestamp(2, java.sql.Timestamp.valueOf(updatedAt));
+            stm.setInt(3, id);
+            stm.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("updateCategory: " + e.getMessage());
+        }
+    }
+
+    public void deleteCategory(int id) {
+        String sql = "DELETE FROM Categories WHERE CategoryID = ?";
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setInt(1, id);
+            stm.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("deleteCategory: " + e.getMessage());
+        }
+    }
+
+    //Lấy Category theo tên
+    public Categories getCategoryByName(String name) {
+        Categories category = null;
+        String sql = "SELECT * FROM Categories WHERE CategoryName = ?";
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setString(1, name);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                category = new Categories();
+                category.setCategoryID(rs.getInt("CategoryID"));
+                category.setCategoryName(rs.getString("CategoryName"));
+                category.setCreatedAt(rs.getTimestamp("CreatedAt").toLocalDateTime());
+                category.setUpdatedAt(rs.getTimestamp("UpdatedAt").toLocalDateTime());
+            }
+        } catch (SQLException e) {
+            System.out.println("getCategoryByName: " + e.getMessage());
+        }
+        return category;
+    }
+
+    // Tìm kiếm thể loại theo tên
+    public ArrayList<Categories> searchCategoryByName(String name) {
+        ArrayList<Categories> categories = new ArrayList<Categories>();
+        String sql = "SELECT * FROM Categories WHERE CategoryName LIKE ?";
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setString(1, "%" + name + "%");
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                Categories category = new Categories();
+                category.setCategoryID(rs.getInt("CategoryID"));
+                category.setCategoryName(rs.getString("CategoryName"));
+                category.setCreatedAt(rs.getTimestamp("CreatedAt").toLocalDateTime());
+                category.setUpdatedAt(rs.getTimestamp("UpdatedAt").toLocalDateTime());
+                categories.add(category);
+            }
+        } catch (Exception e) {
+            System.out.println("searchCategoryByName" + e.getMessage());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stm != null) {
+                    stm.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return categories;
+    }
 }

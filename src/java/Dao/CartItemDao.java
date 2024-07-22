@@ -69,7 +69,7 @@ public class CartItemDao extends DBContext {
         } catch (SQLException e) {
             System.out.println("addNewCartItem: " + e.getMessage());
         }
-        return false;
+        return true;
     }
     public int getBookIdFromCartItem(int cartID, int bookID) {
         String sql = "SELECT * FROM CartItems WHERE BookID = ? AND CartID = ?";
