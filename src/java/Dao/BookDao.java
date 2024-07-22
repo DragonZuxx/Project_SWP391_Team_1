@@ -429,6 +429,4 @@ public class BookDao extends DBContext {
         // Khởi tạo một đối tượng BookDao
     }
 
-
-    
 }
