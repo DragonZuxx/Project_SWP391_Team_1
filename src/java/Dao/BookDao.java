@@ -425,50 +425,8 @@ public class BookDao extends DBContext {
         return books;
     }
     
-    public int getStockByBookID(int bookID) {
-        String sql = "SELECT Stock FROM Books WHERE BookID = ?";
-        try {
-            stm = connection.prepareStatement(sql);
-            stm.setInt(1, bookID);
-            rs = stm.executeQuery();
-            while (rs.next()) {
-                return rs.getInt("Stock");
-            }
-        } catch (Exception e) {
-            System.out.println("getStockByBookID" + e.getMessage());
-        }
-        return 0;
-
-    }
-    public int getSoldQuantitybyBookID(int bookID) {
-        String sql = "SELECT SoldQuantity FROM Books WHERE BookID = ?";
-        try {
-            stm = connection.prepareStatement(sql);
-            stm.setInt(1, bookID);
-            rs = stm.executeQuery();
-            while (rs.next()) {
-                return rs.getInt("SoldQuantity");
-            }
-        } catch (Exception e) {
-            System.out.println("getSoldQuantitybyBookID" + e.getMessage());
-        }
-        return 0;
-
-    }
-    
-    public boolean updateQuantityInStock(int bookID, int newQuantityInStock, int quantity) {
-        String sql = "UPDATE Books SET Stock = ?, SoldQuantity = ? WHERE BookID = ?";
-        try {
-            stm = connection.prepareStatement(sql);
-            stm.setInt(1, newQuantityInStock);
-            stm.setInt(2, quantity);
-            stm.setInt(3, bookID);
-            int result = stm.executeUpdate();
-            return result > 0;
-        } catch (Exception e) {
-            System.out.println("updateQuantityInStock" + e.getMessage());
-        }
-        return false;
+    public static void main(String[] args) {
+        // Khởi tạo một đối tượng BookDao
     }
 
 
