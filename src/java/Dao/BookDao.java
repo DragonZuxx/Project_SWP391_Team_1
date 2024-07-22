@@ -185,4 +185,19 @@ public class BookDao extends DBContext {
         }
         return false;
     }
+    //Chỉ lấy ra Publisher của Books và không trùng nhau (Distinct)
+    public ArrayList<String> getDistinctPublisher() {
+        ArrayList<String> publishers = new ArrayList<String>();
+        String sql = "SELECT DISTINCT Publisher FROM Books";
+        try {
+            stm = connection.prepareStatement(sql);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                publishers.add(rs.getString("Publisher"));
+            }
+        } catch (Exception e) {
+            System.out.println("getDistinctPublisher" + e.getMessage());
+        }
+        return publishers;
+    }
 }

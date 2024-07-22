@@ -64,7 +64,7 @@ public class CartDao extends DBContext {
         } catch (SQLException e) {
             System.out.println("addNewCart: " + e.getMessage());
         }
-        return false;
+        return true;
     }
 
 }
