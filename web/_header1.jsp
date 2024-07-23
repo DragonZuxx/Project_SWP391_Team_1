@@ -12,7 +12,7 @@
                     </a>
                 </div> <!-- col.// -->
 
-                <div class="col-lg-6 col-xl-6 ${empty sessionScope.account ? 'mb-3 mb-lg-0' : ''}">
+                <div class="col-lg-4 col-xl-4 ${empty sessionScope.account ? 'mb-3 mb-lg-0' : ''}">
                     <form action="${pageContext.request.contextPath}/search" method="post" class="search">
                         <div class="input-group w-100">
                             <input type="text"
@@ -27,7 +27,7 @@
                     </form>
                 </div> <!-- col.// -->
 
-                <div class="col-lg-3 col-xl-3">
+                <div class="col-lg-5 col-xl-5">
                     <c:if test="${not empty sessionScope.account}">
                         <ul class="nav col-12 col-lg-auto my-2 my-lg-0 justify-content-center justify-content-lg-end text-small">
                            <c:choose>
