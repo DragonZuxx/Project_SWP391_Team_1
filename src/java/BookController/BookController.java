@@ -156,7 +156,7 @@ public class BookController extends HttpServlet {
         boolean isBanned = Boolean.parseBoolean(request.getParameter("isBanned"));
         java.time.LocalDateTime now = java.time.LocalDateTime.now();
 
-        Books book = bookDAO.getBookByID(bookID);
+        Books book = bookDAO.getBookById(bookID);
         book.setISBN(isbn);
         book.setTitle(title);
         book.setPublisher(publisher);
