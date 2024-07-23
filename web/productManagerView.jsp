@@ -185,7 +185,7 @@
                                     <label for="stock">Tồn kho</label>
                                     <input type="number" class="form-control" id="stock" name="stock" value="${book.getStock()}" required>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group d-none"">
                                     <label for="soldQuantity">Số lượng đã bán</label>
                                     <input type="number" class="form-control" id="soldQuantity" name="soldQuantity" value="${book.getSoldQuantity()}" required>
                                 </div>
@@ -290,7 +290,7 @@
                                 <label for="stock">Tồn kho</label>
                                 <input type="number" class="form-control" id="stock" name="stock" required>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group d-none">
                                 <label for="soldQuantity">Số lượng đã bán</label>
                                 <input type="number" class="form-control" id="soldQuantity" name="soldQuantity" required>
                             </div>
