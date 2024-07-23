@@ -20,6 +20,7 @@ public class AccountDao extends DBContext {
 
     PreparedStatement stm;
     ResultSet rs;
+
     public Accounts getLogin(String email, String pass) {
         String sql = "select * from Users where Email= ? and Password =?";
         try {
@@ -46,7 +47,8 @@ public class AccountDao extends DBContext {
         }
         return null;
     }
-     public Accounts checkEmail(String email) {
+
+    public Accounts checkEmail(String email) {
         String sql = "SELECT * FROM Users WHERE Email= ?";
         try {
             stm = connection.prepareStatement(sql);
@@ -71,8 +73,8 @@ public class AccountDao extends DBContext {
         }
         return null;
     }
-   
-      public boolean updatePasswordByPassAndEmail(String currentPassword, String newPassword, String email) {
+
+    public boolean updatePasswordByPassAndEmail(String currentPassword, String newPassword, String email) {
         String query = "UPDATE Users SET Password = ? WHERE Password = ? AND Email = ?";
 
         try {
@@ -89,7 +91,8 @@ public class AccountDao extends DBContext {
         }
         return false;
     }
-      public void updateUser(String pass, String fullname, String address, String phone,
+
+    public void updateUser(String pass, String fullname, String address, String phone,
             int userID) {
         String sql = "UPDATE [dbo].[Users]\n"
                 + "   SET  [Password] = ?\n"
@@ -110,7 +113,8 @@ public class AccountDao extends DBContext {
             System.out.println(e);
         }
     }
-       public Accounts getAccountByID(int id) {
+
+    public Accounts getAccountByID(int id) {
         String sql = "SELECT * FROM Users WHERE UserID = ?";
         Accounts a = null;
         try {
@@ -135,7 +139,8 @@ public class AccountDao extends DBContext {
         }
         return a;
     }
-       //Lấy thông tin người dùng bằng Id
+    //Lấy thông tin người dùng bằng Id
+
     public Accounts getAccountByUserID(int id) {
         String sql = "SELECT * FROM Users WHERE UserID = ?";
         try {
@@ -160,7 +165,8 @@ public class AccountDao extends DBContext {
         }
         return null;
     }
-     public List<Accounts> getAll() {
+
+    public List<Accounts> getAll() {
         List<Accounts> accounts = new ArrayList<>();
         String sql = "SELECT * FROM Users";
         try {
@@ -184,6 +190,27 @@ public class AccountDao extends DBContext {
             System.out.println(e);
         }
         return accounts;
+    }
+
+    public boolean createAccount(Accounts account) {
+        String sql = "INSERT INTO Users (Email, Password, FullName, Address, Phone, RoleID, IsActive, CreatedAt, UpdatedAt) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, GETDATE(), GETDATE())";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, account.getEmail());
+            statement.setString(2, account.getPassword());
+            statement.setString(3, account.getFullName());
+            statement.setString(4, account.getAddress());
+            statement.setString(5, account.getPhone());
+            statement.setInt(6, account.getRoleID());
+            statement.setBoolean(7, true);
+
+            int result = statement.executeUpdate();
+            return result > 0; // Returns true if at least one record was inserted
+        } catch (SQLException e) {
+            System.out.println("createAccount: " + e.getMessage());
+        }
+        return false; // Returns false if an error occurred or no record was inserted
     }
 
 }
