@@ -58,6 +58,7 @@ public class AuthorDao extends DBContext {
         }
         return authors;
     }
+
     //Lấy Authors theo AuthorID
     public Authors getAuthorById(int id) {
         Authors author = null;
@@ -156,20 +157,18 @@ public class AuthorDao extends DBContext {
         return author;
     }
 
-   public void addAuthor(String name, LocalDateTime createdAt, LocalDateTime updatedAt) {
-    String sql = "INSERT INTO Authors(Name, CreatedAt, UpdatedAt) VALUES(?, ?, ?)";
-    try {
-        stm = connection.prepareStatement(sql);
-        stm.setString(1, name);
-        stm.setTimestamp(2, java.sql.Timestamp.valueOf(createdAt));
-        stm.setTimestamp(3, java.sql.Timestamp.valueOf(updatedAt));
-        stm.executeUpdate();
-    } catch (SQLException e) {
-        System.out.println("addAuthor: " + e.getMessage());
+    public void addAuthor(String name, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        String sql = "INSERT INTO Authors(Name, CreatedAt, UpdatedAt) VALUES(?, ?, ?)";
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setString(1, name);
+            stm.setTimestamp(2, java.sql.Timestamp.valueOf(createdAt));
+            stm.setTimestamp(3, java.sql.Timestamp.valueOf(updatedAt));
+            stm.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("addAuthor: " + e.getMessage());
+        }
     }
-}
-
-   
 
     public ArrayList<Authors> searchAuthorByName(String name) {
         ArrayList<Authors> authors = new ArrayList<Authors>();
@@ -189,6 +188,26 @@ public class AuthorDao extends DBContext {
             }
         } catch (Exception e) {
             System.out.println("searchAuthorByName" + e.getMessage());
+        }
+        return authors;
+    }
+
+    public ArrayList<Authors> getAllAuthors() {
+        ArrayList<Authors> authors = new ArrayList<>();
+        String sql = "SELECT * FROM Authors";
+        try {
+            stm = connection.prepareStatement(sql);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                Authors author = new Authors();
+                author.setAuthorID(rs.getInt("AuthorID"));
+                author.setName(rs.getString("Name"));
+                author.setCreatedAt(rs.getTimestamp("CreatedAt").toLocalDateTime());
+                author.setUpdatedAt(rs.getTimestamp("UpdatedAt").toLocalDateTime());
+                authors.add(author);
+            }
+        } catch (Exception e) {
+            System.out.println("getAllAuthors: " + e.getMessage());
         }
         return authors;
     }

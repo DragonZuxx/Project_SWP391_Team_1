@@ -124,6 +124,7 @@
         </section> 
     </div> 
     <jsp:include page="_footer.jsp"/>
+    <jsp:include page="ChatBot.jsp"/>
     <script src="js/home.js"></script>
 </body>
 

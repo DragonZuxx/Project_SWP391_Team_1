@@ -4,7 +4,10 @@
  */
 package Model;
 
+import Dao.BookAuthorDao;
+import Dao.BookCategorieDao;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  *
@@ -164,6 +167,28 @@ public class Books {
         return "Books{" + "BookID=" + BookID + ", Title=" + Title + ", Publisher=" + Publisher + ", PublicationDate=" + PublicationDate + ", ISBN=" + ISBN + ", Price=" + Price + ", Stock=" + Stock + ", SoldQuantity=" + SoldQuantity + ", Description=" + Description + ", CoverImage=" + CoverImage + ", IsAvailable=" + IsAvailable + ", IsBanned=" + IsBanned + ", CreatedAt=" + CreatedAt + ", UpdatedAt=" + UpdatedAt + '}';
     }
 
+    private String authors = null;
+    public String getAuthors() {
+        if (authors == null) {
+            List<BookAuthors> temp = new BookAuthorDao().getBookAuthorsByBookID(BookID);
+            authors = ",";
+            for (BookAuthors ba : temp)
+                authors += ba.getAuthorID() + ",";
+        }
+        
+        return authors;
+    }
     
+    private String cates = null;
+    public String getCates() {
+        if (cates == null) {
+            List<BookCategories> temp = new BookCategorieDao().getAllBookCategoriesByBookID(BookID);
+            cates = ",";
+            for (BookCategories bc : temp)
+                cates += bc.getCategoryID()+ ",";
+        }
+        
+        return cates;
+    }
     
 }

@@ -31,6 +31,7 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        ChatBotController.getBot(request);
 
         BookDao bookDao = new BookDao();
         CategoryDao cateDao = new CategoryDao();

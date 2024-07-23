@@ -40,6 +40,7 @@ public class BookCategorieDao extends DBContext {
         }
         return bookcategories;
     }
+
     //Lấy ra list BookCategories theo CategoryID
     public ArrayList<BookCategories> getBookCategoriesByCategoryID(int id) {
         ArrayList<BookCategories> bookcategories = new ArrayList<>();
@@ -61,4 +62,53 @@ public class BookCategorieDao extends DBContext {
         }
         return bookcategories;
     }
+
+    public boolean deleteBookCategoriesByBookID(int id) {
+        String sql = "DELETE FROM BookCategories WHERE BookID = ?";
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setInt(1, id);
+            int rowsAffected = stm.executeUpdate();
+            return rowsAffected > 0; // Return true if rows were deleted
+        } catch (Exception e) {
+            System.out.println("deleteBookCategoriesByBookID: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean addBookCategory(int bookID, int categoryID) {
+        String sql = "INSERT INTO BookCategories (BookID, CategoryID, CreatedAt, UpdatedAt) VALUES (?, ?, GETDATE(), GETDATE())";
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setInt(1, bookID);
+            stm.setInt(2, categoryID);
+            int rowsAffected = stm.executeUpdate();
+            return rowsAffected > 0; // Return true if insertion was successful
+        } catch (Exception e) {
+            System.out.println("addBookCategory: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public ArrayList<BookCategories> getAllBookCategoriesByBookID(int id) {
+        ArrayList<BookCategories> bookcategories = new ArrayList<>();
+        String sql = "SELECT * FROM BookCategories WHERE BookID = ?";
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setInt(1, id);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                BookCategories bookcategorie = new BookCategories();
+                bookcategorie.setBookID(rs.getInt("BookID"));
+                bookcategorie.setCategoryID(rs.getInt("CategoryID"));
+                bookcategorie.setCreatedAt(rs.getTimestamp("CreatedAt").toLocalDateTime());
+                bookcategorie.setUpdatedAt(rs.getTimestamp("UpdatedAt").toLocalDateTime());
+                bookcategories.add(bookcategorie);
+            }
+        } catch (Exception e) {
+            System.out.println("getBookCategoriesByCategoryID: " + e.getMessage());
+        }
+        return bookcategories;
+    }
+
 }
