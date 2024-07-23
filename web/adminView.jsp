@@ -87,7 +87,16 @@
                                             </figure>
                                         </div>
                                     </c:if>
+                                    <div class="col-6 col-lg-3">
+                                        <figure class="card">
+                                            <div class="p-3">
+                                                <h4 class="title">${requestScope.totalOrders}</h4>
+                                                <span><a href="promotionManager" class="text-dark mr-3" style="text-decoration: none;">Chương trình khuyến mãi</a></span>
+                                            </div>
+                                        </figure>
+                                    </div>
                                 </div>
+
                                 <div class="container">
                                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                                         <span class="navbar-toggler-icon"></span>
@@ -131,6 +140,11 @@
                                                 <a class="nav-link ${fn:startsWith(servletPath, '/admin/revenueBook') ? 'active' : ''}"
                                                    href="revenueBook">
                                                     <i class="bi bi-window"></i> Quản lý doanh thu
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link ${fn:startsWith(servletPath, '/promotionManager') ? 'active' : ''}" href="${pageContext.request.contextPath}/promotionManager">
+                                                    <i class="bi-megaphone-fill"></i> Quản lý chương trình khuyến mãi
                                                 </a>
                                             </li>
                                         </ul>

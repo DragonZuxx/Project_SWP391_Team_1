@@ -7,7 +7,7 @@
 
 <head>
     <jsp:include page="_meta.jsp"/>
-    <title>Quản lý thể loại</title>
+    <title>Quản lý Tác giả</title>
     <style>
         .header-container {
             display: flex;
@@ -21,11 +21,15 @@
             max-width: 400px;
             margin-right: 20px;
         }
+
+        .spacer {
+            margin-top: 20px; /* Khoảng cách giữa thanh tìm kiếm và danh sách tác giả */
+        }
     </style>
     <script type="text/javascript">
-        function doDelete(CategoryID) {
-            if (confirm("Are you sure to delete Category with ID = " + CategoryID + "?")) {
-                window.location = "deletecategory?CategoryID=" + CategoryID;
+        function doDelete(AuthorID) {
+            if (confirm("Are you sure to delete Author with ID = " + AuthorID + "?")) {
+                window.location = "deleteauthor?AuthorID=" + AuthorID;
             }
         }
     </script>
@@ -50,15 +54,15 @@
             <c:remove var="errorMessage" scope="session"/>
 
             <div class="header-container">
-                <h3 class="section-title">Quản lý thể loại</h3>
+                <h3 class="section-title">Quản lý Tác giả</h3>
                 <div class="search-container">
-                    <form action="${pageContext.request.contextPath}/searchmanagercate" method="post" class="searchmanagercate">
+                    <form action="${pageContext.request.contextPath}/searchauthoradmin" method="post" class="searchauthoradmin">
                         <div class="input-group">
                             <input type="text"
                                    class="form-control"
                                    placeholder="Nhập từ khóa cần tìm ..."
-                                   name="searchcate"
-                                   value="${requestScope.searchcate}">
+                                   name="searchauthor"
+                                   value="${requestScope.searchauthor}">
                             <button class="btn btn-primary" type="submit">
                                 <i class="bi bi-search"></i>
                             </button>
@@ -66,9 +70,9 @@
                     </form>
                 </div>
                 <a class="btn btn-primary"
-                   href="${pageContext.request.contextPath}/createCategoryView.jsp"
+                   href="${pageContext.request.contextPath}/createAuthorView.jsp"
                    role="button">
-                    Thêm thể loại
+                    Thêm tác giả
                 </a>
             </div> <!-- header-container.// -->
 
@@ -78,34 +82,29 @@
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">ID</th>
-                            <th scope="col">Tên thể loại</th>
+                            <th scope="col">Tên tác giả</th>
+                            
                             <th scope="col" style="width: 225px;">Thao tác</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach var="category" varStatus="loop" items="${requestScope.categories}">
+                        <c:forEach var="author" varStatus="loop" items="${requestScope.authors}">
                             <tr>
                                 <th scope="row">${loop.index + 1}</th>
-                                <td>${category.getCategoryID()}</td>
-
+                                <td>${author.getAuthorID()}</td>
                                 <td>
-                                    <a href="${pageContext.request.contextPath}/category?id=${category.getCategoryID()}"
-                                       target="_blank">${category.getCategoryName()}</a>
+                                    <a href="${pageContext.request.contextPath}/author?id=${author.getAuthorID()}"
+                                       target="_blank">${author.getName()}</a>
                                 </td>
+                               
                                 <td class="text-center text-nowrap">
-                                    <a class="btn btn-primary me-2"
-                                       href="${pageContext.request.contextPath}/detailCate?id=${category.getCategoryID()}"
-                                       role="button">
-                                        Xem
-                                    </a>
-                                    <a class="btn btn-success me-2"
-                                       href="updatecategory?id=${category.getCategoryID()}"
+                                    
+                                    <a class="btn btn-success me-2" href="updateauthor?id=${author.getAuthorID()}"
                                        role="button">
                                         Cập Nhật
                                     </a>
                                     
                                 </td>
-
                             </tr>
                         </c:forEach>
                     </tbody>
@@ -117,7 +116,7 @@
                     <ul class="pagination justify-content-center">
                         <li class="page-item ${requestScope.currentPage == 1 ? 'disabled' : ''}">
                             <a class="page-link"
-                               href="${pageContext.request.contextPath}/categoryManager?page=${requestScope.currentPage - 1}">
+                               href="${pageContext.request.contextPath}/authorManager?page=${requestScope.currentPage - 1}">
                                 Trang trước
                             </a>
                         </li>
@@ -135,7 +134,7 @@
                                 <c:forEach begin="1" end="${requestScope.totalPages}" var="i">
                                     <li class="page-item ${requestScope.currentPage == i ? 'active' : ''}">
                                         <a class="page-link"
-                                           href="${pageContext.request.contextPath}/categoryManager?page=${i}">
+                                           href="${pageContext.request.contextPath}/authorManager?page=${i}">
                                             ${i}
                                         </a>
                                     </li>
@@ -143,12 +142,12 @@
                             </c:when>
                             <c:otherwise>
                                 <li class="page-item ${requestScope.currentPage == 1 ? 'active' : ''}">
-                                    <a class="page-link" href="${pageContext.request.contextPath}/categoryManager?page=1">1</a>
+                                    <a class="page-link" href="${pageContext.request.contextPath}/authorManager?page=1">1</a>
                                 </li>
 
                                 <c:if test="${startPage > 2}">
                                     <li class="page-item disabled"><a class="page-link">...</a></li>
-                                    </c:if>
+                                </c:if>
 
                                 <c:forEach begin="${startPage}" end="${endPage}" var="i">
                                     <c:choose>
@@ -161,7 +160,7 @@
                                         <c:otherwise>
                                             <li class="page-item">
                                                 <a class="page-link"
-                                                   href="${pageContext.request.contextPath}/categoryManager?page=${i}">
+                                                   href="${pageContext.request.contextPath}/authorManager?page=${i}">
                                                     ${i}
                                                 </a>
                                             </li>
@@ -171,10 +170,10 @@
 
                                 <c:if test="${endPage < requestScope.totalPages - 1}">
                                     <li class="page-item disabled"><a class="page-link">...</a></li>
-                                    </c:if>
+                                </c:if>
 
                                 <li class="page-item ${requestScope.currentPage == requestScope.totalPages ? 'active' : ''}">
-                                    <a class="page-link" href="${pageContext.request.contextPath}/categoryManager?page=${requestScope.totalPages}">
+                                    <a class="page-link" href="${pageContext.request.contextPath}/authorManager?page=${requestScope.totalPages}">
                                         ${requestScope.totalPages}
                                     </a>
                                 </li>
@@ -183,7 +182,7 @@
 
                         <li class="page-item ${requestScope.currentPage == requestScope.totalPages ? 'disabled' : ''}">
                             <a class="page-link"
-                               href="${pageContext.request.contextPath}/categoryManager?page=${requestScope.currentPage + 1}">
+                               href="${pageContext.request.contextPath}/authorManager?page=${requestScope.currentPage + 1}">
                                 Trang sau
                             </a>
                         </li>

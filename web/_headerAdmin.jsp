@@ -77,13 +77,18 @@
                     </a>
                 </li>
                 <c:if test="${sessionScope.account.getRoleID() == 1}">
+                    <li class="nav-item">
+                        <a class="nav-link ${fn:startsWith(servletPath, '/admin/revenueBook') ? 'active' : ''}"
+                           href="revenueBook">
+                            <i class="bi bi-window"></i> Quản lý doanh thu
+                        </a>
+                    </li>               
+                </c:if>
                 <li class="nav-item">
-                    <a class="nav-link ${fn:startsWith(servletPath, '/admin/revenueBook') ? 'active' : ''}"
-                       href="revenueBook">
-                        <i class="bi bi-window"></i> Quản lý doanh thu
+                    <a class="nav-link ${fn:startsWith(servletPath, '/promotionManager') ? 'active' : ''}" href="${pageContext.request.contextPath}/promotionManager">
+                        <i class="bi-megaphone-fill"></i> Quản lý chương trình khuyến mãi
                     </a>
                 </li>
-                </c:if>
             </ul>
         </div>
     </div>
