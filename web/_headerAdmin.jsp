@@ -6,11 +6,21 @@
     <section class="header-main border-bottom">
         <div class="container">
             <div class="row align-items-center">
-                <div class="col py-3">
-                    <a class="text-body" href="${pageContext.request.contextPath}/home">
-                        <h3><span class="badge bg-primary">Admin</span> Book Haven Shop</h3>
-                    </a>
-                </div>
+                <c:if test="${sessionScope.account.getRoleID() == 1}">
+                    <div class="col py-3">
+                        <a class="text-body" href="${pageContext.request.contextPath}/home">
+                            <h3><span class="badge bg-primary">Admin</span> Book Haven Shop</h3>
+                        </a>
+                    </div>
+                </c:if>
+
+                <c:if test="${sessionScope.account.getRoleID() == 2}">
+                    <div class="col py-3">
+                        <a class="text-body" href="${pageContext.request.contextPath}/home">
+                            <h3><span class="badge bg-primary">Nhân Viên</span> Book Haven Shop</h3>
+                        </a>
+                    </div>
+                </c:if>
                 <div class="col-sm-1">
                     <ul class="nav col-12 col-lg-auto my-2 my-lg-0 justify-content-center justify-content-lg-end text-small">
                         <li>
@@ -33,11 +43,14 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link ${fn:startsWith(servletPath, 'userManager') ? 'active' : ''}" href="${pageContext.request.contextPath}/userManager">
-                        <i class="bi bi-people"></i> Quản lý người dùng
-                    </a>
-                </li>
+                <c:if test="${sessionScope.account.getRoleID() == 1}">
+                    <li class="nav-item">
+                        <a class="nav-link ${fn:startsWith(servletPath, 'userManager') ? 'active' : ''}" href="${pageContext.request.contextPath}/userManager">
+                            <i class="bi bi-people"></i> Quản lý người dùng
+                        </a>
+                    </li>
+                </c:if>
+
                 <li class="nav-item">
                     <a class="nav-link ${fn:startsWith(servletPath, 'categoryManager') ? 'active' : ''}" href="${pageContext.request.contextPath}/categoryManager">
                         <i class="bi bi-tags"></i> Quản lý thể loại
@@ -63,12 +76,14 @@
                         <i class="bi bi-person-check"></i> Quản lý tác giả
                     </a>
                 </li>
+                <c:if test="${sessionScope.account.getRoleID() == 1}">
                 <li class="nav-item">
                     <a class="nav-link ${fn:startsWith(servletPath, '/admin/revenueBook') ? 'active' : ''}"
                        href="revenueBook">
                         <i class="bi bi-window"></i> Quản lý doanh thu
                     </a>
                 </li>
+                </c:if>
             </ul>
         </div>
     </div>

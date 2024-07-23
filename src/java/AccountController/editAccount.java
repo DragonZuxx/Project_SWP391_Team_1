@@ -129,6 +129,7 @@ public class editAccount extends HttpServlet {
 //            isActive = Boolean.parseBoolean(active);
             ListAccountDao dal = new ListAccountDao();
             dal.updateAccount(pass, email, fullname, address, phone, role, isActive, LocalDateTime.now(), id);
+            request.getSession().setAttribute("mess", "Sửa người dùng thành công!");
             response.sendRedirect("userManager");
 
         } catch (NumberFormatException e) {

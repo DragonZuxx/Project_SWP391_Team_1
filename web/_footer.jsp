@@ -15,14 +15,14 @@
                         <li>Gmail: <a href="mailto:bookhavenshop03@gmail.com">bookhavenshop03@gmail.com</a></li>
                     </ul>
                 </aside>
-                <aside class="col-sm-4 col-lg-3">
+<!--                <aside class="col-sm-4 col-lg-3">
                     <h6 class="pb-2">Thông tin khác</h6>
                     <ul class="list-unstyled">
                         <li><a href="#">Facebook</a></li>
                         <li><a href="#">Instagram</a></li>
                         <li><a href="#">Tiktok</a></li>
                     </ul>
-                </aside>
+                </aside>-->
             </div> <!-- row.// -->
             <div class="row">
                 <div class="col-12 text-center mt-3">

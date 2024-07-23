@@ -13,7 +13,7 @@
 
     <body>
         <c:choose>
-            <c:when test="${empty sessionScope.account.getRoleID() || sessionScope.account.getRoleID() == 3}">
+            <c:when test="${empty sessionScope.account.getRoleID() || sessionScope.account.getRoleID() == 3 || sessionScope.account.getRoleID() == 2}">
                 <jsp:include page="admin401View.jsp"/>
             </c:when>
             <c:otherwise>
