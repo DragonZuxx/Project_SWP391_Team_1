@@ -92,14 +92,14 @@
                                     <td>${product.stock}</td>
                                     <td class="text-center text-nowrap">
                                         <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#bookInfoModal_${product.getBookID()}">Xem</button>
-                                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editBookModal_${product.getBookID()}">Sửa</button>
-                                        <form method="post">
+                                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editBookModal_${product.getBookID()}">Cập nhật</button>
+<!--                                        <form method="post">
                                             <input type="hidden" name="action" value="delete">
                                             <input type="hidden" name="bookID" value="${product.getBookID()}">
                                             <button class="btn-sm btn-danger"
                                                     role="button"
                                                     onclick="return confirm('Bạn có muốn xóa?')">Xóa</button>
-                                        </form>
+                                        </form>-->
                                     </td>
                                 </tr>
                             </c:forEach>
@@ -218,7 +218,7 @@
                                         <option value="false" ${!book.getIsAvailable() ? "selected" : ""}>Không hoạt động</option>
                                     </select>
                                 </div>
-                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                                <button type="submit" class="btn btn-primary">Cập nhật</button>
                             </form>
                         </div>
                     </div>
@@ -245,7 +245,7 @@
                             <p><strong>Giá bán:</strong> ${book.getPrice()}</p>
                             <p><strong>Tồn kho:</strong> ${book.getStock()}</p>
                             <p><strong>Số lượng đã bán:</strong> ${book.getSoldQuantity()}</p>
-                            <p><strong>Trạng thái:</strong> ${book.getIsAvailable() ? 'Available' : 'Unavailable'}</p>
+                            <p><strong>Trạng thái:</strong> ${book.getIsAvailable() ? 'Hoạt động' : 'Không hoạt động'}</p>
                         </div>
                     </div>
                 </div>
@@ -323,7 +323,7 @@
                                     <option value="false">Không hoạt động</option>
                                 </select>
                             </div>
-                            <button type="submit" class="btn btn-primary">Add Book</button>
+                            <button type="submit" class="btn btn-primary">Thêm</button>
                         </form>
                     </div>
                 </div>
