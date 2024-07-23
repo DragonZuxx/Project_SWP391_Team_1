@@ -27,24 +27,7 @@
                         </div>
                     </c:if>
                     <form action="${pageContext.request.contextPath}/register" method="post">
-                        <div class="mb-3">
-                            <label for="inputUsername" class="form-label">Username</label>
-                            <input type="text"
-                                   class="form-control ${not empty requestScope.violations.usernameViolations
-                                                         ? 'is-invalid' : (not empty requestScope.values.username ? 'is-valid' : '')}"
-                                   id="inputUsername"
-                                   name="username"
-                                   value="${requestScope.values.username}">
-                            <c:if test="${not empty requestScope.violations.usernameViolations}">
-                                <div class="invalid-feedback">
-                                    <ul class="list-unstyled">
-                                        <c:forEach var="violation" items="${requestScope.violations.usernameViolations}">
-                                            <li>${violation}</li>
-                                            </c:forEach>
-                                    </ul>
-                                </div>
-                            </c:if>
-                        </div>
+
                         <div class="mb-3">
                             <label for="inputUsername" class="form-label">Email</label>
                             <input type="text"
