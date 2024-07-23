@@ -94,6 +94,7 @@ public class addAccount extends HttpServlet {
             if (ac == null) {
                 
                 dal.addAccount(pass, email, fullName, address, phone, roleId, LocalDateTime.now(), LocalDateTime.now());
+               request.getSession().setAttribute("succsess", "Thêm thành công tài khoản!");
                 response.sendRedirect("userManager");
             } else {
                 request.setAttribute("mess4", "Email đã tồn tại!");

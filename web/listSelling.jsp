@@ -67,7 +67,7 @@
         <jsp:include page="navbar.jsp"/>
         <section class="section-pagetop bg-light">
             <div class="container">
-                <h3 class="title-page">Top 10 Sản phẩm bán chạy nhất</h3>
+                <h3 class="title-page">Top sản phẩm bán chạy nhất</h3>
             </div> 
         </section>
         <section class="section-content padding-y">

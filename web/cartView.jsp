@@ -22,30 +22,24 @@
         <section class="section-content padding-y">
             <div class="container">
                 <div class="row">
-                     <c:if test="${not empty sessionScope.updateOutCartSucssec}">
+                    <c:if test="${not empty sessionScope.successDeleteBookInCart}">
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            ${sessionScope.updateOutCartSucssec}
+                            ${sessionScope.successDeleteBookInCart}
                         </div>
                     </c:if>
-                    <c:if test="${not empty sessionScope.updateOutCartError}">
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            ${sessionScope.updateOutCartError}
-                        </div>
-                    </c:if>
-                    <c:if test="${not empty sessionScope.deleteOutCartSucssec}">
+                    <c:if test="${not empty sessionScope.messErorr}">
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            ${sessionScope.deleteOutCartSucssec}
+                            ${sessionScope.messErorr}
                         </div>
                     </c:if>
-                    <c:if test="${not empty sessionScope.deleteOutCartError}">
+                    <c:if test="${not empty sessionScope.errorDeleteBookInCart}">
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            ${sessionScope.deleteOutCartError}
+                            ${sessionScope.errorDeleteBookInCart}
                         </div>
                     </c:if>
-                    <c:remove var="updateOutCartSucssec" scope="session" />
-                    <c:remove var="deleteOutCartError" scope="session" />
-                    <c:remove var="updateOutCartError" scope="session" />
-                    <c:remove var="updateOutCartSucssec" scope="session" />
+                    <c:remove var="successDeleteBookInCart" scope="session" />
+                    <c:remove var="messErorr" scope="session" />
+                    <c:remove var="errorDeleteBookInCart" scope="session" />
                     <c:choose>
                         <c:when test="${empty sessionScope.account}">
                             <p>
