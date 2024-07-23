@@ -114,7 +114,7 @@ public class ListAccountDao extends DBContext {
         return list;
     }
 
-    public void addAccount(String pass, String email, String fullname, String address, String Phone, int role, LocalDateTime createAt, LocalDateTime updateAt) {
+    public void addAccount(String pass, String email, String fullname, String address, String Phone, int role, boolean isActive, LocalDateTime createAt, LocalDateTime updateAt) {
         String sql = "INSERT INTO [dbo].[Users]\n"
                 + "           ([Password]\n"
                 + "           ,[Email]\n"
@@ -122,10 +122,11 @@ public class ListAccountDao extends DBContext {
                 + "           ,[Address]\n"
                 + "           ,[Phone]\n"
                 + "           ,[RoleID]\n"
+                + "           ,[isActive]\n"
                 + "           ,[CreatedAt]\n"
                 + "           ,[UpdatedAt])\n"
                 + "     VALUES\n"
-                + "           (?,?,?,?,?,?,?,?)";
+                + "           (?,?,?,?,?,?,?,?,?)";
 
         try {
             PreparedStatement pr = connection.prepareStatement(sql);
@@ -135,8 +136,9 @@ public class ListAccountDao extends DBContext {
             pr.setString(4, address);
             pr.setString(5, Phone);
             pr.setInt(6, role);
-            pr.setTimestamp(7, Timestamp.valueOf(createAt));
-            pr.setTimestamp(8, Timestamp.valueOf(updateAt));
+            pr.setBoolean(7, isActive);
+            pr.setTimestamp(8, Timestamp.valueOf(createAt));
+            pr.setTimestamp(9, Timestamp.valueOf(updateAt));
             pr.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e);
@@ -626,8 +628,8 @@ public class ListAccountDao extends DBContext {
     public static void main(String[] args) {
         ListAccountDao dal = new ListAccountDao();
         BookRevenue bok = new BookRevenue();
-
-        System.out.println(dal.getAllWishlistBooks());
+        dal.addAccount("Minhtan@120003", "minhdg@gmail.com", "Tandeotrai", "Ha Noi", "0988786543", 3, true, LocalDateTime.now(), LocalDateTime.now());
+        System.out.println(dal);
 
     }
 }

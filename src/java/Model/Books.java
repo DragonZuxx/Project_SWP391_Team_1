@@ -164,7 +164,7 @@ public class Books {
 
     @Override
     public String toString() {
-        return "Books{" + "BookID=" + BookID + ", Title=" + Title + ", Publisher=" + Publisher + ", PublicationDate=" + PublicationDate + ", ISBN=" + ISBN + ", Price=" + Price + ", Stock=" + Stock + ", SoldQuantity=" + SoldQuantity + ", Description=" + Description + ", CoverImage=" + CoverImage + ", IsAvailable=" + IsAvailable + ", IsBanned=" + IsBanned + ", CreatedAt=" + CreatedAt + ", UpdatedAt=" + UpdatedAt + '}';
+        return "Books{" + "BookID=" + BookID + ", Title=" + Title + ", Publisher=" + Publisher + ", PublicationDate=" + PublicationDate + ", ISBN=" + ISBN + ", Price=" + Price + ", Stock=" + Stock + ", SoldQuantity=" + SoldQuantity + ", CoverImage=" + CoverImage + ", IsAvailable=" + IsAvailable + ", IsBanned=" + IsBanned + ", CreatedAt=" + CreatedAt + ", UpdatedAt=" + UpdatedAt + '}';
     }
 
     private String authors = null;

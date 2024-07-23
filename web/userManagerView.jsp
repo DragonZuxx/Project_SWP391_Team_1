@@ -109,7 +109,7 @@
                                                         <c:when test="${account.isIsActive() == null}">Hoạt động</c:when> 
                                                     </c:choose>
                                                 </td>
-                                                <th><a href="edit?id=${account.getUserID()}" class="btn btn-warning btn-sm">Sửa</a></th>
+                                                <th><a href="edit?id=${account.getUserID()}" class="btn btn-warning btn-sm">Cập nhật</a></th>
                                             </tr>
                                         </c:forEach>
                                     </tbody>

@@ -73,8 +73,6 @@
                                     </select>
                                 </div>
 
-
-
                                 <span class="text-danger">${requestScope.errorMessage3}</span>
                                 <div class="mb-3">
                                     <label for="user-role" class="form-label">Quyền <span class="text-danger">*</span></label>

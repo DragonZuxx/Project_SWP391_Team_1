@@ -67,8 +67,16 @@ public class addAccount extends HttpServlet {
         String address = request.getParameter("address");
         String phone = request.getParameter("phone");
         String role = request.getParameter("role");
+        String active = request.getParameter("isActive");
         int roleId;
-
+         Boolean isActive = null;
+        if (active != null) {
+            if (active.equals("true")) {
+                isActive = true;
+            } else if (active.equals("false")) {
+                isActive = false;
+            }
+        }
         if (!isValidEmail(email)) {
             request.setAttribute("errorMessage1", "Định dạng email không hợp lệ. Vui lòng nhập địa chỉ email hợp lệ.");
             request.getRequestDispatcher("addAccount.jsp").forward(request, response);
@@ -93,7 +101,7 @@ public class addAccount extends HttpServlet {
             Accounts ac = dal.checkAccountExistByEmail(email);
             if (ac == null) {
                 
-                dal.addAccount(pass, email, fullName, address, phone, roleId, LocalDateTime.now(), LocalDateTime.now());
+                dal.addAccount(pass, email, fullName, address, phone, roleId, isActive, LocalDateTime.now(), LocalDateTime.now());
                request.getSession().setAttribute("succsess", "Thêm thành công tài khoản!");
                 response.sendRedirect("userManager");
             } else {
