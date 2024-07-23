@@ -74,9 +74,10 @@ public class listOrder extends HttpServlet {
         Accounts account = (Accounts) request.getSession().getAttribute("account");
 
         if (account == null || account.getRoleID() == 3) {
-            response.sendRedirect("Notfound.jsp");
+            response.sendRedirect("admin401View.jsp");
         } else {
             ArrayList<Order> listOrder2 = new ArrayList<>();
+            ArrayList<Order> listOrder3 = new ArrayList<>();
             ArrayList<Accounts> listAccount = new ArrayList<>();
             ArrayList<ShippingDetails> listShip = new ArrayList();
             ArrayList<Books> listBook = new ArrayList<>();
@@ -92,6 +93,8 @@ public class listOrder extends HttpServlet {
             listAccount = (ArrayList<Accounts>) accountdao.getAll();
             listOrder2 = orderdao.getOrderRequest();
             int count = listOrder2.size();
+             listOrder3= orderdao.getOrderShipping();
+            int countShip= listOrder3.size();
 
             int pageNumber = request.getParameter("page") == null ? 1 : Integer.parseInt(request.getParameter("page"));
             int pageSize = 5;
@@ -105,6 +108,7 @@ public class listOrder extends HttpServlet {
             request.setAttribute("totalPages", totalPages);
             request.setAttribute("listorder", orders);
 
+            request.setAttribute("countShip", countShip);
             request.setAttribute("countRequest", count);
             request.setAttribute("listbook", listBook);
             request.setAttribute("listorderdetail", listOrderDetail);
@@ -129,7 +133,7 @@ public class listOrder extends HttpServlet {
         Accounts account = (Accounts) request.getSession().getAttribute("account");
 
         if (account == null || account.getRoleID() == 3) {
-            response.sendRedirect("Notfound.jsp");
+            response.sendRedirect("admin401View.jsp");
         } else {
             String searchTerm = request.getParameter("searchorder");
             if(searchTerm.isEmpty()){
@@ -151,6 +155,7 @@ public class listOrder extends HttpServlet {
                 filteredOrders = orders;
             }
             ArrayList<Order> listOrder2 = new ArrayList<>();
+             ArrayList<Order> listOrder3 = new ArrayList<>();
             ArrayList<Accounts> listAccount = new ArrayList<>();
             ArrayList<ShippingDetails> listShip = new ArrayList();
             ArrayList<Books> listBook = new ArrayList<>();
@@ -165,21 +170,23 @@ public class listOrder extends HttpServlet {
             listBook = bookdao.getAllBooks();
             listAccount = (ArrayList<Accounts>) accountdao.getAll();
             listOrder2 = orderdao.getOrderRequest();
+            listOrder3= orderdao.getOrderShipping();
+            int countShip= listOrder3.size();
             int count = listOrder2.size();
             
-            ArrayList<Order> listOrder= new ArrayList<>();
-            listOrder= orderdao.getOrderSuccessfull();
+         
 
-              if(filteredOrders.isEmpty()){
+            if(filteredOrders.isEmpty()){
                 request.setAttribute("mess", "Không tìm thấy order nào.");
             }
-            request.setAttribute("listviewOrder", listOrder);
+              request.setAttribute("check", "check");
+              request.setAttribute("countShip", countShip);
             request.setAttribute("countRequest", count);
             request.setAttribute("listbook", listBook);
             request.setAttribute("listorderdetail", listOrderDetail);
             request.setAttribute("listship", listShip);
             request.setAttribute("listaccount", listAccount);
-            request.setAttribute("detailorder", filteredOrders);
+            request.setAttribute("listorder", filteredOrders);
           
             
             

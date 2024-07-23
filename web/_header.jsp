@@ -1,17 +1,19 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<jsp:include page="_meta.jsp" />
+
 <header class="section-header">
     <section class="header-main border-bottom">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-3 py-3">
-                    <a class="text-body d-flex align-items-center" href="home" >
-                        <img src="img/11zon_cropped.png" style="width: 50px; margin-right: 10px;" />
-                        <h3 class="m-0">Book Haven Shop</h3>
+                    <a class="text-body" href="home">
+                        <h3>Book Haven Shop</h3>
                     </a>
                 </div> <!-- col.// -->
-                <div class="col-lg-4 col-xl-5 ${empty sessionScope.account ? 'mb-3 mb-lg-0' : ''}">
-                    <form action="${pageContext.request.contextPath}/search" method="get" class="search">
+
+                <div class="col-lg-4 col-xl-4 ${empty sessionScope.account ? 'mb-3 mb-lg-0' : ''}">
+                    <form action="${pageContext.request.contextPath}/search" method="post" class="search">
                         <div class="input-group w-100">
                             <input type="text"
                                    class="form-control"
@@ -23,37 +25,63 @@
                             </button>
                         </div>
                     </form>
-
                 </div> <!-- col.// -->
-                
-                
-                <div class="col-lg-5 col-xl-4">
+
+                <div class="col-lg-5 col-xl-5">
                     <c:if test="${not empty sessionScope.account}">
                         <ul class="nav col-12 col-lg-auto my-2 my-lg-0 justify-content-center justify-content-lg-end text-small">
-                            <li>
-                                <a href="${pageContext.request.contextPath}/user" class="nav-link text-body">
-                                    <i class="bi bi-person d-block text-center fs-3"></i>
-                                    Tài khoản
-                                </a>
-                            </li>
-                            <li>
-                                <a href="${pageContext.request.contextPath}/order" class="nav-link text-body">
+                           <c:choose>
+                        <c:when test="${not empty sessionScope.account}">
+                            <c:if test="${sessionScope.account.getRoleID() == 1 || sessionScope.account.getRoleID() == 2 }"> 
+                                <div class="d-flex justify-content-end">
+                                    <button class="btn btn-light me-2" style="background-color: white; border: 1px solid #007bff; margin-right: 5px; display: flex; justify-content: center; align-items: center; padding: 10px 5px;" type="button">
+                                        <a href="adminView.jsp" class="text-dark mr-3" style="text-decoration: none;">Admin</a>
+                                    </button>
+                                </div>
+                            </c:if>
+                        </c:when>
+                    </c:choose>
+                             <li>
+                                <a href="${pageContext.request.contextPath}/orderUser" class="nav-link text-body">
                                     <i class="bi bi-list-check d-block text-center fs-3"></i>
                                     Đơn hàng
                                 </a>
                             </li>
                             <li>
-                                <a href="${pageContext.request.contextPath}/cart" class="nav-link text-body position-relative">
+                                <a href="cart" class="nav-link text-body position-relative">
+                                    <span id="total-cart-items-quantity" class="position-absolute top-0 end-0 mt-2 badge rounded-pill bg-primary">
+                                        ...
+                                    </span>
                                     <i class="bi bi-cart d-block text-center fs-3 position-relative"></i>
                                     Giỏ hàng
                                 </a>
                             </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-person d-block text-center fs-3"></i>
+                                    Tài khoản
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <li><a class="dropdown-item" href="orderUser">Đơn Hàng</a></li>
+                                    <li><a class="dropdown-item" href="userView.jsp">Thay đổi thông tin</a></li>
+                                    <li><a class="dropdown-item" href="logout">Đăng xuất</a></li>
+                                </ul>
+                            </li>
                         </ul>
                     </c:if>
-                   
+
+                    <c:choose>
+                        <c:when test="${ empty sessionScope.account}">
+                            <a class="btn btn-light me-2" href="register" role="button">
+                                Đăng ký
+                            </a>
+                            <a class="btn btn-primary" href="login" role="button">
+                                Đăng nhập
+                            </a>
+                        </c:when>
+                    </c:choose>
                 </div> <!-- col.// -->
             </div> <!-- row.// -->
         </div> <!-- container.// -->
     </section> <!-- header-main.// -->
 </header> <!-- section-header.// -->
-

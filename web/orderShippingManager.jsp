@@ -12,7 +12,7 @@
 <html lang="vi_VN">
     <head>
         <jsp:include page="_meta.jsp" />
-        <title>Đơn hàng đang vận chuyển</title>
+        <title>Đơn hàng đang giao.</title>
     </head>
     <body>
         <jsp:include page="_headerAdmin.jsp" />
@@ -27,7 +27,7 @@
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col-md-4">
-                        <h2 class="title-page">Đơn hàng chờ xử lí</h2>
+                        <h2 class="title-page">Đơn hàng đang giao</h2>
                     </div>
                     <div class="col-md-4">
                         <form action="orderShipping" method="post" class="searchauthoradmin">
@@ -67,104 +67,84 @@
 
         <h1 style="color: red; font-size: 24px; font-family: Arial, sans-serif; text-align: center;">${requestScope.mess}</h1>
 
-         <section class="section-content padding-y">
-        <div class="container">
-            <div class="row">
-                <main class="col-md-12">
-                    <div class="table-responsive-xxl">
-                        <table class="table table-bordered table-striped table-hover align-middle">
-                            <thead>
-                                <tr>
-                                    <th scope="col" style="min-width: 125px;">OrderId</th>
-                                    <th scope="col" style="min-width: 125px;">Người mua</th>
-                                    <th scope="col" style="min-width: 100px;">Ngày mua</th>
-                                    <th scope="col" style="min-width: 100px;">Tổng tiền</th>
-                                    <th scope="col" style="min-width: 175px;">Trạng thái đơn hàng</th>
-                                    <th scope="col">Thao tác</th>
-                                </tr>
-                            </thead>
-                            <tbody>
+        <section class="section-content padding-y">
+            <div class="container">
+                <div class="row">
+                    <main class="col-md-12">
+                        <div class="table-responsive-xxl">
+                            <table class="table table-bordered table-striped table-hover align-middle">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" style="min-width: 125px;">Mã đơn hàng</th>
+                                        <th scope="col" style="min-width: 125px;">Người mua</th>
+                                        <th scope="col" style="min-width: 100px;">Ngày mua</th>
+                                        <th scope="col" style="min-width: 100px;">Tổng tiền</th>
+                                        <th scope="col" style="min-width: 175px;">Trạng thái đơn hàng</th>
+                                        <th scope="col">Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                   
+                                            <c:forEach var="order" items="${requestScope.listorder}">
+                                                <tr>
+                                                    <th scope="row">${order.id}</th>
+                                                        <c:forEach var="account" items="${requestScope.listaccount}">
+                                                            <c:if test="${account.getUserID() == order.userid}">
+                                                            <td>${account.getEmail()}</td>
+                                                        </c:if>
+                                                    </c:forEach>
+                                                    <td>${order.createdat}</td>
+                                                    <td><fmt:formatNumber pattern="#,##0" value="${order.amount}"/>₫</td>
+                                                    <td>
+                                                        <span class="badge bg-success">${order.status}</span>
+                                                    </td>
+                                                    <td class="text-center text-nowrap">
+                                                        <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#orderInforModell${order.id}">Xem</button>
+                                                    </td>
+                                                </tr>
+                                            </c:forEach>
+                                        
+                                </tbody>
+                            </table>
+                        </div>
+                    </main>
+                </div>
+                <c:if test="${empty requestScope.check}">
+                <c:if test="${totalPages != 0}">
+                    <nav class="mt-3 mb-5">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
+                                <a class="page-link" href="?page=${currentPage - 1}">
+                                    Trang trước
+                                </a>
+                            </li>
+                            <c:forEach begin="1" end="${totalPages}" var="i">
                                 <c:choose>
-                                    <c:when test="${empty requestScope.detailorder}">
-                                        <c:forEach var="order" items="${requestScope.listorder}">
-                                            <tr>
-                                                <th scope="row">${order.id}</th>
-                                                <c:forEach var="account" items="${requestScope.listaccount}">
-                                                    <c:if test="${account.getUserID() == order.userid}">
-                                                        <td>${account.getEmail()}</td>
-                                                    </c:if>
-                                                </c:forEach>
-                                                <td>${order.createdat}</td>
-                                                <td><fmt:formatNumber pattern="#,##0" value="${order.amount}"/>₫</td>
-                                                <td>
-                                                    <span class="badge bg-success">${order.status}</span>
-                                                </td>
-                                                <td class="text-center text-nowrap">
-                                                    <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#orderInforModell${order.id}">Xem</button>
-                                                </td>
-                                            </tr>
-                                        </c:forEach>
+                                    <c:when test="${currentPage == i}">
+                                        <li class="page-item active">
+                                            <a class="page-link">${i}</a>
+                                        </li>
                                     </c:when>
                                     <c:otherwise>
-                                        <c:forEach var="order" items="${requestScope.detailorder}">
-                                            <tr>
-                                                <th scope="row">${order.id}</th>
-                                                <c:forEach var="account" items="${requestScope.listaccount}">
-                                                    <c:if test="${account.getUserID() == order.userid}">
-                                                        <td>${account.getEmail()}</td>
-                                                    </c:if>
-                                                </c:forEach>
-                                                <td>${order.createdat}</td>
-                                                <td><fmt:formatNumber pattern="#,##0" value="${order.amount}"/>₫</td>
-                                                <td>
-                                                    <span class="badge bg-success">${order.status}</span>
-                                                </td>
-                                                <td class="text-center text-nowrap">
-                                                    <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#orderInforModell${order.id}">Xem</button>
-                                                </td>
-                                            </tr>
-                                        </c:forEach>
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page=${i}">
+                                                ${i}
+                                            </a>
+                                        </li>
                                     </c:otherwise>
                                 </c:choose>
-                            </tbody>
-                        </table>
-                    </div>
-                </main>
+                            </c:forEach>
+                            <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
+                                <a class="page-link" href="?page=${currentPage + 1}">
+                                    Trang sau
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </c:if>
+                </c:if>
             </div>
-            <c:if test="${totalPages != 0}">
-                <nav class="mt-3 mb-5">
-                    <ul class="pagination justify-content-center">
-                        <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
-                            <a class="page-link" href="?page=${currentPage - 1}">
-                                Trang trước
-                            </a>
-                        </li>
-                        <c:forEach begin="1" end="${totalPages}" var="i">
-                            <c:choose>
-                                <c:when test="${currentPage == i}">
-                                    <li class="page-item active">
-                                        <a class="page-link">${i}</a>
-                                    </li>
-                                </c:when>
-                                <c:otherwise>
-                                    <li class="page-item">
-                                        <a class="page-link" href="?page=${i}">
-                                            ${i}
-                                        </a>
-                                    </li>
-                                </c:otherwise>
-                            </c:choose>
-                        </c:forEach>
-                        <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
-                            <a class="page-link" href="?page=${currentPage + 1}">
-                                Trang sau
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-            </c:if>
-        </div>
-    </section>
+        </section>
 
 
 

@@ -23,6 +23,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,7 +75,7 @@ public class OrderRequest extends HttpServlet {
         Accounts account = (Accounts) request.getSession().getAttribute("account");
 
         if (account == null || account.getRoleID() == 3) {
-            response.sendRedirect("Notfound.jsp");
+            response.sendRedirect("admin401View.jsp");
         } else {
             ArrayList<Order> listOrder = new ArrayList<>();
             ArrayList<Accounts> listAccount = new ArrayList<>();
@@ -126,7 +127,7 @@ public class OrderRequest extends HttpServlet {
         Accounts account = (Accounts) request.getSession().getAttribute("account");
 
         if (account == null || account.getRoleID() == 3) {
-            response.sendRedirect("Notfound.jsp");
+            response.sendRedirect("admin401View.jsp");
         } else {
             String action = request.getParameter("action");
             if (action != null) {
@@ -189,13 +190,15 @@ public class OrderRequest extends HttpServlet {
         if (filteredOrders.isEmpty()) {
             request.setAttribute("mess", "Không tìm thấy order nào.");
         }
+        
+        request.setAttribute("check", "check");
         request.setAttribute("listviewOrder", listOrder);
         request.setAttribute("countRequest", count);
         request.setAttribute("listbook", listBook);
         request.setAttribute("listorderdetail", listOrderDetail);
         request.setAttribute("listship", listShip);
         request.setAttribute("listaccount", listAccount);
-        request.setAttribute("detailorder", filteredOrders);
+        request.setAttribute("listorder", filteredOrders);
 
         request.getRequestDispatcher("orderRequestManager.jsp").forward(request, response);
 
@@ -213,8 +216,11 @@ public class OrderRequest extends HttpServlet {
         int orderid = Integer.parseInt(orderid_);
         OrderDao orderdao = new OrderDao();
         if (isValidPhoneNumber(phone)) {
-            boolean succesOrder = orderdao.UpdateOrder(orderid, fullname, address, phone, status);
+            LocalDateTime updateDate= LocalDateTime.now();
+            boolean succesOrder = orderdao.UpdateOrder(orderid, fullname, address, phone, status, updateDate);
             if (succesOrder) {
+//                OrderDao orderDao= new OrderDao();
+//                orderDao.autoUpdateOrderStatus(orderid);
                 request.setAttribute("mess", "Cập nhật thành công.");
                 doGet(request, response);
             } else {

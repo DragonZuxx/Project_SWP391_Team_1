@@ -22,6 +22,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 /**
@@ -69,7 +70,7 @@ public class OrderManagerUser extends HttpServlet {
          Accounts account = (Accounts) request.getSession().getAttribute("account");
 
         if (account == null) {
-            response.sendRedirect("Notfound.jsp");
+            response.sendRedirect("admin401View.jsp");
         } else {
             ArrayList<Accounts> listAccount = new ArrayList<>();
             ArrayList<ShippingDetails> listShip = new ArrayList();
@@ -148,7 +149,8 @@ public class OrderManagerUser extends HttpServlet {
          String status= "Đã nhận được hàng";
          int orderid= Integer.parseInt(id);
          OrderDao orderDao= new OrderDao();
-        Boolean check= orderDao.updateOrderSucces(orderid, status);
+         LocalDateTime updateDate= LocalDateTime.now();
+        Boolean check= orderDao.updateOrderSucces(orderid, status,updateDate);
           if(check){
              request.setAttribute("mess", "Chúc mừng bạn đã nhận hàng thành công.");
          }else{
@@ -163,7 +165,8 @@ public class OrderManagerUser extends HttpServlet {
          String status= "Hủy đơn hàng";
          int orderid= Integer.parseInt(id);
          OrderDao orderDao= new OrderDao();
-         Boolean check= orderDao.updateOrderReason(orderid, reson,status);
+         LocalDateTime updateDate= LocalDateTime.now();
+         Boolean check= orderDao.updateOrderReason(orderid, reson,status,updateDate);
          if(check){
              request.setAttribute("mess", "Hủy đơn hàng thành công");
          }else{

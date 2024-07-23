@@ -72,7 +72,7 @@ public class OrderCancelManager extends HttpServlet {
         Accounts account = (Accounts) request.getSession().getAttribute("account");
 
         if (account == null || account.getRoleID() == 3) {
-            response.sendRedirect("Notfound.jsp");
+            response.sendRedirect("admin401View.jsp");
         } else {
             ArrayList<Accounts> listAccount = new ArrayList<>();
             ArrayList<ShippingDetails> listShip = new ArrayList();
@@ -124,7 +124,7 @@ public class OrderCancelManager extends HttpServlet {
         Accounts account = (Accounts) request.getSession().getAttribute("account");
 
         if (account == null || account.getRoleID() == 3) {
-            response.sendRedirect("Notfound.jsp");
+            response.sendRedirect("admin401View.jsp");
         } else {
             String searchTerm = request.getParameter("searchorder");
             if(searchTerm.isEmpty()){
@@ -168,13 +168,14 @@ public class OrderCancelManager extends HttpServlet {
               if(filteredOrders.isEmpty()){
                 request.setAttribute("mess", "Không tìm thấy order nào cần tìm.");
             }
+              request.setAttribute("check", "check");
             request.setAttribute("listviewOrder", listOrder);
             request.setAttribute("countRequest", count);
             request.setAttribute("listbook", listBook);
             request.setAttribute("listorderdetail", listOrderDetail);
             request.setAttribute("listship", listShip);
             request.setAttribute("listaccount", listAccount);
-            request.setAttribute("detailorder", filteredOrders);
+            request.setAttribute("listorder", filteredOrders);
           
 
             // Forward to the JSP

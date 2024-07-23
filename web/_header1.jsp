@@ -1,5 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<jsp:include page="_meta.jsp" />
+
 <header class="section-header">
     <section class="header-main border-bottom">
         <div class="container">
@@ -10,7 +12,7 @@
                     </a>
                 </div> <!-- col.// -->
 
-                <div class="col-lg-6 col-xl-6 ${empty sessionScope.account ? 'mb-3 mb-lg-0' : ''}">
+                <div class="col-lg-4 col-xl-4 ${empty sessionScope.account ? 'mb-3 mb-lg-0' : ''}">
                     <form action="${pageContext.request.contextPath}/search" method="post" class="search">
                         <div class="input-group w-100">
                             <input type="text"
@@ -25,7 +27,7 @@
                     </form>
                 </div> <!-- col.// -->
 
-                <div class="col-lg-3 col-xl-3">
+                <div class="col-lg-5 col-xl-5">
                     <c:if test="${not empty sessionScope.account}">
                         <ul class="nav col-12 col-lg-auto my-2 my-lg-0 justify-content-center justify-content-lg-end text-small">
                            <c:choose>
@@ -39,6 +41,12 @@
                             </c:if>
                         </c:when>
                     </c:choose>
+                             <li>
+                                <a href="${pageContext.request.contextPath}/orderUser" class="nav-link text-body">
+                                    <i class="bi bi-list-check d-block text-center fs-3"></i>
+                                    Đơn hàng
+                                </a>
+                            </li>
                             <li>
                                 <a href="cart" class="nav-link text-body position-relative">
                                     <span id="total-cart-items-quantity" class="position-absolute top-0 end-0 mt-2 badge rounded-pill bg-primary">
