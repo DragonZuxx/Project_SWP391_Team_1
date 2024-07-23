@@ -1,7 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<jsp:include page="_meta.jsp" />
 
-   <jsp:include page="_meta.jsp" />
 <header class="section-header">
     <section class="header-main border-bottom">
         <div class="container">
@@ -35,12 +35,18 @@
                             <c:if test="${sessionScope.account.getRoleID() == 1 || sessionScope.account.getRoleID() == 2 }"> 
                                 <div class="d-flex justify-content-end">
                                     <button class="btn btn-light me-2" style="background-color: white; border: 1px solid #007bff; margin-right: 5px; display: flex; justify-content: center; align-items: center; padding: 10px 5px;" type="button">
-                                        <a href="userManager" class="text-dark mr-3" style="text-decoration: none;">Admin</a>
+                                        <a href="adminView.jsp" class="text-dark mr-3" style="text-decoration: none;">Admin</a>
                                     </button>
                                 </div>
                             </c:if>
                         </c:when>
                     </c:choose>
+                             <li>
+                                <a href="${pageContext.request.contextPath}/orderUser" class="nav-link text-body">
+                                    <i class="bi bi-list-check d-block text-center fs-3"></i>
+                                    Đơn hàng
+                                </a>
+                            </li>
                             <li>
                                 <a href="cart" class="nav-link text-body position-relative">
                                     <span id="total-cart-items-quantity" class="position-absolute top-0 end-0 mt-2 badge rounded-pill bg-primary">
