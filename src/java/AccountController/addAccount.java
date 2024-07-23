@@ -69,7 +69,7 @@ public class addAccount extends HttpServlet {
         String role = request.getParameter("role");
         String active = request.getParameter("isActive");
         int roleId;
-         Boolean isActive = null;
+        Boolean isActive = null;
         if (active != null) {
             if (active.equals("true")) {
                 isActive = true;
@@ -100,9 +100,9 @@ public class addAccount extends HttpServlet {
             ListAccountDao dal = new ListAccountDao();
             Accounts ac = dal.checkAccountExistByEmail(email);
             if (ac == null) {
-                
+
                 dal.addAccount(pass, email, fullName, address, phone, roleId, isActive, LocalDateTime.now(), LocalDateTime.now());
-               request.getSession().setAttribute("succsess", "Thêm thành công tài khoản!");
+                request.getSession().setAttribute("succsess", "Thêm thành công tài khoản!");
                 response.sendRedirect("userManager");
             } else {
                 request.setAttribute("mess4", "Email đã tồn tại!");
