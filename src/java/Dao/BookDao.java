@@ -143,6 +143,37 @@ public class BookDao extends DBContext {
         }
         return null;
     }
+    
+    public Books getBookById(int id) {
+        String sql = "SELECT * FROM Books WHERE BookID = ?";
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setInt(1, id);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                Books book = new Books();
+                book.setBookID(rs.getInt("BookID"));
+                book.setTitle(rs.getString("Title"));
+                book.setPublisher(rs.getString("Publisher"));
+                book.setPublicationDate(rs.getString("PublicationDate"));
+                book.setISBN(rs.getString("ISBN"));
+                book.setPrice(rs.getString("Price"));
+                book.setStock(rs.getInt("Stock"));
+                book.setSoldQuantity(rs.getInt("SoldQuantity"));
+                book.setDescription(rs.getString("Description"));
+                book.setCoverImage(rs.getString("CoverImage"));
+                book.setIsAvailable(rs.getBoolean("IsAvailable"));
+                book.setIsBanned(rs.getBoolean("IsBanned"));
+                book.setCreatedAt(rs.getTimestamp("CreatedAt").toLocalDateTime());
+                book.setUpdatedAt(rs.getTimestamp("UpdatedAt").toLocalDateTime());
+                return book;
+            }
+        } catch (Exception e) {
+            System.out.println("getBookByID" + e.getMessage());
+        }
+        return null;
+    }
+    
     public int getStockByBookID(int bookID) {
         String sql = "SELECT Stock FROM Books WHERE BookID = ?";
         try {

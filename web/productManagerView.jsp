@@ -151,7 +151,7 @@
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="editBookModalLabel_${book.getBookID()}">Edit Book</h5>
+                            <h5 class="modal-title" id="editBookModalLabel_${book.getBookID()}">Chỉnh sửa sản phẩm</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -162,15 +162,15 @@
                                 <input type="hidden" name="action" value="update">
                                 <input type="hidden" name="bookID" value="${book.getBookID()}">
                                 <div class="form-group">
-                                    <label for="title">Title</label>
+                                    <label for="title">Tiêu đề</label>
                                     <input type="text" class="form-control" id="title" name="title" value="${book.getTitle()}" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="publisher">Publisher</label>
+                                    <label for="publisher">Nhà xuất bản</label>
                                     <input type="text" class="form-control" id="publisher" name="publisher" value="${book.getPublisher()}" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="publicationDate">Publication Date</label>
+                                    <label for="publicationDate">Ngày xuất bản</label>
                                     <input type="text" class="form-control" id="publicationDate" name="publicationDate" value="${book.getPublicationDate()}">
                                 </div>
                                 <div class="form-group">
@@ -178,47 +178,22 @@
                                     <input type="text" class="form-control" id="isbn" name="isbn" value="${book.getISBN()}" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="price">Price</label>
+                                    <label for="price">Giá bán</label>
                                     <input type="number" class="form-control" id="price" name="price" value="${book.getPrice()}" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="stock">Stock</label>
+                                    <label for="stock">Tồn kho</label>
                                     <input type="number" class="form-control" id="stock" name="stock" value="${book.getStock()}" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="soldQuantity">Sold Quantity</label>
+                                    <label for="soldQuantity">Số lượng đã bán</label>
                                     <input type="number" class="form-control" id="soldQuantity" name="soldQuantity" value="${book.getSoldQuantity()}" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="coverImage">Cover Image</label><br>
-                                    <input type="file" class="form-control" id="coverImageFile_${book.getBookID()}" accept="image/*" onchange="uploadImage(this, ${book.getBookID()})"><br>
-                                    <input type="hidden" class="form-control" id="coverImage_${book.getBookID()}" name="coverImage" value="${book.getCoverImage()}">
-                                    <div class="mt-2" id="imagePreview_${book.getBookID()}"></div>
+                                    <label for="coverImage">Hình bìa</label>
+                                    <input type="text" class="form-control" id="coverImage" name="coverImage" value="${book.getCoverImage()}">
                                 </div>
-                                <div class="form-group">
-                                    <label>Authors</label>
-                                    <select class="authors form-control" name="authors" multiple required>
-                                        <c:forEach var="author" items="${authorList}">
-                                            <option value="${author.authorID}" ${fn:contains(book.authors, ",".concat(author.authorID).concat(",")) ? 'selected' : ''}>${author.name}</option>
-                                        </c:forEach>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label>Category</label>
-                                    <select class="categories form-control" name="categories" multiple>
-                                        <c:forEach var="cate" items="${cateList}">
-                                            <option value="${cate.categoryID}" ${fn:contains(book.cates, ",".concat(cate.categoryID).concat(",")) ? 'selected' : ''}>${cate.categoryName}</option>
-                                        </c:forEach>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="isAvailable">Status</label>
-                                    <select class="form-control" id="isAvailable" name="isAvailable">
-                                        <option value="true" ${book.getIsAvailable() ? "selected" : ""}>Available</option>
-                                        <option value="false" ${!book.getIsAvailable() ? "selected" : ""}>Unavailable</option>
-                                    </select>
-                                </div>
-                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                                <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
                             </form>
                         </div>
                     </div>
@@ -230,27 +205,30 @@
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="bookInfoModalLabel_${book.getBookID()}">Book Details</h5>
+                            <h5 class="modal-title" id="bookInfoModalLabel_${book.getBookID()}">Thông tin sản phẩm</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
-                            <img class="w-100 mb-3" src="${book.getCoverImage()}">
-                            <p><strong>ID:</strong> ${book.getBookID()}</p>
-                            <p><strong>Title:</strong> ${book.getTitle()}</p>
-                            <p><strong>Publisher:</strong> ${book.getPublisher()}</p>
-                            <p><strong>Publication Date:</strong> ${book.getPublicationDate()}</p>
-                            <p><strong>ISBN:</strong> ${book.getISBN()}</p>
-                            <p><strong>Price:</strong> ${book.getPrice()}</p>
-                            <p><strong>Stock:</strong> ${book.getStock()}</p>
-                            <p><strong>Sold Quantity:</strong> ${book.getSoldQuantity()}</p>
-                            <p><strong>Status:</strong> ${book.getIsAvailable() ? 'Available' : 'Unavailable'}</p>
+                            <p><strong>ID: </strong>${book.getBookID()}</p>
+                            <p><strong>Tiêu đề: </strong>${book.getTitle()}</p>
+                            <p><strong>Nhà xuất bản: </strong>${book.getPublisher()}</p>
+                            <p><strong>Ngày xuất bản: </strong>${book.getPublicationDate()}</p>
+                            <p><strong>ISBN: </strong>${book.getISBN()}</p>
+                            <p><strong>Giá bán: </strong>${book.getPrice()}</p>
+                            <p><strong>Tồn kho: </strong>${book.getStock()}</p>
+                            <p><strong>Số lượng đã bán: </strong>${book.getSoldQuantity()}</p>
+                            <p><strong>Hình bìa: </strong>${book.getCoverImage()}</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
                         </div>
                     </div>
                 </div>
             </div>
 
+            .
         </c:forEach>
 
         <!-- Add Book Modal -->
@@ -258,72 +236,48 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="addBookModalLabel">Add Book</h5>
+                        <h5 class="modal-title" id="addBookModalLabel">Thêm sản phẩm mới</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
+                        <!-- Add Book Form -->
                         <form action="productManager" method="post">
                             <input type="hidden" name="action" value="add">
                             <div class="form-group">
-                                <label for="title">Title</label>
+                                <label for="title">Tiêu đề</label>
                                 <input type="text" class="form-control" id="title" name="title" required>
                             </div>
                             <div class="form-group">
-                                <label for="publisher">Publisher</label>
+                                <label for="publisher">Nhà xuất bản</label>
                                 <input type="text" class="form-control" id="publisher" name="publisher" required>
                             </div>
                             <div class="form-group">
-                                <label for="publicationDate">Publication Date</label>
-                                <input type="text" class="form-control" id="publicationDate" name="publicationDate" required>
+                                <label for="publicationDate">Ngày xuất bản</label>
+                                <input type="text" class="form-control" id="publicationDate" name="publicationDate">
                             </div>
                             <div class="form-group">
                                 <label for="isbn">ISBN</label>
                                 <input type="text" class="form-control" id="isbn" name="isbn" required>
                             </div>
                             <div class="form-group">
-                                <label for="price">Price</label>
+                                <label for="price">Giá bán</label>
                                 <input type="number" class="form-control" id="price" name="price" required>
                             </div>
                             <div class="form-group">
-                                <label for="stock">Stock</label>
+                                <label for="stock">Tồn kho</label>
                                 <input type="number" class="form-control" id="stock" name="stock" required>
                             </div>
                             <div class="form-group">
-                                <label for="soldQuantity">Sold Quantity</label>
+                                <label for="soldQuantity">Số lượng đã bán</label>
                                 <input type="number" class="form-control" id="soldQuantity" name="soldQuantity" required>
                             </div>
                             <div class="form-group">
-                                <label for="coverImage">Cover Image</label>
-                                <input type="file" class="form-control" id="coverImageFile_0" accept="image/*" onchange="uploadImage(this, 0)">
-                                <input type="hidden" class="form-control" id="coverImage_0" name="coverImage" value="">
-                                <div class="mt-2" id="imagePreview_0"></div>
+                                <label for="coverImage">Hình bìa</label>
+                                <input type="text" class="form-control" id="coverImage" name="coverImage">
                             </div>
-                            <div class="form-group">
-                                <label>Authors</label>
-                                <select class="authors form-control" name="authors" multiple>
-                                    <c:forEach var="author" items="${authorList}">
-                                        <option value="${author.authorID}">${author.name}</option>
-                                    </c:forEach>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Category</label>
-                                <select class="categories form-control" name="categories" multiple>
-                                    <c:forEach var="cate" items="${cateList}">
-                                        <option value="${cate.categoryID}">${cate.categoryName}</option>
-                                    </c:forEach>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="isAvailable">Status</label>
-                                <select class="form-control" id="isAvailable" name="isAvailable">
-                                    <option value="true">Available</option>
-                                    <option value="false">Unavailable</option>
-                                </select>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Add Book</button>
+                            <button type="submit" class="btn btn-primary">Thêm sản phẩm</button>
                         </form>
                     </div>
                 </div>
@@ -341,55 +295,55 @@
         <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
 
         <script>
-                                    async function uploadImage(input, bookID) {
+                                                        async function uploadImage(input, bookID) {
 
-                                        previewImage(input, bookID)
+                                                            previewImage(input, bookID)
 
-                                        const apiKey = '82b2f0b4bad5a0f8c43de992fe433a3e'; // Replace with your ImgBB API Key
-                                        const file = input.files[0];
-                                        if (bookID == 0 && !file) {
-                                            alert('Please select a file');
-                                            return;
-                                        }
+                                                            const apiKey = '82b2f0b4bad5a0f8c43de992fe433a3e'; // Replace with your ImgBB API Key
+                                                            const file = input.files[0];
+                                                            if (bookID == 0 && !file) {
+                                                                alert('Please select a file');
+                                                                return;
+                                                            }
 
-                                        const formData = new FormData();
-                                        formData.append('image', file);
+                                                            const formData = new FormData();
+                                                            formData.append('image', file);
 
-                                        try {
-                                            const response = await fetch('https://api.imgbb.com/1/upload?key=' + apiKey, {
-                                                method: 'POST',
-                                                body: formData
-                                            });
-                                            const data = await response.json();
+                                                            try {
+                                                                const response = await fetch('https://api.imgbb.com/1/upload?key=' + apiKey, {
+                                                                    method: 'POST',
+                                                                    body: formData
+                                                                });
+                                                                const data = await response.json();
 
-                                            if (data.success) {
-                                                const imageUrl = data.data.url;
-                                                document.getElementById(`coverImage_` + bookID).value = imageUrl;
+                                                                if (data.success) {
+                                                                    const imageUrl = data.data.url;
+                                                                    document.getElementById(`coverImage_` + bookID).value = imageUrl;
 
 //                                                const previewContainer = document.getElementById(`imagePreview_` + bookID);
 //                                                previewContainer.innerHTML = `<img src="` + imageUrl + `" class="img-fluid" alt="Cover Image">`;
-                                            } else {
-                                                alert('Upload failed: ' + data.error.message);
-                                            }
-                                        } catch (error) {
-                                            alert('Error uploading file');
-                                            console.error('Error:', error);
-                                        }
-                                    }
+                                                                } else {
+                                                                    alert('Upload failed: ' + data.error.message);
+                                                                }
+                                                            } catch (error) {
+                                                                alert('Error uploading file');
+                                                                console.error('Error:', error);
+                                                            }
+                                                        }
 
-                                    function previewImage(input, bookID) {
-                                        const file = input.files[0];
-                                        if (!file) {
-                                            return; // No file selected, do nothing
-                                        }
+                                                        function previewImage(input, bookID) {
+                                                            const file = input.files[0];
+                                                            if (!file) {
+                                                                return; // No file selected, do nothing
+                                                            }
 
-                                        const reader = new FileReader();
-                                        reader.onload = function (e) {
-                                            const imagePreview = document.getElementById(`imagePreview_` + bookID);
-                                            imagePreview.innerHTML = `<img src="` + e.target.result + `" class="img-fluid" alt="Cover Image">`;
-                                        };
-                                        reader.readAsDataURL(file);
-                                    }
+                                                            const reader = new FileReader();
+                                                            reader.onload = function (e) {
+                                                                const imagePreview = document.getElementById(`imagePreview_` + bookID);
+                                                                imagePreview.innerHTML = `<img src="` + e.target.result + `" class="img-fluid" alt="Cover Image">`;
+                                                            };
+                                                            reader.readAsDataURL(file);
+                                                        }
         </script>
 
         <script>
