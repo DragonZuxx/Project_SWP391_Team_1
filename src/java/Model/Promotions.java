@@ -1,14 +1,16 @@
 package Model;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 public class Promotions {
-    private int PromotionID;
+     private int PromotionID;
     private String Title;
     private String Description;
-    private LocalDateTime StartDate;
-    private LocalDateTime EndDate;
-    private String DiscountPercentage;
+    private Date StartDate;
+    private Date EndDate;
+    private BigDecimal DiscountPercentage;
     private boolean isActive;
     private LocalDateTime CreatedAt;
     private LocalDateTime UpdatedAt;
@@ -16,7 +18,7 @@ public class Promotions {
     public Promotions() {
     }
 
-    public Promotions(int PromotionID, String Title, String Description, LocalDateTime StartDate, LocalDateTime EndDate, String DiscountPercentage, boolean isActive, LocalDateTime CreatedAt, LocalDateTime UpdatedAt) {
+    public Promotions(int PromotionID, String Title, String Description, Date StartDate, Date EndDate, BigDecimal DiscountPercentage, boolean isActive, LocalDateTime CreatedAt, LocalDateTime UpdatedAt) {
         this.PromotionID = PromotionID;
         this.Title = Title;
         this.Description = Description;
@@ -52,27 +54,27 @@ public class Promotions {
         this.Description = Description;
     }
 
-    public LocalDateTime getStartDate() {
+    public Date getStartDate() {
         return StartDate;
     }
 
-    public void setStartDate(LocalDateTime StartDate) {
+    public void setStartDate(Date StartDate) {
         this.StartDate = StartDate;
     }
 
-    public LocalDateTime getEndDate() {
+    public Date getEndDate() {
         return EndDate;
     }
 
-    public void setEndDate(LocalDateTime EndDate) {
+    public void setEndDate(Date EndDate) {
         this.EndDate = EndDate;
     }
 
-    public String getDiscountPercentage() {
+    public BigDecimal getDiscountPercentage() {
         return DiscountPercentage;
     }
 
-    public void setDiscountPercentage(String DiscountPercentage) {
+    public void setDiscountPercentage(BigDecimal DiscountPercentage) {
         this.DiscountPercentage = DiscountPercentage;
     }
 

@@ -2,11 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package ReviewManagerAdmin;
+package AuthorController;
 
-import Dao.ReviewDao;
-import Model.Accounts;
-import Model.Reviews;
+import Dao.AuthorDao;
+import Model.Authors;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -15,21 +14,13 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  *
  * @author DMX THANH SON
  */
-@WebServlet(name = "ReviewAdmin", urlPatterns = {"/reviewManager"})
-public class ReviewAdmin extends HttpServlet {
-
-    private Accounts getAccountsInfoSession(HttpServletRequest request) {
-
-        return (Accounts) request.getSession().getAttribute("account");
-
-    }
+@WebServlet(name = "SearchAuthorAdmin", urlPatterns = {"/searchauthoradmin"})
+public class SearchAuthorAdmin extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -48,10 +39,10 @@ public class ReviewAdmin extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ReviewAdmin</title>");
+            out.println("<title>Servlet SearchAuthorAdmin</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ReviewAdmin at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet SearchAuthorAdmin at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -69,25 +60,7 @@ public class ReviewAdmin extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    Accounts user = getAccountsInfoSession(request);
-    if (user == null || user.getRoleID() == 3) {
-        response.sendRedirect(request.getContextPath() + "/login");
-        return;
-    }
-
-    int pageSize = 5;
-    ReviewDao reviewDao = new ReviewDao();
-    int totalReview = reviewDao.countTotalReviews();
-    int totalPages = (int) Math.ceil((double) totalReview / pageSize);
-    int currentPage = request.getParameter("page") == null ? 1 : Integer.parseInt(request.getParameter("page"));
-
-    int offset = (currentPage - 1) * pageSize;
-    List<Map.Entry<Reviews, Map<String, String>>> reviewList = reviewDao.getLatestReviews(offset, pageSize);
-
-    request.setAttribute("currentPage", currentPage);
-    request.setAttribute("totalPages", totalPages);
-    request.setAttribute("latereview", reviewList);
-    request.getRequestDispatcher("ReviewAdminManager.jsp").forward(request, response);
+        processRequest(request, response);
     }
 
     /**
@@ -101,8 +74,18 @@ public class ReviewAdmin extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String searchAuthor = request.getParameter("searchauthor");
+        AuthorDao authorDAO = new AuthorDao();
+        ArrayList<Authors> authors = authorDAO.searchAuthorByName(searchAuthor);
+        
+        // Đặt danh sách tác giả vào request attribute
+        request.setAttribute("authors", authors);
+        request.setAttribute("searchauthor", searchAuthor); // Để giữ lại giá trị search khi hiển thị lại form
+
+        // Chuyển tiếp request và response đến trang JSP hiển thị kết quả
+        request.getRequestDispatcher("authorManagerView.jsp").forward(request, response);
     }
+   
 
     /**
      * Returns a short description of the servlet.
