@@ -39,7 +39,7 @@
                     <div class="col-md-2 text-end">
                         <a href="orderShipping" class="btn btn-outline-info">
                             <i class="bi bi-basket"></i> 
-                            <span class="badge bg-primary">${requestScope.countRequestShipping}</span>
+                            <span class="badge bg-primary">${requestScope.countShip}</span>
                             <span class="d-block">Đang giao hàng</span>
                         </a>
                     </div>
@@ -74,7 +74,7 @@
                             <table class="table table-bordered table-striped table-hover align-middle">
                                 <thead>
                                     <tr>
-                                        <th scope="col" style="min-width: 125px;">OrderId</th>
+                                        <th scope="col" style="min-width: 125px;">Mã đơn hàng</th>
                                         <th scope="col" style="min-width: 125px;">Người mua</th>
                                         <th scope="col" style="min-width: 100px;">Ngày mua</th>
                                         <th scope="col" style="min-width: 100px;">Tổng tiền</th>
@@ -119,7 +119,7 @@
                                                         <span class="badge bg-success">${order.status}</span>
                                                     </td>
                                                     <td class="text-center text-nowrap">
-                                                        <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#orderSearchModell${order.id}">Xem</button>
+                                                        <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#orderInforModell${order.id}">Xem</button>
                                                     </td>
                                                 </tr>
                                             </c:forEach>
@@ -130,6 +130,7 @@
                         </div>
                     </main>
                 </div>
+                <c:if test="${empty requestScope.check}">
                 <c:if test="${totalPages != 0}">
                     <nav class="mt-3 mb-5">
                         <ul class="pagination justify-content-center">
@@ -161,6 +162,7 @@
                             </li>
                         </ul>
                     </nav>
+                </c:if>
                 </c:if>
             </div>
         </section>
