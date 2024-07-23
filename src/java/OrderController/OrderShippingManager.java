@@ -72,7 +72,7 @@ public class OrderShippingManager extends HttpServlet {
         Accounts account = (Accounts) request.getSession().getAttribute("account");
 
         if (account == null || account.getRoleID() == 3) {
-            response.sendRedirect("Notfound.jsp");
+            response.sendRedirect("admin401View.jsp");
         } else {
             ArrayList<Accounts> listAccount = new ArrayList<>();
             ArrayList<ShippingDetails> listShip = new ArrayList();
@@ -106,23 +106,19 @@ public class OrderShippingManager extends HttpServlet {
         }
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-         Accounts account = (Accounts) request.getSession().getAttribute("account");
+        Accounts account = (Accounts) request.getSession().getAttribute("account");
 
         if (account == null || account.getRoleID() == 3) {
-            response.sendRedirect("Notfound.jsp");
+            response.sendRedirect("admin401View.jsp");
         } else {
             String searchTerm = request.getParameter("searchorder");
+            if (searchTerm.isEmpty()) {
+                doGet(request, response);
+                return;
+            }
             int search = Integer.parseInt(searchTerm);
             OrderDao orderDao = new OrderDao();
             List<Order> orderShipping = orderDao.getOrderShipping();
@@ -137,36 +133,30 @@ public class OrderShippingManager extends HttpServlet {
             } else {
                 filteredOrders = orderShipping;
             }
-            ArrayList<Order> listOrder2 = new ArrayList<>();
             ArrayList<Accounts> listAccount = new ArrayList<>();
             ArrayList<ShippingDetails> listShip = new ArrayList();
             ArrayList<Books> listBook = new ArrayList<>();
             ArrayList<OrderDetail> listOrderDetail = new ArrayList<>();
             BookDao bookdao = new BookDao();
             ShippingDao shipdao = new ShippingDao();
-            OrderDao orderdao = new OrderDao();
             AccountDao accountdao = new AccountDao();
             OrderDetailDao orderdetaildao = new OrderDetailDao();
             listOrderDetail = orderdetaildao.getAllOrderDetail();
             listShip = shipdao.getAllShip();
             listBook = bookdao.getAllBooks();
             listAccount = (ArrayList<Accounts>) accountdao.getAll();
-            listOrder2 = orderdao.getOrderRequest();
-            int count = listOrder2.size();
-           
 
-              if(filteredOrders.isEmpty()){
+            if (filteredOrders.isEmpty()) {
                 request.setAttribute("mess", "Không tìm thấy order nào.");
             }
-            request.setAttribute("listviewOrder", orderShipping);
-            request.setAttribute("countRequest", count);
+            request.setAttribute("check", "check");
+            request.setAttribute("detailorder", orderShipping);
             request.setAttribute("listbook", listBook);
             request.setAttribute("listorderdetail", listOrderDetail);
             request.setAttribute("listship", listShip);
             request.setAttribute("listaccount", listAccount);
-            request.setAttribute("detailorder", filteredOrders);
-          
-            
+            request.setAttribute("listorder", filteredOrders);
+
             request.getRequestDispatcher("orderShippingManager.jsp").forward(request, response);
         }
     }

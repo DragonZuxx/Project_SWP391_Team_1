@@ -1,5 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+   <jsp:include page="_meta.jsp" />
 <header class="section-header">
     <section class="header-main border-bottom">
         <div class="container">
@@ -33,7 +35,7 @@
                             <c:if test="${sessionScope.account.getRoleID() == 1 || sessionScope.account.getRoleID() == 2 }"> 
                                 <div class="d-flex justify-content-end">
                                     <button class="btn btn-light me-2" style="background-color: white; border: 1px solid #007bff; margin-right: 5px; display: flex; justify-content: center; align-items: center; padding: 10px 5px;" type="button">
-                                        <a href="adminView.jsp" class="text-dark mr-3" style="text-decoration: none;">Admin</a>
+                                        <a href="userManager" class="text-dark mr-3" style="text-decoration: none;">Admin</a>
                                     </button>
                                 </div>
                             </c:if>

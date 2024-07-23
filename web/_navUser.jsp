@@ -13,9 +13,6 @@
         <a class="list-group-item list-group-item-action ${param.active == 'CHANGE_PASSWORD' ? 'active' : ''}" href="${pageContext.request.contextPath}/changepass" role="button">
             <i class="fas fa-key me-2"></i>Đổi mật khẩu
         </a>
-        <a class="list-group-item list-group-item-action ${param.active == 'SETTING' ? 'active' : ''}" href="${pageContext.request.contextPath}/setting" role="button">
-            <i class="fas fa-cog me-2"></i>Thiết đặt
-        </a>
 
     </nav>
 </aside> <!-- col.// -->

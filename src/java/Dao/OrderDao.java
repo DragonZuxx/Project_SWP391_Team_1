@@ -58,27 +58,28 @@ public class OrderDao extends DBContext {
         return 0;
     }
 
+public void autoUpdateOrderStatus(int orderId) {
+    String sql = "UPDATE Orders SET Status = N'Đã nhận được hàng' WHERE OrderID = ? AND Status = N'Đang giao hàng' AND DATEADD(MINUTE, 1, UpdatedAt) <= ?";
+    Timestamp currentTimestamp = Timestamp.valueOf(LocalDateTime.now());
 
-  public void autoUpdateOrderStatus(int orderId) {
-        String sql = "UPDATE Orders SET Status = N'Đã nhận được hàng' WHERE OrderID = ? AND Status = N'Đang giao hàng' AND UpdatedAt <= ?";
-        LocalDateTime tenDaysAgo = LocalDateTime.now().minusSeconds(10); // Cập nhật sau 10 ngày
-        Timestamp tenDaysAgoTimestamp = Timestamp.valueOf(tenDaysAgo);
-
-        try (PreparedStatement stm = connection.prepareStatement(sql)) {
-            stm.setInt(1, orderId);
-            stm.setTimestamp(2, tenDaysAgoTimestamp);
-            int rowsAffected = stm.executeUpdate();
-            if (rowsAffected > 0) {
-                System.out.println("Đã cập nhật trạng thái đơn hàng tự động thành công.");
-            } else {
-                System.out.println("Không có đơn hàng nào cần cập nhật.");
-            }
-        } catch (SQLException e) {
-            System.err.println("Lỗi khi cập nhật trạng thái đơn hàng tự động: " + e.getMessage());
-            e.printStackTrace();
+    try (PreparedStatement stm = connection.prepareStatement(sql)) {
+        stm.setInt(1, orderId);
+        stm.setTimestamp(2, currentTimestamp);
+        int rowsAffected = stm.executeUpdate();
+        if (rowsAffected > 0) {
+            System.out.println("Đã cập nhật trạng thái đơn hàng tự động thành công.");
+        } else {
+            System.out.println("Không có đơn hàng nào cần cập nhật.");
         }
+    } catch (SQLException e) {
+        System.err.println("Lỗi khi cập nhật trạng thái đơn hàng tự động: " + e.getMessage());
+        e.printStackTrace();
     }
-  public Order getOrder(int id) {
+}
+
+
+
+public Order getOrder(int id) {
 
         String sql = "select * from Orders where OrderID= ?";
         try {
@@ -393,22 +394,23 @@ public class OrderDao extends DBContext {
         return 1; // default to 1 if there is an error
     }
 
-    public boolean UpdateOrder(int orderid, String fullname, String address, String phone, String status) {
-        String sql = " Update Orders set  [FullName] = ?,[Address] =? ,[Phone] =?,[Status]= ? where  OrderID=?";
-        try {
-            stm = connection.prepareStatement(sql);
-            stm.setString(1, fullname);
-            stm.setString(2, address);
-            stm.setString(3, phone);
-            stm.setString(4, status);
-            stm.setInt(5, orderid);
-            int result = stm.executeUpdate();
-            return result > 0;
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        return false;
+   public boolean UpdateOrder(int orderid, String fullname, String address, String phone, String status, LocalDateTime update) {
+    String sql = "UPDATE Orders SET FullName = ?, Address = ?, Phone = ?, Status = ?, UpdatedAt = ? WHERE OrderID = ?";
+    try (PreparedStatement stm = connection.prepareStatement(sql)) {
+        stm.setString(1, fullname);
+        stm.setString(2, address);
+        stm.setString(3, phone);
+        stm.setString(4, status);
+        stm.setTimestamp(5, java.sql.Timestamp.valueOf(update));
+        stm.setInt(6, orderid);
+        int result = stm.executeUpdate();
+        return result > 0;
+    } catch (Exception e) {
+        System.out.println(e);
     }
+    return false;
+}
+
 
     public ArrayList<Order> getOrderRequestUser(int id) {
         ArrayList<Order> list = new ArrayList<>();
@@ -464,36 +466,35 @@ public class OrderDao extends DBContext {
         return list;
     }
 
-    public Boolean updateOrderReason(int orderId, String newReason, String status) {
-        String sql = "UPDATE Orders SET Reason = ?, Status = ? WHERE OrderID = ?";
-        try {
-            stm = connection.prepareStatement(sql);
-            stm.setString(1, newReason);
-            stm.setString(2, status);
-            stm.setInt(3, orderId);
-            int result = stm.executeUpdate();
-            return result > 0;
+   public Boolean updateOrderReason(int orderId, String newReason, String status, LocalDateTime update) {
+    String sql = "UPDATE Orders SET Reason = ?, Status = ?, [UpdatedAt] = ? WHERE OrderID = ?";
+    try (PreparedStatement stm = connection.prepareStatement(sql)) {
+        stm.setString(1, newReason);
+        stm.setString(2, status);
+        stm.setTimestamp(3, java.sql.Timestamp.valueOf(update));
+        stm.setInt(4, orderId);
 
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        return false;
+        int result = stm.executeUpdate();
+        return result > 0;
+    } catch (Exception e) {
+        System.out.println(e);
     }
+    return false;
+}
+   public Boolean updateOrderSucces(int orderId, String status, LocalDateTime update) {
+    String sql = "UPDATE Orders SET Status = ?, [UpdatedAt] = ? WHERE OrderID = ?";
+    try (PreparedStatement stm = connection.prepareStatement(sql)) {
+        stm.setString(1, status);
+        stm.setTimestamp(2, java.sql.Timestamp.valueOf(update));
+        stm.setInt(3, orderId);
 
-    public Boolean updateOrderSucces(int orderId, String status) {
-        String sql = "UPDATE Orders SET Status = ? WHERE OrderID = ?";
-        try {
-            stm = connection.prepareStatement(sql);
-            stm.setString(1, status);
-            stm.setInt(2, orderId);
-            int result = stm.executeUpdate();
-            return result > 0;
-
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        return false;
+        int result = stm.executeUpdate();
+        return result > 0;
+    } catch (Exception e) {
+        System.out.println(e);
     }
+    return false;
+}
 
     //OrderCancelManager
     public ArrayList<Order> getOrderCancelled(int pageNumber, int pageSize) {
@@ -568,6 +569,17 @@ public class OrderDao extends DBContext {
             System.out.println(e);
         }
         return 1; // default to 1 if there is an error
+    }
+    
+       
+    
+    
+    public static void main(String[] args) {
+        OrderDao orderdao= new OrderDao();
+        ArrayList<Order> listOrder3 = new ArrayList<>();
+        listOrder3= orderdao.getOrderShipping();
+         int countShip= listOrder3.size();
+         System.out.println(countShip);
     }
     
   

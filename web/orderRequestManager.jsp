@@ -38,7 +38,7 @@
                         </form>
                     </div>
                     <div class="col-md-4 text-center ">
-                        <button onclick="window.history.back();" style="
+                        <button onclick="window.location.href = 'listorder';" style="
                                 background-color: #4CAF50; /* Green background */
                                 border: none; /* Remove borders */
                                 color: white; /* White text */
@@ -81,7 +81,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <c:if test="${empty requestScope.detailorder}">
+                                   
                                         <c:forEach var="order" items="${requestScope.listorder}">
                                             <tr>
                                                 <th scope="row">${order.id}</th>
@@ -97,36 +97,18 @@
                                                 </td>
                                                 <td class="text-center text-nowrap">
                                                     <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#orderInforModell${order.id}">Xem</button>
-                                                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#orderUpdateModel${order.id}">Sửa</button>
+                                                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#orderUpdateModel${order.id}">Cập Nhật</button>
 
 
                                                 </td>
                                             </tr>
                                         </c:forEach>
-                                    </c:if>
-                                    <c:forEach var="order" items="${requestScope.detailorder}">
-                                        <tr>
-                                            <th scope="row">${order.id}</th>
-                                                <c:forEach var="account" items="${requestScope.listaccount}">
-                                                    <c:if  test="${account.getUserID() == order.userid}">
-                                                    <td>${account.getEmail()}</td>
-                                                </c:if>
-                                            </c:forEach>
-                                            <td>${order.createdat}</td>
-                                            <td><fmt:formatNumber pattern="#,##0" value="${order.amount}"/>₫</td>
-                                            <td>    
-                                                <span class="badge bg-success">${order.status}</span>
-                                            </td>
-                                            <td class="text-center text-nowrap">
-                                                <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#orderInforModell${order.id}">Xem</button>
-                                            </td>
-                                        </tr>
-                                    </c:forEach>
                                 </tbody>
                             </table>
                         </div>
                     </main>
                 </div>
+                 <c:if test="${empty requestScope.check}">
                 <c:if test="${totalPages != 0}">
                     <nav class="mt-3 mb-5">
                         <ul class="pagination justify-content-center">
@@ -161,6 +143,7 @@
                         </ul>
                     </nav>
                 </c:if>
+                 </c:if>
             </div>
         </section>
 
