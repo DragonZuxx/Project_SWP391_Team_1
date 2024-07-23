@@ -628,8 +628,8 @@ public class ListAccountDao extends DBContext {
     public static void main(String[] args) {
         ListAccountDao dal = new ListAccountDao();
         BookRevenue bok = new BookRevenue();
-        dal.addAccount("Minhtan@120003", "minhdg@gmail.com", "Tandeotrai", "Ha Noi", "0988786543", 3, true, LocalDateTime.now(), LocalDateTime.now());
-        System.out.println(dal);
+
+        System.out.println(dal.getAllWishlistBooks());
 
     }
 }

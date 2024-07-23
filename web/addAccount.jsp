@@ -77,7 +77,7 @@
                                            required>
                                 </div>
                                 <span class="text-danger">${requestScope.errorMessage3}</span> 
-                                
+
                                 <div class="mb-3">
                                     <label for="user-active-role" class="form-label">Quyền hoạt động <span class="text-danger">*</span></label>
                                     <select class="form-select" id="user-active-role" name="isActive" required>
@@ -85,7 +85,6 @@
                                         <option value="true" ${a.isIsActive() != null && a.isIsActive() ? 'selected' : ''}>Hoạt động</option>
                                     </select>
                                 </div>
-                                    
                                 <div class="mb-3">
                                     <label for="user-role" class="form-label">Quyền <span class="text-danger">*</span></label>
                                     <select class="form-select"
