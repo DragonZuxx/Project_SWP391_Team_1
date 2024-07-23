@@ -10,6 +10,10 @@ import java.util.ArrayList;
 
 import Dal.DBContext;
 import Model.Reviews;
+import java.util.AbstractMap;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -103,5 +107,52 @@ public class ReviewDao extends DBContext {
             System.out.println("addReview: " + e.getMessage());
         }
         return false;
+    }
+    public List<Map.Entry<Reviews, Map<String, String>>> getLatestReviews(int offset, int limit) {
+        String sql = "SELECT r.ReviewID, r.Comment, r.CreatedAt, r.UpdatedAt, "
+                + "b.Title AS BookTitle, "
+                + "u.FullName AS FullName, "
+                + "u.Phone AS Phone "
+                + "FROM Reviews r "
+                + "JOIN Books b ON r.BookID = b.BookID "
+                + "JOIN Users u ON r.UserID = u.UserID "
+                + "ORDER BY r.CreatedAt DESC "
+                + "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        List<Map.Entry<Reviews, Map<String, String>>> reviewsList = new ArrayList<>();
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            stm.setInt(1, offset);
+            stm.setInt(2, limit);
+            try (ResultSet rs = stm.executeQuery()) {
+                while (rs.next()) {
+                    Reviews review = new Reviews();
+                    review.setReviewID(rs.getInt("ReviewID"));
+                    review.setComment(rs.getString("Comment"));
+                    review.setCreatedAt(rs.getTimestamp("CreatedAt").toLocalDateTime());
+                    review.setUpdatedAt(rs.getTimestamp("UpdatedAt").toLocalDateTime());
+
+                    Map<String, String> additionalInfo = new HashMap<>();
+                    additionalInfo.put("bookTitle", rs.getString("BookTitle"));
+                    additionalInfo.put("fullName", rs.getString("FullName"));
+                    additionalInfo.put("phone", rs.getString("Phone"));
+
+                    reviewsList.add(new AbstractMap.SimpleEntry<>(review, additionalInfo));
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("getLatestReviews: " + e.getMessage());
+        }
+        return reviewsList;
+    }
+
+    public int countTotalReviews() {
+        String sql = "SELECT COUNT(*) FROM Reviews";
+        try (PreparedStatement stm = connection.prepareStatement(sql); ResultSet rs = stm.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+            System.out.println("countTotalReviews: " + e.getMessage());
+        }
+        return 0;
     }
 }
