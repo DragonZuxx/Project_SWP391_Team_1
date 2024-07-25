@@ -8,7 +8,14 @@
     <head>
         <jsp:include page="_meta.jsp" />
         <title>${requestScope.product.getTitle()}</title>
-
+        <link rel="stylesheet" href="<c:url value='/css/bootstrap.min.css'/>">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/coupon.css">
         <!-- Custom Scripts -->
         <script src="${pageContext.request.contextPath}/js/toast.js" type="module"></script>
         <script src="${pageContext.request.contextPath}/js/product.js" type="module"></script>
@@ -23,10 +30,6 @@
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
                             <a href="${pageContext.request.contextPath}/home">Trang chủ</a>
-                        </li>
-                        <li class="breadcrumb-item">
-                            <a
-                                href="${pageContext.request.contextPath}/category?id=${requestScope.category.getCategoryID()}">${requestScope.category.getCategoryName()}</a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">
                             ${requestScope.product.getTitle()}</li>
@@ -300,10 +303,7 @@
         <section class="section-content mb-5">
             <div class="container">
                 <h3 class="pb-2">Sản phẩm liên quan</h3>
-                <div class="related-products-container position-relative">
-                    <button class="scroll-button left" onclick="scrollLeft()">&#10094;</button>
-                    <div class="related-products-wrapper d-flex overflow-hidden">
-                        <div class="row item-grid">
+                <div class="product-list">
 
                             <c:forEach var="relatedProduct" items="${requestScope.bookgetbyid}">
                                 <c:choose>
@@ -361,95 +361,96 @@
                             </c:forEach>
                         </div>
                     </div>
-                    <button class="scroll-button right" onclick="scrollRight()">&#10095;</button>
-                </div>
-            </div>
         </section>
 
 
         <!-- JavaScript đặt sau nội dung HTML -->
-        <script>
-            // Define scrollLeft function globally
-            function scrollLeft() {
-                const container = document.querySelector('.related-products-wrapper');
-                const width = container.clientWidth;
-                container.scrollBy({left: -width, behavior: 'smooth'});
-            }
-
-            // Define scrollRight function globally
-            function scrollRight() {
-                const container = document.querySelector('.related-products-wrapper');
-                const width = container.clientWidth;
-                container.scrollBy({left: width, behavior: 'smooth'});
-            }
+         <script>
+            $(document).ready(function () {
+                $('.product-list').slick({
+                    infinite: true,
+                    slidesToShow: 4,
+                    slidesToScroll: 4,
+                    dots: true,
+                    arrows: true,
+                    prevArrow: '<button type="button" class="slick-prev">Trước</button>',
+                    nextArrow: '<button type="button" class="slick-next">Tiếp</button>',
+                    customPaging: function (slider, i) {
+                        return '<button type="button" class="slick-page">' + (i + 1) + '</button>';
+                    },
+                    responsive: [
+                        {
+                            breakpoint: 1024,
+                            settings: {
+                                slidesToShow: 3,
+                                slidesToScroll: 3
+                            }
+                        },
+                        {
+                            breakpoint: 600,
+                            settings: {
+                                slidesToShow: 2,
+                                slidesToScroll: 2
+                            }
+                        },
+                        {
+                            breakpoint: 480,
+                            settings: {
+                                slidesToShow: 1,
+                                slidesToScroll: 1
+                            }
+                        }
+                    ]
+                });
+            });
         </script>
 
-        <style>
-            .related-products-container {
-                display: flex;
-                align-items: center;
-                position: relative;
-            }
-
-            .related-products-wrapper {
-                overflow-x: auto;
-                display: flex;
-                width: 100%;
-                scroll-behavior: smooth;
-            }
-
-            .related-products-wrapper .item-grid {
-                display: flex;
-                flex-wrap: nowrap;
-            }
-
-            .related-product-item {
-                flex: 0 0 auto;
-                width: 25%;
-            }
-
-            .scroll-button {
-                position: absolute;
-                top: 50%;
-                transform: translateY(-50%);
-                background-color: rgba(0, 0, 0, 0.5);
-                color: white;
-                border: none;
-                padding: 10px;
-                cursor: pointer;
-                z-index: 1000;
-            }
-
-            .scroll-button.left {
-                left: 0;
-            }
-
-            .scroll-button.right {
-                right: 0;
-            }
-            .item-grid {
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: space-between;
-            }
-
-            .related-product-item {
-                flex: 0 0 calc(25% - 15px); /* Chia đều 4 cột, với margin giữa các sản phẩm */
-                margin-bottom: 30px;
-                max-width: calc(25% - 15px); /* Đảm bảo rằng các sản phẩm không tràn ra khỏi khung */
-            }
-
-            .card {
-                height: 100%;
-            }
-
-
-
-        </style>
-
+        
         <jsp:include page="_footer.jsp" />
     </body>
 
     <div class="toast-container position-fixed bottom-0 start-0 p-3"></div>
+
+    <!-- JavaScript đặt sau nội dung HTML -->
+    <script>
+        window.onload = function () {
+            const quantityInput = document.getElementById('cart-item-quantity');
+            const stock = parseInt(quantityInput.getAttribute('max')); // Lấy giá trị tối đa từ thuộc tính max
+
+            quantityInput.addEventListener('input', function () {
+                const quantity = parseInt(quantityInput.value);
+
+                if (quantity > stock) {
+                    // Hiển thị thông báo lỗi nếu số lượng vượt quá số lượng tồn kho
+                    showToast('Số lượng tồn kho không đủ hàng.', 'danger');
+                    quantityInput.value = stock; // Đặt giá trị số lượng về giá trị tối đa
+                }
+            });
+
+            function showToast(message, type) {
+                const toastContainer = document.querySelector('.toast-container');
+                const toast = document.createElement('div');
+                toast.className = `toast align-items-center text-white bg-${type} border-0`;
+                toast.innerHTML = `
+                    <div class="d-flex">
+                        <div class="toast-body">
+        ${message}
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                `;
+                toastContainer.appendChild(toast);
+                const toastElement = new bootstrap.Toast(toast);
+                toastElement.show();
+            }
+
+            // Ensure Bootstrap JavaScript is included and initialized
+            if (typeof bootstrap !== 'undefined' && bootstrap.Toast) {
+                console.log('Bootstrap Toast is available.');
+            } else {
+                console.error('Bootstrap Toast is not available.');
+            }
+        };
+    </script>
 
 </html>

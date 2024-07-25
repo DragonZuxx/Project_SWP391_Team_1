@@ -4,8 +4,11 @@
  */
 package HomeController;
 
+import Dao.BookDao;
 import Dao.ListAccountDao;
+import Dao.PromotionDao;
 import Model.Books;
+import Model.Promotions;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,6 +16,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -61,11 +65,19 @@ public class listSelling extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         ListAccountDao dal = new ListAccountDao();
+        
         int pageNumber = request.getParameter("page") == null ? 1 : Integer.parseInt(request.getParameter("page"));
         int pageSize = 8;
+        
         List<Books> books = dal.getBestSellingByPage(pageNumber, pageSize);
         int totalBooks = dal.getBestSelling().size();
         int totalPages = (int) Math.ceil((double) totalBooks / pageSize);
+        PromotionDao promotionsDao = new PromotionDao();
+        Promotions promotions = promotionsDao.getPromotionValid();
+        BookDao bookDao = new BookDao();
+        ArrayList<Books> bookrelated = bookDao.getBestSeller();
+         request.setAttribute("promotions", promotions);
+         request.setAttribute("bookrelated", bookrelated);
          request.setAttribute("products", books);
         request.setAttribute("currentPage", pageNumber);
         request.setAttribute("pageSize", pageSize);

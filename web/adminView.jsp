@@ -57,14 +57,6 @@
                                         <figure class="card">
                                             <div class="p-3">
                                                 <h4 class="title">${requestScope.totalOrders}</h4>
-                                                <span><a href="reviewManager" class="text-dark mr-3" style="text-decoration: none;">Đánh giá</a></span>
-                                            </div>
-                                        </figure>
-                                    </div>
-                                    <div class="col-6 col-lg-3">
-                                        <figure class="card">
-                                            <div class="p-3">
-                                                <h4 class="title">${requestScope.totalOrders}</h4>
                                                 <span><a href="listorder" class="text-dark mr-3" style="text-decoration: none;">Đơn hàng</a></span>
                                             </div>
                                         </figure>

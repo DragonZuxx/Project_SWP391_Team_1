@@ -7,8 +7,10 @@ package categoryController;
 import Dao.BookDao;
 import Dao.CategoryDao;
 import Dao.ProductFilterDao;
+import Dao.PromotionDao;
 import Model.Books;
 import Model.Categories;
+import Model.Promotions;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -69,35 +71,43 @@ public class FilterCategory extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-       // Lấy danh sách nhà xuất bản từ DAO
-    ArrayList<String> publishers = bd.getDistinctPublisher();
-    
-    // Lấy các tham số từ request
-    String selectedPublisher = request.getParameter("selectedPublisher");
-    String priceRange = request.getParameter("priceRanges");
-    String order = request.getParameter("order");
-    String categoryID = request.getParameter("categoryID");
+        // Lấy danh sách nhà xuất bản từ DAO
+        ArrayList<String> publishers = bd.getDistinctPublisher();
 
-    // Kiểm tra nếu categoryID null hoặc empty, hãy lấy nó từ session hoặc nơi lưu trữ khác
-    if (categoryID == null || categoryID.isEmpty()) {
-        categoryID = (String) request.getSession().getAttribute("categoryID");
-    } else {
-        request.getSession().setAttribute("categoryID", categoryID);
-    }
+        // Lấy các tham số từ request
+        String selectedPublisher = request.getParameter("selectedPublisher");
+        String priceRange = request.getParameter("priceRanges");
+        String order = request.getParameter("order");
+        String categoryID = request.getParameter("categoryID");
 
-    // Lấy danh sách sách từ DAO
-    List<Books> books = productDAO.filterBooks(selectedPublisher, priceRange, order, categoryID);
+        // Kiểm tra nếu categoryID null hoặc empty, hãy lấy nó từ session hoặc nơi lưu trữ khác
+        if (categoryID == null || categoryID.isEmpty()) {
+            categoryID = (String) request.getSession().getAttribute("categoryID");
+        } else {
+            request.getSession().setAttribute("categoryID", categoryID);
+        }
 
-    // Đặt các thuộc tính vào request scope để truyền tới JSP
-    request.setAttribute("publishers", publishers);
-    request.setAttribute("books", books);
-    request.setAttribute("selectedPublisher", selectedPublisher);
-    request.setAttribute("priceRanges", priceRange);
-    request.setAttribute("order", order);
-    request.setAttribute("categoryID", categoryID);
+        // Lấy danh sách sách từ DAO
+        List<Books> books = productDAO.filterBooks(selectedPublisher, priceRange, order, categoryID);
+        PromotionDao promotionsDao = new PromotionDao();
+        Promotions promotions = promotionsDao.getPromotionValid();
+        // Kiểm tra và lấy thông tin khuyến mãi nếu chưa có trong request
+        if (request.getAttribute("promotion") == null) {
 
-    // Forward request và response tới trang JSP
-    request.getRequestDispatcher("categoryView.jsp").forward(request, response);
+            request.setAttribute("promotion", promotions);
+        }
+
+        
+        // Đặt các thuộc tính vào request scope để truyền tới JSP
+        request.setAttribute("publishers", publishers);
+        request.setAttribute("books", books);
+        request.setAttribute("selectedPublisher", selectedPublisher);
+        request.setAttribute("priceRanges", priceRange);
+        request.setAttribute("order", order);
+        request.setAttribute("categoryID", categoryID);
+
+        // Forward request và response tới trang JSP
+        request.getRequestDispatcher("categoryView.jsp").forward(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

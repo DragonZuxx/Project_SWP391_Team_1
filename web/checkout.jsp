@@ -32,15 +32,15 @@
                                     <h4>Thông tin giao hàng</h4>
                                     <div class="mb-3">
                                         <label for="fullName" class="form-label">Họ và tên</label>
-                                        <input type="text" class="form-control" id="fullName" name="fullName" required>
+                                        <input type="text" class="form-control" id="fullName" name="fullName"  value="${sessionScope.account.getFullName()}" required>
                                     </div>
                                     <div class="mb-3">
                                         <label for="address" class="form-label">Địa chỉ</label>
-                                        <input type="text" class="form-control" id="address" name="address" required>
+                                        <input type="text" class="form-control" id="address" name="address" value="${sessionScope.account.getAddress()}" required>
                                     </div>
                                     <div class="mb-3">
                                         <label for="phone" class="form-label">Số điện thoại</label>
-                                        <input type="text" class="form-control" id="phone" name="phone" required>
+                                        <input type="text" class="form-control" id="phone" name="phone"  value="${sessionScope.account.getPhone()}" required>
                                     </div>
                                     <h4>Thông tin đơn hàng</h4>
                                     <div class="table-responsive">
@@ -82,7 +82,7 @@
                                     <div class="card-body">
                                         <p class="card-title">Hình thức giao hàng</p>
                                         <div class="form-check mb-2">
-                                            <input class="form-check-input delivery-method" type="radio" name="delivery-method" id="delivery-method-1" value="0">
+                                            <input class="form-check-input delivery-method" type="radio" name="delivery-method" id="delivery-method-1" value="0" checked="">
                                             <label class="form-check-label" for="delivery-method-1">Giao tiêu chuẩn</label>
                                         </div>
                                         <div class="form-check mb-2">
@@ -101,7 +101,7 @@
                                         <div class="card-body">
                                             <p class="card-title">Hình thức thanh toán</p>
                                             <div class="form-check mb-2">
-                                                <input class="form-check-input payment-method" type="radio" name="payment-method" id="payment-method-1" value="Thanh toán khi nhận hàng (COD)">
+                                                <input class="form-check-input payment-method" type="radio" name="payment-method" id="payment-method-1" value="Thanh toán khi nhận hàng (COD)" checked="">
                                                 <label class="form-check-label" for="payment-method-1">Thanh toán khi nhận hàng (COD)</label>
                                             </div>
                                         </div>
@@ -116,15 +116,6 @@
                         </div>
                     </main>
                     <aside class="col-lg-3">
-                        <div class="card mb-3">
-                            <div class="card-body">
-                                <p class="card-title">Mã giảm giá</p>
-                                <div class="input-group mb-3">
-                                    <input type="text" class="form-control" id="coupon-code" placeholder="Nhập mã giảm giá">
-                                    <button class="btn btn-primary" type="button" id="apply-coupon">Áp dụng</button>
-                                </div>
-                            </div>
-                        </div>
 
                         <div class="card">
                             <div class="card-body">
@@ -164,8 +155,6 @@
             const tempPriceElement = document.getElementById("temp-price");
             const deliveryPriceElement = document.getElementById("delivery-price");
             const totalPriceElement = document.getElementById("total-price");
-            const couponCodeInput = document.getElementById("coupon-code");
-            const applyCouponButton = document.getElementById("apply-coupon");
             const deliveryMethodNameField = document.getElementById('delivery-method-name');
             const deliveryTimeField = document.getElementById('delivery-time');
 
@@ -214,7 +203,7 @@
                 input.addEventListener("change", calculateTotalPrice);
             });
 
-            
+
             calculateTotalPrice(); // Initial calculation
         });
 

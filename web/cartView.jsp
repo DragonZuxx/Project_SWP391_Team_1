@@ -88,7 +88,7 @@
                                                                         </figure>
                                                                     </td>
                                                                     <td>
-                                                                        <input type="number" class="form-control quantity-input" value="${item.getQuantity()}" min="1" max="${book.stock}">
+                                                                        <input type="number" class="form-control quantity-input" value="${item.getQuantity()}" min="1" max="${book.stock}" readonly="">
                                                                     </td>
                                                                     <td>
                                                                         <div class="price-wrap">
@@ -196,6 +196,12 @@
         function updateCartItem(cartID, bookID, quantity) {
             const newQuantity = prompt("Nhập số lượng mới:", quantity);
             if (newQuantity !== null && newQuantity !== "" && !isNaN(newQuantity)) {
+                const maxQuantity = parseInt(document.querySelector(`input[name='selectedBooks'][value='${bookID}']`).dataset.getStock(), 10);
+                if (newQuantity > maxQuantity) {
+                    alert(`Số lượng không được vượt quá số lượng có sẵn trong kho (${maxQuantity}).`);
+                    return;
+                }
+
                 const data = new URLSearchParams();
                 data.append('cartID', cartID);
                 data.append('bookID', bookID);
@@ -211,7 +217,6 @@
                         .then(response => response.json())
                         .then(result => {
                             if (result.success) {
-                                // Cập nhật giao diện người dùng tương ứng
                                 location.reload(); // Tải lại trang để hiển thị cập nhật
                             } else {
                                 alert("Cập nhật thất bại: " + result.message);
@@ -220,6 +225,7 @@
                         .catch(error => console.error('Error:', error));
             }
         }
+
 
         function confirmDelete(cartID, bookID) {
             if (confirm("Bạn có chắc chắn muốn xóa mục này không?")) {

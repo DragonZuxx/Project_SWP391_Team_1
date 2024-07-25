@@ -6,7 +6,9 @@ package HomeController;
 
 import Dao.BookDao;
 import Dao.ListAccountDao;
+import Dao.PromotionDao;
 import Model.Books;
+import Model.Promotions;
 import Model.Wishlist;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -72,6 +74,12 @@ public class WishlistControll extends HttpServlet {
         int totalBooks = dal.getAllWishlistBooks().size();
         int totalPages = (int) Math.ceil((double) totalBooks / pageSize);
         List<Books> books = book.getAllBooks();
+        PromotionDao promotionsDao = new PromotionDao();
+        Promotions promotions = promotionsDao.getPromotionValid();
+        BookDao bookDao = new BookDao();
+        ArrayList<Books> bookrelated = bookDao.getBestSeller();
+         request.setAttribute("promotions", promotions);
+         request.setAttribute("bookrelated", bookrelated);
         request.setAttribute("wishlistItems", list);
         request.setAttribute("wishlistBooks", books);
         request.setAttribute("currentPage", pageNumber);

@@ -8,6 +8,13 @@
         <jsp:include page="_meta.jsp"/>
         <title>Danh sách bán chạy nhất</title>
         <link rel="stylesheet" href="<c:url value='/css/bootstrap.min.css'/>">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/coupon.css">
         <style>
             .content-container {
                 display: flex;
@@ -67,7 +74,7 @@
         <jsp:include page="navbar.jsp"/>
         <section class="section-pagetop bg-light">
             <div class="container">
-                <h3 class="title-page">Top sản phẩm bán chạy nhất</h3>
+<h3 class="title-page">Top sản phẩm bán chạy nhất</h3>
             </div> 
         </section>
         <section class="section-content padding-y">
@@ -75,14 +82,14 @@
                 <div class="row item-grid">
                     <c:forEach var="book" items="${requestScope.products}">
                         <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
-                            <div class="card p-3 h-100">
+                            <div class="card p-2">
                                 <a href="${pageContext.request.contextPath}/detailbook?id=${book.getBookID()}">
                                     <c:choose>
                                         <c:when test="${empty book.getCoverImage()}">
-                                            <img src="${pageContext.request.contextPath}/img/280px.png" alt="No image available" style="max-width: 100%; height: auto">
+                                            <img src="${pageContext.request.contextPath}/img/280px.png" alt="No image available" width="200" height="200" class="img-fluid">
                                         </c:when>
                                         <c:otherwise>
-                                            <img src="${book.getCoverImage()}" alt="${book.getTitle()}" style="max-width: 100%; height: auto">
+                                            <img src="${book.getCoverImage()}" alt="${book.getTitle()}" width="200" height="200" class="img-fluid">
                                         </c:otherwise>
                                     </c:choose>
                                 </a>
@@ -91,7 +98,7 @@
                                     <p>Nhà xuất bản: ${book.getPublisher()}</p>
                                     <p>Giá: <fmt:formatNumber value="${book.getPrice()}" type="currency" currencySymbol="VND"/></p>
                                     <p>Số lượng đã bán: ${book.getSoldQuantity()}</p>
-                                    <a href="${pageContext.request.contextPath}/detailbook?id=${book.getBookID()}" class="btn-read-more">Mua ngay</a>
+
                                 </div>
                             </div>
                         </div>
@@ -116,78 +123,87 @@
                         </nav>
                     </c:if>
                 </div>
-            </div>
-        </section>
-        
-        <section class="section-content mb-5">
-            <div class="container">
-                <h3 class="pb-2">Sản phẩm liên quan</h3>
-                <div class="related-products-container position-relative">
-                    <button class="scroll-button left" onclick="scrollLeft()">&#10094;</button>
-                    <div class="related-products-wrapper d-flex overflow-hidden">
-                        <div class="row item-grid">
-
-                            <c:forEach var="relatedProduct" items="${requestScope.bookgetbyid}">
-                                <c:choose>
-                                    <c:when test="${requestScope.product.getBookID() != relatedProduct.getBookID()}">
-                                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 related-product-item">
-                                            <div class="card p-3 mb-4">
-                                                <a href="${pageContext.request.contextPath}/detailbook?id=${relatedProduct.getBookID()}"
-                                                   class="img-wrap text-center">
-                                                    <c:choose>
-                                                        <c:when test="${empty relatedProduct.getCoverImage()}">
-                                                            <img width="200" height="200" class="img-fluid"
-                                                                 src="${pageContext.request.contextPath}/img/280px.png"
-                                                                 alt="280px.png">
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            <img width="200" height="200" class="img-fluid"
-                                                                 src="${relatedProduct.getCoverImage()}"
-                                                                 alt="${relatedProduct.getTitle()}">
-                                                        </c:otherwise>
-                                                    </c:choose>
-                                                </a>
-                                                <figcaption class="info-wrap mt-2">
-                                                    <a href="${pageContext.request.contextPath}/detailbook?id=${relatedProduct.getBookID()}"
-                                                       class="title">${relatedProduct.getTitle()}</a>
-                                                    <div>
-                                                        <c:choose>
-                                                            <c:when test="${empty requestScope.promotion}">
-                                                                <!-- If no promotion -->
-                                                                <span class="price mt-1 fw-bold">
-                                                                    <fmt:formatNumber pattern="#,##0" value="${product.getPrice()}"/>₫
-                                                                </span>
-                                                            </c:when>
-                                                            <c:otherwise>
-                                                                <!-- If there is a promotion -->
-                                                                <span class="price mt-1 fw-bold">
-                                                                    <fmt:formatNumber pattern="#,##0" value="${product.getPrice() * (100 - requestScope.promotion.getDiscountPercentage()) / 100}"/>₫
-                                                                </span>
-                                                                <span class="ms-2 text-muted text-decoration-line-through">
-                                                                    <fmt:formatNumber pattern="#,##0" value="${product.getPrice()}"/>₫
-                                                                </span>
-                                                                <span class="ms-2 badge bg-info">
-                                                                    -<fmt:formatNumber pattern="#,##0" value="${requestScope.promotion.getDiscountPercentage()}"/>%
-                                                                </span>
-                                                            </c:otherwise>
-                                                        </c:choose>
-                                                    </div>
-                                                </figcaption>
-                                            </div>
+<div class="related-products mt-5">
+                    <h2>Sản Phẩm Đề Xuất</h2>
+                    <div class="product-list">
+                        <c:forEach var="product" items="${requestScope.bookrelated}">
+                            <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
+                                <div class="card p-3 h-100">
+                                    <a href="${pageContext.request.contextPath}/detailbook?id=${product.getBookID()}" class="img-wrap text-center">
+                                        <img width="200" height="200" class="img-fluid" src="${product.getCoverImage()}" alt="${product.getTitle()}">
+                                    </a>
+                                    <figcaption class="info-wrap mt-2">
+                                        <a href="${pageContext.request.contextPath}/detailbook?id=${product.getBookID()}" class="title">${product.getTitle()}</a>
+                                        <div>
+                                            <c:choose>
+                                                <c:when test="${empty requestScope.promotions}">
+                                                    <!-- If no promotion -->
+                                                    <span class="price mt-1 fw-bold">
+                                                        <fmt:formatNumber pattern="#,##0" value="${product.getPrice()}"/>₫
+                                                    </span>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <!-- If there is a promotion -->
+                                                    <span class="price mt-1 fw-bold">
+                                                        <fmt:formatNumber pattern="#,##0" value="${product.getPrice() * (100 - requestScope.promotions.getDiscountPercentage()) / 100}"/>₫
+                                                    </span>
+                                                    <span class="ms-2 text-muted text-decoration-line-through">
+                                                        <fmt:formatNumber pattern="#,##0" value="${product.getPrice()}"/>₫
+                                                    </span>
+                                                    <span class="ms-2 badge bg-info">
+                                                        -<fmt:formatNumber pattern="#,##0" value="${requestScope.promotions.getDiscountPercentage()}"/>%
+                                                    </span>
+                                                </c:otherwise>
+                                            </c:choose>
                                         </div>
-                                    </c:when>
-                                    <c:otherwise>
-
-                                    </c:otherwise>
-                                </c:choose>
-                            </c:forEach>
-                        </div>
+                                    </figcaption>
+                                </div>
+                            </div> 
+                        </c:forEach>
                     </div>
-                    <button class="scroll-button right" onclick="scrollRight()">&#10095;</button>
                 </div>
-            </div>
+</div>
         </section>
-        <jsp:include page="_footerAdmin.jsp"/>
+        <jsp:include page="_footer.jsp"/>
         <script src="<c:url value='/js/bootstrap.bundle.min.js'/>"></script>
+        <script>
+            $(document).ready(function () {
+                $('.product-list').slick({
+                    infinite: true,
+                    slidesToShow: 4,
+                    slidesToScroll: 4,
+                    dots: true,
+                    arrows: true,
+                    prevArrow: '<button type="button" class="slick-prev">Trước</button>',
+                    nextArrow: '<button type="button" class="slick-next">Tiếp</button>',
+                    customPaging: function (slider, i) {
+                        return '<button type="button" class="slick-page">' + (i + 1) + '</button>';
+                    },
+                    responsive: [
+                        {
+                            breakpoint: 1024,
+                            settings: {
+                                slidesToShow: 3,
+                                slidesToScroll: 3
+                            }
+                        },
+                        {
+                            breakpoint: 600,
+                            settings: {
+                                slidesToShow: 2,
+                                slidesToScroll: 2
+                            }
+                        },
+                        {
+                            breakpoint: 480,
+                            settings: {
+                                slidesToShow: 1,
+                                slidesToScroll: 1
+                            }
+                        }
+                    ]
+                });
+            });
+        </script>
     </body>
 </html>

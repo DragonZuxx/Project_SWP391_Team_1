@@ -188,21 +188,21 @@ public class OrderSucessfullController extends HttpServlet {
                 }
             }
 
-            // Update stock quantity
-            for (int i = 0; i < bookIDs.length; i++) {
-                int bookID = Integer.parseInt(bookIDs[i]);
-                int quantity = Integer.parseInt(quantities[i]);
-                int quantityInStock = bookDao.getStockByBookID(bookID);
-                int soldQuantity = bookDao.getSoldQuantitybyBookID(bookID);
-                int newQuantityInStock = quantityInStock - quantity;
-                int newSoldQuantity = soldQuantity + quantity;
-                boolean updateQuantityInStockResult = bookDao.updateQuantityInStock(bookID, newQuantityInStock, newSoldQuantity);
-                if (!updateQuantityInStockResult) {
-                    request.setAttribute("errorMessage", "Failed to place order_5. Please try again.");
-                    request.getRequestDispatcher("orderSuccess.jsp").forward(request, response);
-                    return;
-                }
-            }
+//            // Update stock quantity
+//            for (int i = 0; i < bookIDs.length; i++) {
+//                int bookID = Integer.parseInt(bookIDs[i]);
+//                int quantity = Integer.parseInt(quantities[i]);
+//                int quantityInStock = bookDao.getStockByBookID(bookID);
+//                int soldQuantity = bookDao.getSoldQuantitybyBookID(bookID);
+//                int newQuantityInStock = quantityInStock - quantity;
+//                int newSoldQuantity = soldQuantity + quantity;
+//                boolean updateQuantityInStockResult = bookDao.updateQuantityInStock(bookID, newQuantityInStock, newSoldQuantity);
+//                if (!updateQuantityInStockResult) {
+//                    request.setAttribute("errorMessage", "Failed to place order_5. Please try again.");
+//                    request.getRequestDispatcher("orderSuccess.jsp").forward(request, response);
+//                    return;
+//                }
+//            }
             orderDao.autoUpdateOrderStatus(orderId);
             request.setAttribute("successMessage", "Order placed successfully.");
             request.getRequestDispatcher("orderSuccess.jsp").forward(request, response);
