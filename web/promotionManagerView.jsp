@@ -12,6 +12,20 @@
             <div class="container">
                 <header class="section-heading py-4 d-flex justify-content-between">
                     <h3 class="section-title">Quản lý chương trình khuyến mãi</h3>
+                    <div class="search-container">
+                        <form action="${pageContext.request.contextPath}/searchmanagerpromotion" method="post" class="searchmanagerpromotion">
+                            <div class="input-group">
+                                <input type="text"
+                                       class="form-control"
+                                       placeholder="Nhập từ khóa cần tìm ..."
+                                       name="searchpromotion"
+                                       value="${requestScope.searchpromotion}">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                     <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#addPromotionModal">Thêm chương trình khuyến mãi</button>
                 </header>
                 <c:if test="${not empty sessionScope.error}">

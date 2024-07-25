@@ -146,6 +146,34 @@ public class PromotionDao extends DBContext {
         }
         
     }
+    // tìm promotion theo title và theo trang và số lượng promotion trên 1 trang
+    public ArrayList<Promotions> searchPromotionByTitle(String title, int pageNumber, int pageSize) {
+        ArrayList<Promotions> list = new ArrayList<>();
+        String sql = "SELECT * FROM Promotions WHERE Title LIKE ? ORDER BY PromotionID OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setString(1, "%" + title + "%");
+            stm.setInt(2, (pageNumber - 1) * pageSize);
+            stm.setInt(3, pageSize);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                Promotions p = new Promotions();
+                p.setPromotionID(rs.getInt("PromotionID"));
+                p.setTitle(rs.getString("Title"));
+                p.setDescription(rs.getString("Description"));
+                p.setStartDate(rs.getDate("StartDate"));
+                p.setEndDate(rs.getDate("EndDate"));
+                p.setDiscountPercentage(rs.getBigDecimal("DiscountPercentage"));
+                p.setIsActive(rs.getBoolean("isActive"));
+                p.setCreatedAt(rs.getTimestamp("CreatedAt").toLocalDateTime());
+                p.setUpdatedAt(rs.getTimestamp("UpdatedAt").toLocalDateTime());
+                list.add(p);
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return list;
+    }
 
 
 }
