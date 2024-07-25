@@ -62,11 +62,6 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link ${fn:startsWith(servletPath, '/reviewManager') ? 'active' : ''}" href="${pageContext.request.contextPath}/reviewManager">
-                        <i class="bi bi-star"></i> Quản lý đánh giá
-                    </a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link ${fn:startsWith(servletPath, '/listorder') ? 'active' : ''}" href="${pageContext.request.contextPath}/listorder">
                         <i class="bi bi-inboxes"></i> Quản lý đơn hàng
                     </a>

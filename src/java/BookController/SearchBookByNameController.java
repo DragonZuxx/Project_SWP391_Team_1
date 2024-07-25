@@ -6,7 +6,9 @@ package BookController;
 
 import Dao.BookDao;
 import Dao.ProductFilterDao;
+import Dao.PromotionDao;
 import Model.Books;
+import Model.Promotions;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -88,7 +90,9 @@ public class SearchBookByNameController extends HttpServlet {
         List<Books> books = dao.searchfilterBooks(selectedPublisher, priceRange, order, query);
         int totalRecords = books.size();
         int totalPages = (int) Math.ceil(totalRecords * 1.0 / RECORDS_PER_PAGE);
-
+        PromotionDao promotionDao = new PromotionDao();
+        Promotions promotions = promotionDao.getPromotionValid();
+        request.setAttribute("promotion", promotions);
         request.setAttribute("books", books);
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
