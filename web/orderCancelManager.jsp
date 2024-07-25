@@ -72,6 +72,10 @@
                 <div class="row">
                     <main class="col-md-12">
                         <div class="table-responsive-xxl">
+                            <c:if test="${empty requestScope.listorder}">
+                                <p style="text-align: center; color: red; font-size: 20px;">Không có đơn hàng nào.</p>
+                            </c:if>
+                            <c:if test="${not empty requestScope.listorder}">
                             <table class="table table-bordered table-striped table-hover align-middle">
                                 <thead>
                                     <tr>
@@ -107,6 +111,7 @@
                                     </c:forEach>
                                 </tbody>
                             </table>
+                            </c:if>
                         </div>
                     </main>
                 </div>

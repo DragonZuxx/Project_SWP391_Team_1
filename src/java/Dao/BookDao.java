@@ -202,22 +202,9 @@ public class BookDao extends DBContext {
             System.out.println("getSoldQuantitybyBookID" + e.getMessage());
         }
         return 0;
-
     }
-    public boolean updateQuantityInStock(int bookID, int newQuantityInStock, int quantity) {
-        String sql = "UPDATE Books SET Stock = ?, SoldQuantity = ? WHERE BookID = ?";
-        try {
-            stm = connection.prepareStatement(sql);
-            stm.setInt(1, newQuantityInStock);
-            stm.setInt(2, quantity);
-            stm.setInt(3, bookID);
-            int result = stm.executeUpdate();
-            return result > 0;
-        } catch (Exception e) {
-            System.out.println("updateQuantityInStock" + e.getMessage());
-        }
-        return false;
-    }
+    
+ 
     //Chỉ lấy ra Publisher của Books và không trùng nhau (Distinct)
     public ArrayList<String> getDistinctPublisher() {
         ArrayList<String> publishers = new ArrayList<String>();
@@ -492,5 +479,55 @@ public class BookDao extends DBContext {
             System.out.println(e);
         }
         return books;
+    }
+    
+    public void UpdateOrderQuantity(int orderId) {
+    String orderDetailsSql = "SELECT BookID, Quantity FROM OrderDetails WHERE OrderID = ?";
+    try {
+        if (connection != null) {
+            // Fetch order details
+            stm = connection.prepareStatement(orderDetailsSql);
+            stm.setInt(1, orderId);
+            rs = stm.executeQuery();
+
+            while (rs.next()) {
+                int bookID = rs.getInt("BookID");
+                int quantity = rs.getInt("Quantity");
+
+                // Get the current book stock and sold quantity
+                BookDao bookDao = new BookDao();
+                Books book = bookDao.getBookById(bookID);
+                if (book != null) {
+                    int newQuantityInStock = book.getStock() - quantity;
+                    int newSoldQuantity = book.getSoldQuantity() + quantity;
+
+                    // Update the book information
+                    boolean updateSuccess = bookDao.updateQuantityInStock(bookID, newQuantityInStock, newSoldQuantity);
+                    if (!updateSuccess) {
+                        System.out.println("Failed to update book stock and sold quantity.");
+                    }
+                }
+            }
+        }
+    } catch (Exception e) {
+        System.out.println("autoUpdateOrderStatus" + e.getMessage());
+    }
+}
+
+    
+    public boolean updateQuantityInStock(int bookId, int newQuantityInStock, int newSoldQuantity) {
+        String updateQuery = "UPDATE Books SET Stock = ?, SoldQuantity = ? WHERE BookID = ?";
+        try {
+            PreparedStatement stmt = connection.prepareStatement(updateQuery);
+            stmt.setInt(1, newQuantityInStock);
+            stmt.setInt(2, newSoldQuantity);
+            stmt.setInt(3, bookId);
+
+            int rowsUpdated = stmt.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

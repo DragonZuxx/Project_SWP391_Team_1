@@ -219,8 +219,10 @@ public class OrderRequest extends HttpServlet {
             LocalDateTime updateDate= LocalDateTime.now();
             boolean succesOrder = orderdao.UpdateOrder(orderid, fullname, address, phone, status, updateDate);
             if (succesOrder) {
-//                OrderDao orderDao= new OrderDao();
-//                orderDao.autoUpdateOrderStatus(orderid);
+                OrderDao orderDao= new OrderDao();
+                orderDao.autoUpdateOrderStatus(orderid);
+                BookDao bookdao= new BookDao();
+                bookdao.UpdateOrderQuantity(orderid);
                 request.setAttribute("mess", "Cập nhật thành công.");
                 doGet(request, response);
             } else {

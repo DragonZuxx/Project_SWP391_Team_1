@@ -72,6 +72,10 @@
                 <div class="row">
                     <main class="col-md-12">
                         <div class="table-responsive-xxl">
+                               <c:if test="${empty requestScope.listorder}">
+                                <p style="text-align: center; color: red; font-size: 20px;">Không có đơn hàng nào.</p>
+                            </c:if>
+                            <c:if test="${not empty requestScope.listorder}">
                             <table class="table table-bordered table-striped table-hover align-middle">
                                 <thead>
                                     <tr>
@@ -103,9 +107,9 @@
                                                     </td>
                                                 </tr>
                                             </c:forEach>
-                                        
                                 </tbody>
                             </table>
+                            </c:if>
                         </div>
                     </main>
                 </div>
@@ -219,7 +223,7 @@
                                                         <td>
                                                             <img src="${book.getCoverImage()}" alt="${book.getTitle()}" class="img-fluid" style="max-width: 100px; max-height: 100px;">
                                                         </td>
-                                                        <td><input type="text" class="form-control" name="unitPrice" value="${orderdetail.unitPrice}" readonly></td>
+                                                        <td><input type="text" class="form-control" name="unitPrice" value="<fmt:formatNumber pattern="#,##0" value="${orderdetail.unitPrice}"/>₫" readonly></td>
                                                         <td><input type="text" class="form-control" name="quantity" value="${orderdetail.quantity}" readonly></td>
                                                     </tr>
                                                 </c:if>

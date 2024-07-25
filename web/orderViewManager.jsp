@@ -71,6 +71,10 @@
                 <div class="row">
                     <main class="col-md-12">
                         <div class="table-responsive-xxl">
+                               <c:if test="${empty requestScope.listorder}">
+                                <p style="text-align: center; color: red; font-size: 20px;">Không có đơn hàng nào.</p>
+                            </c:if>
+                            <c:if test="${not empty requestScope.listorder}">
                             <table class="table table-bordered table-striped table-hover align-middle">
                                 <thead>
                                     <tr>
@@ -83,9 +87,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <c:choose>
-                                        <c:when test="${empty requestScope.detailorder}">
-                                            <c:forEach var="order" items="${requestScope.listorder}">
+                                    <c:forEach var="order" items="${requestScope.listorder}">
                                                 <tr>
                                                     <th scope="row">${order.id}</th>
                                                         <c:forEach var="account" items="${requestScope.listaccount}">
@@ -103,30 +105,9 @@
                                                     </td>
                                                 </tr>
                                             </c:forEach>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <c:forEach var="order" items="${requestScope.detailorder}">
-                                                <tr>
-                                                    <th scope="row">${order.id}</th>
-                                                        <c:forEach var="account" items="${requestScope.listaccount}">
-                                                            <c:if test="${account.getUserID() == order.userid}">
-                                                            <td>${account.getEmail()}</td>
-                                                        </c:if>
-                                                    </c:forEach>
-                                                    <td>${order.createdat}</td>
-                                                    <td><fmt:formatNumber pattern="#,##0" value="${order.amount}"/>₫</td>
-                                                    <td>
-                                                        <span class="badge bg-success">${order.status}</span>
-                                                    </td>
-                                                    <td class="text-center text-nowrap">
-                                                        <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#orderInforModell${order.id}">Xem</button>
-                                                    </td>
-                                                </tr>
-                                            </c:forEach>
-                                        </c:otherwise>
-                                    </c:choose>
                                 </tbody>
                             </table>
+                            </c:if>
                         </div>
                     </main>
                 </div>
@@ -232,7 +213,7 @@
                                                         <td>
                                                             <img src="${book.getCoverImage()}" alt="${book.getTitle()}" class="img-fluid" style="max-width: 100px; max-height: 100px;">
                                                         </td>
-                                                        <td><input type="text" class="form-control" name="unitPrice" value="${orderdetail.unitPrice}" readonly></td>
+                                                        <td><input type="text" class="form-control" name="unitPrice" value="<fmt:formatNumber pattern="#,##0" value="${orderdetail.unitPrice}"/>₫" readonly></td>
                                                         <td><input type="text" class="form-control" name="quantity" value="${orderdetail.quantity}" readonly></td>
                                                     </tr>
                                                 </c:if>
@@ -310,7 +291,7 @@
                                                         <td>
                                                             <img src="${book.getCoverImage()}" alt="${book.getTitle()}" class="img-fluid" style="max-width: 100px; max-height: 100px;">
                                                         </td>
-                                                        <td><input type="text" class="form-control" name="unitPrice" value="${orderdetail.unitPrice}" readonly></td>
+                                                        <td><input type="text" class="form-control" name="unitPrice" value="<fmt:formatNumber pattern="#,##0" value="${orderdetail.unitPrice}"/>₫" readonly></td>
                                                         <td><input type="text" class="form-control" name="quantity" value="${orderdetail.quantity}" readonly></td>
                                                     </tr>
                                                 </c:if>

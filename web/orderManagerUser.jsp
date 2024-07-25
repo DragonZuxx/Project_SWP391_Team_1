@@ -48,72 +48,82 @@
 
                             <div class="tab-pane fade show active order-section" id="Pending" role="tabpanel" aria-labelledby="Pending-tab">
                                 <div class="table-responsive-xxl mt-4">
-                                    <table class="table table-bordered table-striped table-hover align-middle">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col" style="min-width: 125px;">Mã đơn hàng</th>
-                                                <th scope="col" style="min-width: 100px;">Ngày mua</th>
-                                                <th scope="col" style="min-width: 300px;">Người mua</th>
-                                                <th scope="col" style="min-width: 100px;">Tổng tiền</th>
-                                                <th scope="col" style="min-width: 175px;">Trạng thái đơn hàng</th>
-                                                <th scope="col">Thao tác</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <c:forEach var="order" items="${requestScope.listorderRequest}">
+                                    <c:if test="${empty requestScope.listorderRequest}">
+                                        <p style="text-align: center; color: #0056b3; font-size: 20px;">Bạn chưa có đơn hàng nào đang chờ xác nhận.</p>
+                                    </c:if>
+                                    <c:if test="${not empty requestScope.listorderRequest}">
+                                        <table class="table table-bordered table-striped table-hover align-middle">
+                                            <thead>
                                                 <tr>
-                                                    <th scope="row">${order.id}</th>
-                                                    <td>${order.createdat}</td>
-                                                    <td>${order.userid}</td>
-                                                    <td>₫${order.amount}</td>
-                                                    <td>
-                                                        <span class="badge bg-danger">Chờ xác nhận</span>
-                                                    </td>
-                                                    <td class="text-center text-nowrap">
-                                                        <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#orderInforModell${order.id}">Xem</button>
-                                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#cancelOrderModal${order.id}">
-                                                            Hủy đơn hàng
-                                                        </button>
-                                                    </td>
+                                                    <th scope="col" style="min-width: 125px;">Mã đơn hàng</th>
+                                                    <th scope="col" style="min-width: 100px;">Ngày mua</th>
+                                                    <th scope="col" style="min-width: 300px;">Người mua</th>
+                                                    <th scope="col" style="min-width: 100px;">Tổng tiền</th>
+                                                    <th scope="col" style="min-width: 175px;">Trạng thái đơn hàng</th>
+                                                    <th scope="col">Thao tác</th>
                                                 </tr>
-                                            </c:forEach>
-                                        </tbody>
-                                    </table>
+                                            </thead>
+                                            <tbody>
+                                                <c:forEach var="order" items="${requestScope.listorderRequest}">
+                                                    <tr>
+                                                        <th scope="row">${order.id}</th>
+                                                        <td>${order.createdat}</td>
+                                                        <td>${account.getEmail()}</td>
+                                                        <td><fmt:formatNumber pattern="#,##0" value="${order.amount}"/>₫</td>
+                                                        <td>
+                                                            <span class="badge bg-danger">Chờ xác nhận</span>
+                                                        </td>
+                                                        <td class="text-center text-nowrap">
+                                                            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#orderInforModell${order.id}">Xem</button>
+                                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#cancelOrderModal${order.id}">
+                                                                Hủy đơn hàng
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                </c:forEach>
+                                            </tbody>
+                                        </table>
+                                    </c:if>
                                 </div>
                             </div>
 
                             <%-- Hiển thị danh sách order đang giao hàng --%>
                             <div class="tab-pane fade order-section" id="Ship" role="tabpanel" aria-labelledby="Ship-tab">
                                 <div class="table-responsive-xxl mt-4">
-                                    <table class="table table-bordered table-striped table-hover align-middle">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col" style="min-width: 125px;">Mã đơn hàng</th>
-                                                <th scope="col" style="min-width: 100px;">Ngày mua</th>
-                                                <th scope="col" style="min-width: 300px;">Người mua</th>
-                                                <th scope="col" style="min-width: 100px;">Tổng tiền</th>
-                                                <th scope="col" style="min-width: 175px;">Trạng thái đơn hàng</th>
-                                                <th scope="col">Thao tác</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <c:forEach var="order" items="${requestScope.listorderShipping}">
+                                    <c:if test="${empty requestScope.listorderShipping}">
+                                        <p style="text-align: center; color: #0056b3; font-size: 20px;">Bạn chưa có đơn hàng đang giao nào</p>
+                                    </c:if>
+                                    <c:if test="${not empty requestScope.listorderShipping}">
+                                        <table class="table table-bordered table-striped table-hover align-middle">
+                                            <thead>
                                                 <tr>
-                                                    <th scope="row">${order.id}</th>
-                                                    <td>${order.createdat}</td>
-                                                    <td>${order.userid}</td>
-                                                    <td>₫${order.amount}</td>
-                                                    <td>
-                                                        <span class="badge bg-warning text-dark">Đang giao hàng</span>
-                                                    </td>
-                                                    <td class="text-center text-nowrap">
-                                                        <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#orderInforModell${order.id}">Xem</button>
-                                                        <button type="button" class="btn btn-info btn-sm"  onclick="confirmReceived(${order.id})">Đã nhận được hàng</button>
-                                                    </td>
+                                                    <th scope="col" style="min-width: 125px;">Mã đơn hàng</th>
+                                                    <th scope="col" style="min-width: 100px;">Ngày mua</th>
+                                                    <th scope="col" style="min-width: 300px;">Người mua</th>
+                                                    <th scope="col" style="min-width: 100px;">Tổng tiền</th>
+                                                    <th scope="col" style="min-width: 175px;">Trạng thái đơn hàng</th>
+                                                    <th scope="col">Thao tác</th>
                                                 </tr>
-                                            </c:forEach>
-                                        </tbody>
-                                    </table>
+                                            </thead>
+                                            <tbody>
+                                                <c:forEach var="order" items="${requestScope.listorderShipping}">
+                                                    <tr>
+                                                        <th scope="row">${order.id}</th>
+                                                        <td>${order.createdat}</td>
+                                                        <td>${account.getEmail()}</td>
+                                                        <td><fmt:formatNumber pattern="#,##0" value="${order.amount}"/>₫</td>
+                                                        <td>
+                                                            <span class="badge bg-warning text-dark">Đang giao hàng</span>
+                                                        </td>
+                                                        <td class="text-center text-nowrap">
+                                                            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#orderInforModell${order.id}">Xem</button>
+                                                            <button type="button" class="btn btn-info btn-sm"  onclick="confirmReceived(${order.id})">Đã nhận được hàng</button>
+                                                        </td>
+                                                    </tr>
+                                                </c:forEach>
+                                            </tbody>
+                                        </table>
+                                    </c:if>
                                 </div>
                             </div>
 
@@ -146,7 +156,7 @@
                                         if (messageElement) {
                                             messageElement.style.display = "none";
                                         }
-                                    }, 5000); 
+                                    }, 5000);
                                 });
                             </script>
 
@@ -155,34 +165,39 @@
                             <%-- Hiển thị danh sách giao hàng thành công --%>
                             <div class="tab-pane fade order-section" id="Successful" role="tabpanel" aria-labelledby="Successful-tab">
                                 <div class="table-responsive-xxl mt-4">
-                                    <table class="table table-bordered table-striped table-hover align-middle">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col" style="min-width: 125px;">Mã đơn hàng</th>
-                                                <th scope="col" style="min-width: 100px;">Ngày mua</th>
-                                                <th scope="col" style="min-width: 300px;">Người mua</th>
-                                                <th scope="col" style="min-width: 100px;">Tổng tiền</th>
-                                                <th scope="col" style="min-width: 175px;">Trạng thái đơn hàng</th>
-                                                <th scope="col">Thao tác</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <c:forEach var="order" items="${requestScope.listorder}">
+                                    <c:if test="${empty requestScope.listorder}">
+                                        <p style="text-align: center; color: #0056b3; font-size: 20px;">Bạn chưa có đơn hàng hoàn thành nào</p>
+                                    </c:if>
+                                    <c:if test="${not empty requestScope.listorder}">
+                                        <table class="table table-bordered table-striped table-hover align-middle">
+                                            <thead>
                                                 <tr>
-                                                    <th scope="row">${order.id}</th>
-                                                    <td>${order.createdat}</td>
-                                                    <td>${order.userid}</td>
-                                                    <td>₫${order.amount}</td>
-                                                    <td>
-                                                        ${order.status}
-                                                    </td>
-                                                    <td class="text-center text-nowrap">
-                                                        <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#orderInforModell${order.id}">Xem</button>
-                                                    </td>
+                                                    <th scope="col" style="min-width: 125px;">Mã đơn hàng</th>
+                                                    <th scope="col" style="min-width: 100px;">Ngày mua</th>
+                                                    <th scope="col" style="min-width: 300px;">Người mua</th>
+                                                    <th scope="col" style="min-width: 100px;">Tổng tiền</th>
+                                                    <th scope="col" style="min-width: 175px;">Trạng thái đơn hàng</th>
+                                                    <th scope="col">Thao tác</th>
                                                 </tr>
-                                            </c:forEach>
-                                        </tbody>
-                                    </table>
+                                            </thead>
+                                            <tbody>
+                                                <c:forEach var="order" items="${requestScope.listorder}">
+                                                    <tr>
+                                                        <th scope="row">${order.id}</th>
+                                                        <td>${order.createdat}</td>
+                                                        <td>${account.getEmail()}</td>
+                                                        <td><fmt:formatNumber pattern="#,##0" value="${order.amount}"/>₫</td>
+                                                        <td>
+                                                            ${order.status}
+                                                        </td>
+                                                        <td class="text-center text-nowrap">
+                                                            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#orderInforModell${order.id}">Xem</button>
+                                                        </td>
+                                                    </tr>
+                                                </c:forEach>
+                                            </tbody>
+                                        </table>
+                                    </c:if>
                                 </div>
                                 <c:if test="${totalPages != 0}">
                                     <nav class="mt-3 mb-5">
@@ -255,7 +270,7 @@
                                                         Phí vận chuyển:  ₫${ship.shippingCost}
                                                         <br>
                                                     </p>
-                                                    Tổng tiền phải thanh toán:₫${order.amount}
+                                                    Tổng tiền phải thanh toán:<fmt:formatNumber pattern="#,##0" value="${order.amount}"/>₫
                                                 </c:if>
                                             </c:forEach>
                                             </p>
