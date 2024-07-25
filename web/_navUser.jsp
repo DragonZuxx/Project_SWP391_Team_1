@@ -7,7 +7,7 @@
         <a class="list-group-item list-group-item-action ${param.active == 'ORDER' ? 'active' : ''}" href="${pageContext.request.contextPath}/orderUser" role="button">
             <i class="fas fa-shopping-cart me-2"></i>Đơn hàng của tôi
         </a>
-        <a class="list-group-item list-group-item-action ${param.active == 'WISHLIST' ? 'active' : ''}" href="${pageContext.request.contextPath}/#" role="button">
+        <a class="list-group-item list-group-item-action ${param.active == 'WISHLIST' ? 'active' : ''}" href="${pageContext.request.contextPath}/wishlistuser" role="button">
             <i class="fas fa-heart me-2"></i>Sản phẩm yêu thích
         </a>
         <a class="list-group-item list-group-item-action ${param.active == 'CHANGE_PASSWORD' ? 'active' : ''}" href="${pageContext.request.contextPath}/changepass" role="button">
