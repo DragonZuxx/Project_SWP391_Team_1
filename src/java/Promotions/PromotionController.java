@@ -42,11 +42,11 @@ public class PromotionController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //    Accounts user = getAccountsInfoSession(request);
-        //     if (user == null || user.getRoleID() == 3) {
-        //         response.sendRedirect(request.getContextPath() + "/login");
-        //         return;
-        //     }
+            Accounts user = getAccountsInfoSession(request);
+             if (user == null || user.getRoleID() == 3) {
+                 response.sendRedirect(request.getContextPath() + "/login");
+                 return;
+             }
 
         // Pagination parameters
         int pageNumber = request.getParameter("page") == null ? 1 : Integer.parseInt(request.getParameter("page"));
@@ -69,11 +69,11 @@ public class PromotionController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //    Accounts user = getAccountsInfoSession(request);
-        //     if (user == null || user.getRoleID() == 3) {
-        //         response.sendRedirect(request.getContextPath() + "/login");
-        //         return;
-        //     }
+            Accounts user = getAccountsInfoSession(request);
+             if (user == null || user.getRoleID() == 3) {
+                 response.sendRedirect(request.getContextPath() + "/login");
+                 return;
+             }
         String action = request.getParameter("action");
         if ("addPromotion".equals(action)) {
             addPromotion(request, response);
