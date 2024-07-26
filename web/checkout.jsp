@@ -40,7 +40,7 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="phone" class="form-label">Số điện thoại</label>
-                                        <input type="text" class="form-control" id="phone" name="phone"  value="${sessionScope.account.getPhone()}" required>
+                                        <input type="number" class="form-control" id="phone" name="phone"  value="${sessionScope.account.getPhone()}" required>
                                     </div>
                                     <h4>Thông tin đơn hàng</h4>
                                     <div class="table-responsive">

@@ -120,7 +120,7 @@
                             <button type="button" class="btn btn-danger" id="add-wishlist-item" title="Thêm vào danh sách yêu thích" ${requestScope.isWishlistItem == 1 ? 'disabled' : '' }>
                                 <i class="bi bi-heart"></i>
                             </button>
-                            <button type="button" class="btn btn-primary ms-2" id="buy-now">Mua ngay</button>
+                            
                             <button type="button" class="btn btn-light ms-2" id="add-cart-item">Thêm vào giỏ hàng</button>
 
                         </div>
@@ -413,44 +413,21 @@
 
     <!-- JavaScript đặt sau nội dung HTML -->
     <script>
-        window.onload = function () {
-            const quantityInput = document.getElementById('cart-item-quantity');
-            const stock = parseInt(quantityInput.getAttribute('max')); // Lấy giá trị tối đa từ thuộc tính max
+    window.onload = function () {
+        const quantityInput = document.getElementById('cart-item-quantity');
+        const stock = parseInt(quantityInput.getAttribute('max')); // Lấy giá trị tối đa từ thuộc tính max
 
-            quantityInput.addEventListener('input', function () {
-                const quantity = parseInt(quantityInput.value);
+        quantityInput.addEventListener('input', function () {
+            const quantity = parseInt(quantityInput.value);
 
-                if (quantity > stock) {
-                    // Hiển thị thông báo lỗi nếu số lượng vượt quá số lượng tồn kho
-                    showToast('Số lượng tồn kho không đủ hàng.', 'danger');
-                    quantityInput.value = stock; // Đặt giá trị số lượng về giá trị tối đa
-                }
-            });
-
-            function showToast(message, type) {
-                const toastContainer = document.querySelector('.toast-container');
-                const toast = document.createElement('div');
-                toast.className = `toast align-items-center text-white bg-${type} border-0`;
-                toast.innerHTML = `
-                    <div class="d-flex">
-                        <div class="toast-body">
-        ${message}
-                        </div>
-                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-                    </div>
-                `;
-                toastContainer.appendChild(toast);
-                const toastElement = new bootstrap.Toast(toast);
-                toastElement.show();
+            if (quantity > stock) {
+                // Hiển thị thông báo lỗi nếu số lượng vượt quá số lượng tồn kho
+                alert('Số lượng tồn kho không đủ hàng.');
+                quantityInput.value = stock; // Đặt giá trị số lượng về giá trị tối đa
             }
+        });
+    };
+</script>
 
-            // Ensure Bootstrap JavaScript is included and initialized
-            if (typeof bootstrap !== 'undefined' && bootstrap.Toast) {
-                console.log('Bootstrap Toast is available.');
-            } else {
-                console.error('Bootstrap Toast is not available.');
-            }
-        };
-    </script>
 
 </html>

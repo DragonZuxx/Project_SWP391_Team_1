@@ -22,24 +22,57 @@
         <section class="section-content padding-y">
             <div class="container">
                 <div class="row">
-                    <c:if test="${not empty sessionScope.successDeleteBookInCart}">
+                    <c:if test="${not empty sessionScope.deleteOutCartSucssec}">
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            ${sessionScope.successDeleteBookInCart}
+                            ${sessionScope.deleteOutCartSucssec}
                         </div>
                     </c:if>
-                    <c:if test="${not empty sessionScope.messErorr}">
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            ${sessionScope.messErorr}
-                        </div>
-                    </c:if>
-                    <c:if test="${not empty sessionScope.errorDeleteBookInCart}">
+
+                    <c:if test="${not empty sessionScope.deleteOutCartError}">
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            ${sessionScope.errorDeleteBookInCart}
+                            ${sessionScope.deleteOutCartError}
                         </div>
                     </c:if>
-                    <c:remove var="successDeleteBookInCart" scope="session" />
-                    <c:remove var="messErorr" scope="session" />
-                    <c:remove var="errorDeleteBookInCart" scope="session" />
+
+                    <c:if test="${not empty sessionScope.updateQuantityCartSucssec}">
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            ${sessionScope.updateQuantityCartSucssec}
+                        </div>
+                    </c:if>
+
+                    <c:if test="${not empty sessionScope.updateQuantityCartError}">
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            ${sessionScope.updateQuantityCartError}
+                        </div>
+                    </c:if>
+                    
+
+                    <c:remove var="deleteOutCartSucssec" scope="session" />
+                    <c:remove var="deleteOutCartError" scope="session" />
+                    <c:remove var="updateQuantityCartSucssec" scope="session" />
+                    <c:remove var="updateQuantityCartError" scope="session" />
+
+                    <!-- Add this script at the bottom of your JSP -->
+                    <script>
+                        window.onload = function () {
+                            setTimeout(function () {
+                                const successAlerts = document.querySelectorAll('.alert-success');
+                                const errorAlerts = document.querySelectorAll('.alert-danger');
+
+                                successAlerts.forEach(function (alert) {
+                                    alert.classList.remove('show');
+                                    alert.classList.add('fade');
+                                    setTimeout(() => alert.remove(), 150); // Ensure the alert is removed after the fade effect
+                                });
+
+                                errorAlerts.forEach(function (alert) {
+                                    alert.classList.remove('show');
+                                    alert.classList.add('fade');
+                                    setTimeout(() => alert.remove(), 150); // Ensure the alert is removed after the fade effect
+                                });
+                            }, 5000);
+                        };
+                    </script>
                     <c:choose>
                         <c:when test="${empty sessionScope.account}">
                             <p>
@@ -194,64 +227,78 @@
             });
         });
         function updateCartItem(cartID, bookID, quantity) {
-            const newQuantity = prompt("Nhập số lượng mới:", quantity);
-            if (newQuantity !== null && newQuantity !== "" && !isNaN(newQuantity)) {
-                const maxQuantity = parseInt(document.querySelector(`input[name='selectedBooks'][value='${bookID}']`).dataset.getStock(), 10);
-                if (newQuantity > maxQuantity) {
-                    alert(`Số lượng không được vượt quá số lượng có sẵn trong kho (${maxQuantity}).`);
-                    return;
+    const newQuantity = prompt("Nhập số lượng mới:", quantity);
+    if (newQuantity !== null && newQuantity !== "" && !isNaN(newQuantity)) {
+        const data = new URLSearchParams();
+        data.append('cartID', cartID);
+        data.append('bookID', bookID);
+        data.append('quantity', newQuantity);
+
+        fetch(`${pageContext.request.contextPath}/updateCartItem`, {
+            method: 'POST',
+            body: data,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.success) {
+                // Update the quantity and price in the DOM
+                const row = document.querySelector(`tr[data-cart-id="${cartID}"][data-book-id="${bookID}"]`);
+                if (row) {
+                    const quantityInput = row.querySelector('.quantity-input');
+                    const priceElement = row.querySelector('.price');
+
+                    // Update quantity
+                    quantityInput.value = newQuantity;
+
+                    // Update price
+                    const unitPrice = parseFloat(row.querySelector('.select-book').dataset.price);
+                    const newPrice = unitPrice * newQuantity;
+                    priceElement.textContent = newPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+
+                    // Update total price
+                    updateTotalSelectedPrice();
                 }
-
-                const data = new URLSearchParams();
-                data.append('cartID', cartID);
-                data.append('bookID', bookID);
-                data.append('quantity', newQuantity);
-
-                fetch(`${pageContext.request.contextPath}/updateCartItem`, {
-                    method: 'POST',
-                    body: data,
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    }
-                })
-                        .then(response => response.json())
-                        .then(result => {
-                            if (result.success) {
-                                location.reload(); // Tải lại trang để hiển thị cập nhật
-                            } else {
-                                alert("Cập nhật thất bại: " + result.message);
-                            }
-                        })
-                        .catch(error => console.error('Error:', error));
+            } else {
+                alert("Cập nhật thất bại: " + result.message);
             }
-        }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+}
 
+function confirmDelete(cartID, bookID) {
+    if (confirm("Bạn có chắc chắn muốn xóa mục này không?")) {
+        const data = new URLSearchParams();
+        data.append('cartID', cartID);
+        data.append('bookID', bookID);
 
-        function confirmDelete(cartID, bookID) {
-            if (confirm("Bạn có chắc chắn muốn xóa mục này không?")) {
-                const data = new URLSearchParams();
-                data.append('cartID', cartID);
-                data.append('bookID', bookID);
-
-                fetch(`${pageContext.request.contextPath}/deleteCartItem`, {
-                    method: 'POST',
-                    body: data,
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    }
-                })
-                        .then(response => response.json())
-                        .then(result => {
-                            if (result.success) {
-                                // Cập nhật giao diện người dùng tương ứng
-                                location.reload(); // Tải lại trang để hiển thị cập nhật
-                            } else {
-                                alert("Xóa thất bại: " + result.message);
-                            }
-                        })
-                        .catch(error => console.error('Error:', error));
+        fetch(`${pageContext.request.contextPath}/deleteCartItem`, {
+            method: 'POST',
+            body: data,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
             }
-        }
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.success) {
+                // Remove the item from the DOM
+                const row = document.querySelector(`tr[data-cart-id="${cartID}"][data-book-id="${bookID}"]`);
+                if (row) {
+                    row.remove();
+                    // Update total price
+                    updateTotalSelectedPrice();
+                }
+            } else {
+                alert("Xóa thất bại: " + result.message);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+}
 
     </script>
 </html>
