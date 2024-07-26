@@ -9,6 +9,7 @@ import Model.OrderDetail;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -61,4 +62,21 @@ public class OrderDetailDao extends DBContext {
          }
          return false;
      }
+     public List<Integer> getBookIDsForOrder(int orderid) {
+        List<Integer> bookIDs = new ArrayList<>();
+        String query = "SELECT BookID FROM OrderDetails WHERE OrderID = ?";
+        try (
+                 PreparedStatement pstmt = connection.prepareStatement(query)) {
+
+            pstmt.setInt(1, orderid);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    bookIDs.add(rs.getInt("BookID"));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return bookIDs;
+    }
 }

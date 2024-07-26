@@ -223,6 +223,11 @@ public class OrderRequest extends HttpServlet {
                 orderDao.autoUpdateOrderStatus(orderid);
                 BookDao bookdao= new BookDao();
                 bookdao.UpdateOrderQuantity(orderid);
+                OrderDetailDao  orderdetailDao = new OrderDetailDao();
+                List<Integer> bookIDs = orderdetailDao.getBookIDsForOrder(orderid); // You need to implement this method to get book IDs for the order
+                for (int bookID : bookIDs) {
+                    bookdao.checkAndUpdateBookAvailability(bookID);
+                }
                 request.setAttribute("mess", "Cập nhật thành công.");
                 doGet(request, response);
             } else {
