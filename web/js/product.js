@@ -45,16 +45,6 @@ function addWishlistItemBtnEvent() {
   submitForm(contextPathMetaTag.content + "/wishlist", "POST", params);
 }
 
-function buyNowBtnEvent() {
-  const params = {
-    userId: currentUserIdMetaTag.content,
-    productId: productIdMetaTag.content,
-    quantity: quantityInput.value
-  };
-
-  submitForm(contextPathMetaTag.content + "/cartItem", "POST", params);
-}
-
 function addCartItemBtnEvent() {
   const params = {
     userId: currentUserIdMetaTag.content,
@@ -68,15 +58,12 @@ function addCartItemBtnEvent() {
 
 // MAIN
 const addWishlistItemBtn = document.querySelector("#add-wishlist-item");
-const buyNowBtn = document.querySelector("#buy-now");
 const addCartItemBtn = document.querySelector("#add-cart-item");
 
 if (currentUserIdMetaTag) {
   addWishlistItemBtn.addEventListener("click", addWishlistItemBtnEvent);
-  buyNowBtn.addEventListener("click", buyNowBtnEvent);
   addCartItemBtn.addEventListener("click", addCartItemBtnEvent);
 } else {
   addWishlistItemBtn.addEventListener("click", noneSigninEvent);
-  buyNowBtn.addEventListener("click", noneSigninEvent);
   addCartItemBtn.addEventListener("click", noneSigninEvent);
 }
