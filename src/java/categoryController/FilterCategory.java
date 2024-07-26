@@ -86,6 +86,10 @@ public class FilterCategory extends HttpServlet {
         } else {
             request.getSession().setAttribute("categoryID", categoryID);
         }
+         CategoryDao cd = new CategoryDao();
+        //Lấy thông tin Category theo id
+        int cateid = Integer.parseInt(categoryID);
+        Categories category = cd.getCategoryByID(cateid);
 
         // Lấy danh sách sách từ DAO
         List<Books> books = productDAO.filterBooks(selectedPublisher, priceRange, order, categoryID);
@@ -105,6 +109,7 @@ public class FilterCategory extends HttpServlet {
         request.setAttribute("priceRanges", priceRange);
         request.setAttribute("order", order);
         request.setAttribute("categoryID", categoryID);
+        request.setAttribute("category", category);
 
         // Forward request và response tới trang JSP
         request.getRequestDispatcher("categoryView.jsp").forward(request, response);
