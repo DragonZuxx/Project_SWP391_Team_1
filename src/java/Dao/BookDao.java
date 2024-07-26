@@ -530,4 +530,28 @@ public class BookDao extends DBContext {
         }
         return false;
     }
+    public void checkAndUpdateBookAvailability(int bookID) {
+        String query = "SELECT Stock FROM Books WHERE BookID = ?";
+        try (
+                PreparedStatement pstmt = connection.prepareStatement(query)) {
+
+            pstmt.setInt(1, bookID);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    int stock = rs.getInt("Stock");
+                    boolean isAvailable = stock > 0;
+
+                    // Update IsAvailable based on stock
+                    String updateQuery = "UPDATE Books SET IsAvailable = ? WHERE BookID = ?";
+                    try (PreparedStatement updateStmt = connection.prepareStatement(updateQuery)) {
+                        updateStmt.setBoolean(1, isAvailable);
+                        updateStmt.setInt(2, bookID);
+                        updateStmt.executeUpdate();
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
