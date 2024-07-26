@@ -93,13 +93,13 @@
                                     <td class="text-center text-nowrap">
                                         <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#bookInfoModal_${product.getBookID()}">Xem</button>
                                         <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editBookModal_${product.getBookID()}">Cập nhật</button>
-<!--                                        <form method="post">
-                                            <input type="hidden" name="action" value="delete">
-                                            <input type="hidden" name="bookID" value="${product.getBookID()}">
-                                            <button class="btn-sm btn-danger"
-                                                    role="button"
-                                                    onclick="return confirm('Bạn có muốn xóa?')">Xóa</button>
-                                        </form>-->
+                                        <!--                                        <form method="post">
+                                                                                    <input type="hidden" name="action" value="delete">
+                                                                                    <input type="hidden" name="bookID" value="${product.getBookID()}">
+                                                                                    <button class="btn-sm btn-danger"
+                                                                                            role="button"
+                                                                                            onclick="return confirm('Bạn có muốn xóa?')">Xóa</button>
+                                                                                </form>-->
                                     </td>
                                 </tr>
                             </c:forEach>
@@ -148,7 +148,7 @@
 
             <!-- Edit Book Modal -->
             <div class="modal fade" id="editBookModal_${book.getBookID()}" tabindex="-1" role="dialog" aria-labelledby="editBookModalLabel_${book.getBookID()}" aria-hidden="true">
-                <div class="modal-dialog" role="document">
+                <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="editBookModalLabel_${book.getBookID()}">Edit Book</h5>
@@ -218,7 +218,11 @@
                                         <option value="false" ${!book.getIsAvailable() ? "selected" : ""}>Không hoạt động</option>
                                     </select>
                                 </div>
-                                <button type="submit" class="btn btn-primary">Cập nhật</button>
+                                <div class="form-group">
+                                    <label for="stock">Mô tả</label>
+                                    <textarea class="form-control" name="description">${book.getDescription()}</textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary mt-3">Cập nhật</button>
                             </form>
                         </div>
                     </div>
@@ -245,6 +249,7 @@
                             <p><strong>Giá bán:</strong> ${book.getPrice()}</p>
                             <p><strong>Tồn kho:</strong> ${book.getStock()}</p>
                             <p><strong>Số lượng đã bán:</strong> ${book.getSoldQuantity()}</p>
+                            <p><strong>Mô tả:</strong> ${book.getDescription()}</p>
                             <p><strong>Trạng thái:</strong> ${book.getIsAvailable() ? 'Hoạt động' : 'Không hoạt động'}</p>
                         </div>
                     </div>
@@ -255,10 +260,10 @@
 
         <!-- Add Book Modal -->
         <div class="modal fade" id="addBookModal" tabindex="-1" role="dialog" aria-labelledby="addBookModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="addBookModalLabel">Add Book</h5>
+                        <h5 class="modal-title" id="addBookModalLabel">Thêm sách</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -323,7 +328,11 @@
                                     <option value="false">Không hoạt động</option>
                                 </select>
                             </div>
-                            <button type="submit" class="btn btn-primary">Thêm</button>
+                            <div class="form-group">
+                                <label for="stock">Mô tả</label>
+                                <textarea class="form-control" name="description"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary mt-3">Thêm</button>
                         </form>
                     </div>
                 </div>
@@ -345,7 +354,7 @@
 
                                         previewImage(input, bookID)
 
-                                        const apiKey = '82b2f0b4bad5a0f8c43de992fe433a3e'; // Replace with your ImgBB API Key
+                                        const apiKey = '82b2f0b4bad5a0f8c43de992fe433a3e';
                                         const file = input.files[0];
                                         if (bookID == 0 && !file) {
                                             alert('Please select a file');
@@ -387,33 +396,33 @@
                                             reader.onload = function (e) {
                                             const imagePreview = document.getElementById(imagePreview_ + bookID);
                                                     imagePreview.innerHTML = <img src=" + e.target.result + " class="img-fluid" alt="Cover Image">;
-                                    };
-                                    reader.readAsDataURL(file);
+                            };
+                            reader.readAsDataURL(file);
                                     }
-        </script>
+    </script>
 
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                        var selects = document.querySelectorAll('.authors');
-                        selects.forEach(function (select) {
-                        new Choices(select, {
-                        removeItemButton: true,
-                                placeholder: true,
-                                placeholderValue: 'Select authors',
-                                searchPlaceholderValue: 'Search authors',
-                        });
-                        });
-                        selects = document.querySelectorAll('.categories');
-                        selects.forEach(function (select) {
-                        new Choices(select, {
-                        removeItemButton: true,
-                                placeholder: true,
-                                placeholderValue: 'Select categories',
-                                searchPlaceholderValue: 'Search categories',
-                        });
-                        });
-            });
-            </script>
+    <script>
+                                    document.addEventListener('DOMContentLoaded', function () {
+                                                    var selects = document.querySelectorAll('.authors');
+                                                    selects.forEach(function (select) {
+                                                    new Choices(select, {
+                                                    removeItemButton: true,
+                                                            placeholder: true,
+                                                            placeholderValue: 'Select authors',
+                                                            searchPlaceholderValue: 'Search authors',
+                                                    });
+                                                    });
+                                                    selects = document.querySelectorAll('.categories');
+                                                    selects.forEach(function (select) {
+                                                    new Choices(select, {
+                                                    removeItemButton: true,
+                                                            placeholder: true,
+                                                            placeholderValue: 'Select categories',
+                                                            searchPlaceholderValue: 'Search categories',
+                                                    });
+                                                    });
+                                        });
+                                        </script>
 
 
 

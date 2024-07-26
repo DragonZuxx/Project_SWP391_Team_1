@@ -52,7 +52,7 @@ public class RegisterController extends HttpServlet {
         user.setFullName(fullName);
         user.setAddress(address);
         user.setPhone(phone);
-        user.setRoleID(3);
+        user.setRoleID(2);
 
         AccountDao userDao = new AccountDao();
         if (userDao.createAccount(user)) {
