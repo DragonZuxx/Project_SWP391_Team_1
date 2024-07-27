@@ -90,7 +90,7 @@
 
                                 <td>
                                     <a href="${pageContext.request.contextPath}/category?id=${category.getCategoryID()}"
-                                       target="_blank">${category.getCategoryName()}</a>
+                                       >${category.getCategoryName()}</a>
                                 </td>
                                 <td class="text-center text-nowrap">
                                     <a class="btn btn-primary me-2"

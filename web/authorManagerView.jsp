@@ -93,8 +93,7 @@
                                 <th scope="row">${loop.index + 1}</th>
                                 <td>${author.getAuthorID()}</td>
                                 <td>
-                                    <a href="${pageContext.request.contextPath}/author?id=${author.getAuthorID()}"
-                                       target="_blank">${author.getName()}</a>
+                                    ${author.getName()}
                                 </td>
                                
                                 <td class="text-center text-nowrap">

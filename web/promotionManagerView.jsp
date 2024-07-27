@@ -100,12 +100,10 @@
                     <nav class="mt-3 mb-5">
                         <ul class="pagination justify-content-center">
                             <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
-                                <a class="page-link" href="?page=${currentPage - 1}">
-                                    Trang trước
-                                </a>
+                                <a class="page-link" href="?page=${currentPage - 1}">Trang trước</a>
                             </li>
 
-                            <c:forEach begin="1" end="${requestScope.totalPages}" var="i">
+                            <c:forEach begin="1" end="${totalPages}" var="i">
                                 <c:choose>
                                     <c:when test="${currentPage == i}">
                                         <li class="page-item active">
@@ -114,18 +112,14 @@
                                     </c:when>
                                     <c:otherwise>
                                         <li class="page-item">
-                                            <a class="page-link" href="?page=${i}">
-                                                ${i}
-                                            </a>
+                                            <a class="page-link" href="?page=${i}">${i}</a>
                                         </li>
                                     </c:otherwise>
                                 </c:choose>
                             </c:forEach>
 
-                            <li class="page-item ${requestScope.page == requestScope.totalPages ? 'disabled' : ''}">
-                                <a class="page-link" href="?page=${currentPage + 1}">
-                                    Trang sau
-                                </a>
+                            <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
+                                <a class="page-link" href="?page=${currentPage + 1}">Trang sau</a>
                             </li>
                         </ul>
                     </nav>

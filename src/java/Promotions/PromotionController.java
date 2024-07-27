@@ -42,25 +42,25 @@ public class PromotionController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            Accounts user = getAccountsInfoSession(request);
-             if (user == null || user.getRoleID() == 3) {
-                 response.sendRedirect(request.getContextPath() + "/login");
-                 return;
-             }
+        Accounts user = getAccountsInfoSession(request);
+        if (user == null || user.getRoleID() == 3) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
 
         // Pagination parameters
         int pageNumber = request.getParameter("page") == null ? 1 : Integer.parseInt(request.getParameter("page"));
         int pageSize = 5;
 
-        // Fetch paginated list of promotions
+// Fetch paginated list of promotions
         List<Promotions> promotionList = promotionDAO.getPromotionByPage(pageNumber, pageSize);
 
-        // Get total number of promotions
+// Get total number of promotions
         int totalPromotions = promotionDAO.getAllPromotion().size();
 
         int totalPages = (int) Math.ceil((double) totalPromotions / pageSize);
         request.setAttribute("promotion", promotionList);
-        request.setAttribute("pageNumber", pageNumber);
+        request.setAttribute("currentPage", pageNumber);  // Đổi thành currentPage
         request.setAttribute("pageSize", pageSize);
         request.setAttribute("totalPages", totalPages);
         request.getRequestDispatcher("promotionManagerView.jsp").forward(request, response);
@@ -69,11 +69,11 @@ public class PromotionController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            Accounts user = getAccountsInfoSession(request);
-             if (user == null || user.getRoleID() == 3) {
-                 response.sendRedirect(request.getContextPath() + "/login");
-                 return;
-             }
+        Accounts user = getAccountsInfoSession(request);
+        if (user == null || user.getRoleID() == 3) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
         String action = request.getParameter("action");
         if ("addPromotion".equals(action)) {
             addPromotion(request, response);
@@ -220,7 +220,7 @@ public class PromotionController extends HttpServlet {
 
         // Validate start date
         if (startDateStr == null || startDateStr.isEmpty()) {
-           request.getSession().setAttribute("error", "Ngày bắt đầu không được để trống!");
+            request.getSession().setAttribute("error", "Ngày bắt đầu không được để trống!");
             response.sendRedirect("promotionManager");
             return;
         }
@@ -275,7 +275,7 @@ public class PromotionController extends HttpServlet {
 
         boolean isSuccess = promotionDAO.updatePromotion(p);
         if (isSuccess) {
-            request.getSession().setAttribute("success", "Chương trình khuyến mãi được cập nhật thành công!"); 
+            request.getSession().setAttribute("success", "Chương trình khuyến mãi được cập nhật thành công!");
         } else {
             request.getSession().setAttribute("error", "Database error occurred");
         }
