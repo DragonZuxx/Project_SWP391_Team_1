@@ -34,11 +34,11 @@ public class BookController extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-//        Accounts user = getAccountsInfoSession(request);
-//        if (user == null || user.getRoleID() == 3) {
-//            response.sendRedirect(request.getContextPath() + "/login");
-//            return;
-//        }
+        Accounts user = getAccountsInfoSession(request);
+        if (user == null || user.getRoleID() == 3) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
         // Pagination parameters
         int pageNumber = request.getParameter("page") == null ? 1 : Integer.parseInt(request.getParameter("page"));
         int pageSize = 5;

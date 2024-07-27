@@ -35,7 +35,7 @@
                                                          ? 'is-invalid' : (not empty requestScope.values.username ? 'is-valid' : '')}"
                                    id="inputUsername"
                                    name="email"
-                                   value="${requestScope.values.username}">
+                                   value="${requestScope.values.username}" required>
                             <c:if test="${not empty requestScope.violations.usernameViolations}">
                                 <div class="invalid-feedback">
                                     <ul class="list-unstyled">
@@ -53,7 +53,7 @@
                                                          ? 'is-invalid' : (not empty requestScope.values.password ? 'is-valid' : '')}"
                                    id="inputPassword"
                                    name="password"
-                                   value="${requestScope.values.password}">
+                                   value="${requestScope.values.password}" required>
                             <c:if test="${not empty requestScope.violations.passwordViolations}">
                                 <div class="invalid-feedback">
                                     <ul class="list-unstyled">
@@ -71,7 +71,7 @@
                                                          ? 'is-invalid' : (not empty requestScope.values.fullname ? 'is-valid' : '')}"
                                    id="inputFullname"
                                    name="fullname"
-                                   value="${requestScope.values.fullname}">
+                                   value="${requestScope.values.fullname}" required>
                             <c:if test="${not empty requestScope.violations.fullnameViolations}">
                                 <div class="invalid-feedback">
                                     <ul class="list-unstyled">
@@ -101,13 +101,13 @@
                         </c:if>
                       </div>-->
                         <div class="mb-3">
-                            <label for="address" class="form-label">Địa chỉ</label>
+                            <label for="inputPhoneNumber" class="form-label">Địa chỉ</label>
                             <input type="text"
                                    class="form-control ${not empty requestScope.violations.phoneNumberViolations
                                                          ? 'is-invalid' : (not empty requestScope.values.phoneNumber ? 'is-valid' : '')}"
-                                   id="address"
+                                   id="inputPhoneNumber"
                                    name="address"
-                                   value="${requestScope.values.phoneNumber}">
+                                   value="${requestScope.values.phoneNumber}" required>
                             <c:if test="${not empty requestScope.violations.phoneNumberViolations}">
                                 <div class="invalid-feedback">
                                     <ul class="list-unstyled">
@@ -151,13 +151,13 @@
                         </c:if>
                       </div>-->
                         <div class="mb-3">
-                            <label for="phone" class="form-label">Số điện thoại</label>
+                            <label for="inputAddress" class="form-label">Số điện thoại</label>
                             <input type="text"
                                    class="form-control ${not empty requestScope.violations.addressViolations
                                                          ? 'is-invalid' : (not empty requestScope.values.address ? 'is-valid' : '')}"
-                                   id="phone"
+                                   id="inputAddress"
                                    name="phone"
-                                   value="${requestScope.values.address}">
+                                   value="${requestScope.values.address}" required>
                             <c:if test="${not empty requestScope.violations.addressViolations}">
                                 <div class="invalid-feedback">
                                     <ul class="list-unstyled">
