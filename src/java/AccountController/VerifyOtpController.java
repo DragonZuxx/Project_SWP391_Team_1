@@ -22,7 +22,7 @@ import javax.mail.internet.MimeMessage;
 public class VerifyOtpController extends HttpServlet {
 
     private static final String USERNAME = "bookhavenshop03@gmail.com";
-    private static final String PASSWORD = "dryy mszj cwmr emok";
+    private static final String PASSWORD = "wjcj tkoi sryn mzba";
     private static final String SMTP_HOST = "smtp.gmail.com";
     private static final String SMTP_PORT = "587";
 

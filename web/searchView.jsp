@@ -182,33 +182,7 @@
                     </main>
                 </div>
 
-                <c:if test="${requestScope.books.size() > 0}">
-                    <nav class="mt-4">
-                        <ul class="pagination">
-                            <c:if test="${requestScope.currentPage > 1}">
-                                <li class="page-item">
-                                    <a class="page-link" href="?q=${requestScope.query}&page=${requestScope.currentPage - 1}"
-                                       aria-label="Previous">
-                                        <span aria-hidden="true">&laquo;</span>
-                                    </a>
-                                </li>
-                            </c:if>
-                            <c:forEach var="i" begin="1" end="${requestScope.totalPages}">
-                                <li class="page-item ${i == requestScope.currentPage ? 'active' : ''}">
-                                    <a class="page-link" href="?q=${requestScope.query}&page=${i}">${i}</a>
-                                </li>
-                            </c:forEach>
-                            <c:if test="${requestScope.currentPage < requestScope.totalPages}">
-                                <li class="page-item">
-                                    <a class="page-link" href="?q=${requestScope.query}&page=${requestScope.currentPage + 1}"
-                                       aria-label="Next">
-                                        <span aria-hidden="true">&raquo;</span>
-                                    </a>
-                                </li>
-                            </c:if>
-                        </ul>
-                    </nav>
-                </c:if>
+                
             </div> <!-- container .// -->
         </section>
         <jsp:include page="_footer.jsp"/>

@@ -24,7 +24,7 @@ public class ProductFilterDao extends DBContext {
 
     public List<Books> filterBooks(String selectedPublisher, String priceRange, String order, String categoryID) {
         List<Books> books = new ArrayList<>();
-        String query = "SELECT b.* FROM books b JOIN BookCategories bc ON b.BookID = bc.BookID WHERE 1=1";
+        String query = "SELECT b.* FROM books b JOIN BookCategories bc ON b.BookID = bc.BookID WHERE 1=1 And b.IsAvailable = 1 and b.IsBanned = 0";
 
         // Thêm điều kiện lọc theo thể loại
         if (categoryID != null && !categoryID.isEmpty()) {
@@ -128,7 +128,7 @@ public class ProductFilterDao extends DBContext {
     
      public List<Books> searchfilterBooks(String selectedPublisher, String priceRange, String order, String searchQuery) {
         List<Books> books = new ArrayList<>();
-        String query = "SELECT b.* FROM books b WHERE 1=1";
+        String query = "SELECT b.* FROM books b WHERE b.IsAvailable = 1 AND b.IsBanned = 0";
 
         // Thêm điều kiện tìm kiếm theo tên sách
         if (searchQuery != null && !searchQuery.isEmpty()) {
