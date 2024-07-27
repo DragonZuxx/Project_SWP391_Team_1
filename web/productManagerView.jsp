@@ -151,14 +151,14 @@
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="editBookModalLabel_${book.getBookID()}">Edit Book</h5>
+                            <h5 class="modal-title" id="editBookModalLabel_${book.getBookID()}">Cập nhật</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
                             <!-- Edit Book Form -->
-                            <form action="productManager" method="post">
+                            <form action="productManager" method="post" onsubmit="return validateAndTrimForm(this);">
                                 <input type="hidden" name="action" value="update">
                                 <input type="hidden" name="bookID" value="${book.getBookID()}">
                                 <div class="form-group">
@@ -171,7 +171,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="publicationDate">Ngày xuất bản</label>
-                                    <input type="text" class="form-control" id="publicationDate" name="publicationDate" value="${book.getPublicationDate()}">
+                                    <input type="text" class="form-control" id="publicationDate" name="publicationDate" value="${book.getPublicationDate()}" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="isbn">ISBN</label>
@@ -179,11 +179,11 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="price">Giá bán</label>
-                                    <input type="number" class="form-control" id="price" name="price" value="${book.getPrice()}" required>
+                                    <input type="number" class="form-control" id="price" name="price" value="${book.getPrice()}" required min="0">
                                 </div>
                                 <div class="form-group">
                                     <label for="stock">Tồn kho</label>
-                                    <input type="number" class="form-control" id="stock" name="stock" value="${book.getStock()}" required>
+                                    <input type="number" class="form-control" id="stock" name="stock" value="${book.getStock()}" required min="0">
                                 </div>
                                 <div class="form-group d-none"">
                                     <label for="soldQuantity">Số lượng đã bán</label>
@@ -205,7 +205,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Thể loại</label>
-                                    <select class="categories form-control" name="categories" multiple>
+                                    <select class="categories form-control" name="categories" multiple required>
                                         <c:forEach var="cate" items="${cateList}">
                                             <option value="${cate.categoryID}" ${fn:contains(book.cates, ",".concat(cate.categoryID).concat(",")) ? 'selected' : ''}>${cate.categoryName}</option>
                                         </c:forEach>
@@ -220,7 +220,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="stock">Mô tả</label>
-                                    <textarea class="form-control" name="description">${book.getDescription()}</textarea>
+                                    <textarea class="form-control" name="description" required>${book.getDescription()}</textarea>
                                 </div>
                                 <button type="submit" class="btn btn-primary mt-3">Cập nhật</button>
                             </form>
@@ -269,7 +269,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="productManager" method="post">
+                        <form action="productManager" method="post" onsubmit="return validateAndTrimForm(this);">
                             <input type="hidden" name="action" value="add">
                             <div class="form-group">
                                 <label for="title">Tiêu đề</label>
@@ -289,11 +289,11 @@
                             </div>
                             <div class="form-group">
                                 <label for="price">Giá bán</label>
-                                <input type="number" class="form-control" id="price" name="price" required>
+                                <input type="number" class="form-control" id="price" name="price" required min="0">
                             </div>
                             <div class="form-group">
                                 <label for="stock">Tồn kho</label>
-                                <input type="number" class="form-control" id="stock" name="stock" required>
+                                <input type="number" class="form-control" id="stock" name="stock" required min="0">
                             </div>
                             <div class="form-group d-none">
                                 <label for="soldQuantity">Số lượng đã bán</label>
@@ -301,13 +301,13 @@
                             </div>
                             <div class="form-group">
                                 <label for="coverImage">Hình bìa</label>
-                                <input type="file" class="form-control" id="coverImageFile_0" accept="image/*" onchange="uploadImage(this, 0)">
+                                <input type="file" class="form-control" id="coverImageFile_0" accept="image/*" onchange="uploadImage(this, 0)" required>
                                 <input type="hidden" class="form-control" id="coverImage_0" name="coverImage" value="">
                                 <div class="mt-2" id="imagePreview_0"></div>
                             </div>
                             <div class="form-group">
                                 <label>Tác giả</label>
-                                <select class="authors form-control" name="authors" multiple>
+                                <select class="authors form-control" name="authors" multiple required>
                                     <c:forEach var="author" items="${authorList}">
                                         <option value="${author.authorID}">${author.name}</option>
                                     </c:forEach>
@@ -315,7 +315,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Thể loại</label>
-                                <select class="categories form-control" name="categories" multiple>
+                                <select class="categories form-control" name="categories" multiple required>
                                     <c:forEach var="cate" items="${cateList}">
                                         <option value="${cate.categoryID}">${cate.categoryName}</option>
                                     </c:forEach>
@@ -330,7 +330,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="stock">Mô tả</label>
-                                <textarea class="form-control" name="description"></textarea>
+                                <textarea class="form-control" name="description" required></textarea>
                             </div>
                             <button type="submit" class="btn btn-primary mt-3">Thêm</button>
                         </form>
@@ -387,44 +387,66 @@
                                     }
 
                                     function previewImage(input, bookID) {
-                                    const file = input.files[0];
-                                            if (!file) {
-                                    return; // No file selected, do nothing
-                                    }
+                                        const file = input.files[0];
+                                        if (!file) {
+                                            return; // No file selected, do nothing
+                                        }
 
-                                    const reader = new FileReader();
-                                            reader.onload = function (e) {
-                                            const imagePreview = document.getElementById(imagePreview_ + bookID);
-                                                    imagePreview.innerHTML = <img src=" + e.target.result + " class="img-fluid" alt="Cover Image">;
-                            };
-                            reader.readAsDataURL(file);
+                                        const reader = new FileReader();
+                                        reader.onload = function (e) {
+                                        const imagePreview = document.getElementById(imagePreview_ + bookID);
+                                                imagePreview.innerHTML = <img src=" + e.target.result + " class="img-fluid" alt="Cover Image">;
+                                    };
+                                    reader.readAsDataURL(file);
                                     }
-    </script>
+                                    </script>
 
-    <script>
-                                    document.addEventListener('DOMContentLoaded', function () {
-                                                    var selects = document.querySelectorAll('.authors');
-                                                    selects.forEach(function (select) {
-                                                    new Choices(select, {
-                                                    removeItemButton: true,
-                                                            placeholder: true,
-                                                            placeholderValue: 'Select authors',
-                                                            searchPlaceholderValue: 'Search authors',
-                                                    });
-                                                    });
-                                                    selects = document.querySelectorAll('.categories');
-                                                    selects.forEach(function (select) {
-                                                    new Choices(select, {
-                                                    removeItemButton: true,
-                                                            placeholder: true,
-                                                            placeholderValue: 'Select categories',
-                                                            searchPlaceholderValue: 'Search categories',
-                                                    });
-                                                    });
+                                        <script>
+                                        document.addEventListener('DOMContentLoaded', function () {
+                                                var selects = document.querySelectorAll('.authors');
+                                                selects.forEach(function (select) {
+                                                new Choices(select, {
+                                                removeItemButton: true,
+                                                        placeholder: true,
+                                                        placeholderValue: 'Select authors',
+                                                        searchPlaceholderValue: 'Search authors',
+                                                });
+                                                });
+                                                selects = document.querySelectorAll('.categories');
+                                                selects.forEach(function (select) {
+                                                new Choices(select, {
+                                                removeItemButton: true,
+                                                        placeholder: true,
+                                                        placeholderValue: 'Select categories',
+                                                        searchPlaceholderValue: 'Search categories',
+                                                });
+                                                });
                                         });
                                         </script>
 
+                                        <script>
+                                        function validateAndTrimForm(form) {
+                                        let isValid = true;
+                                        const elements = form.elements;
 
+                                        for (let i = 0; i < elements.length; i++) {
+                                            if (elements[i].type === 'text' || elements[i].type === 'textarea' || elements[i].type === 'number') {
+                                                elements[i].value = elements[i].value.trim();
+                                                if (elements[i].value === '') {
+                                                    isValid = false;
+                                                    alert('Please fill out all fields');
+                                                    elements[i].focus();
+                                                    break;
+                                                }
+                                            }
+                                        }
+
+                                        return isValid;
+                        }
+                                        
+                            
+                            
+                            </script>
 
         </body>
 

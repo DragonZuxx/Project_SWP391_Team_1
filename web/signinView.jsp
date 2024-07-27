@@ -24,7 +24,7 @@
                                    placeholder="Email"
                                    type="text"
                                    autocomplete="off"
-                                   value="${requestScope.values.username}">
+                                   value="${requestScope.values.username}" required>
                             <c:if test="${not empty requestScope.violations.usernameViolations}">
                                 <div class="invalid-feedback">
                                     <ul class="list-unstyled">
@@ -42,7 +42,7 @@
                                    placeholder="Mật khẩu"
                                    type="password"
                                    autocomplete="off"
-                                   value="${requestScope.values.password}">
+                                   value="${requestScope.values.password}" required>
                             <c:if test="${not empty requestScope.violations.passwordViolations}">
                                 <div class="invalid-feedback">
                                     <ul class="list-unstyled">
@@ -53,7 +53,7 @@
                                 </div>
                             </c:if>
                         </div>
-                             <a href="ForgetPass.jsp" style="display: flex; align-items: center; justify-content: flex-end;">
+                             <a href="forgotPassword.jsp" style="display: flex; align-items: center; justify-content: flex-end;">
                             <span style="margin-left: 5px;">
                                 <!-- Thêm biểu tượng hoặc icon vào đây -->
                                 <i class="fas fa-question-circle"></i>
