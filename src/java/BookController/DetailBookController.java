@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-
 package BookController;
 
 import Dao.AccountDao;
@@ -39,7 +38,7 @@ import java.util.Set;
  *
  * @author Aplal
  */
-@WebServlet(name="DetailBookController", urlPatterns={"/detailbook"})
+@WebServlet(name = "DetailBookController", urlPatterns = {"/detailbook"})
 public class DetailBookController extends HttpServlet {
 
     private AccountDao accountDao;
@@ -80,24 +79,21 @@ public class DetailBookController extends HttpServlet {
         int bookID = Integer.parseInt(bookIDStr);
         Accounts account = getAccountsInfoSession(request);
 
-        
         Books product = bookDao.getBookByID(bookID);
 
-       
         BookAuthors ba = bookAuthorDao.getBookAuthorById(bookID);
-        
+
         BookCategories bc = bookCategorieDao.getBookCategoriesByBookID(bookID);
-        
+
         int auid = ba != null ? ba.getAuthorID() : -1;
         int cateID = bc != null ? bc.getCategoryID() : -1;
 
-        
         ArrayList<Authors> author = authorDao.getAuthorsByBookId(auid);
-       
+
         Categories category = categoryDao.getCategoryByID(cateID);
-        
+
         Promotions promotion = promotionDao.getPromotionValid();
-        
+
         ArrayList<Reviews> review = reviewDao.getReviewByBookId(bookID);
         int countReview = reviewDao.countReviewByBookId(bookID);
 
@@ -113,24 +109,24 @@ public class DetailBookController extends HttpServlet {
         }
 
         ArrayList<BookCategories> bookCategories = bookCategorieDao.getBookCategoriesByCategoryID(cateID);
-        List<Books> bookgetbyid = new ArrayList<>();
-        for (int i = 0; i < bookCategories.size(); i++) {
-            BookCategories bcate = bookCategories.get(i);
-            Books bookbyid = bookDao.getBookByID(bcate.getBookID());
-            bookgetbyid.add(bookbyid);
-        }
-
+//        List<Books> bookgetbyid = new ArrayList<>();
+//        for (int i = 0; i < bookCategories.size(); i++) {
+//            BookCategories bcate = bookCategories.get(i);
+//            Books bookbyid = bookDao.getBookByID(bcate.getBookID());
+//            bookgetbyid.add(bookbyid);
+//        }
+        ArrayList<Books> bookgetbyid = bookDao.getBookByCategoryID(cateID);
         if (account != null) {
             int accID = account.getUserID();
             Wishlist wishlist = wishlistDao.getWishlistByUserIdAndBookId(accID, bookID);
             if (wishlist != null) {
                 request.setAttribute("isWishlistItem", 1);
             } else {
-                request.setAttribute("isWishlistItem", 0); 
+                request.setAttribute("isWishlistItem", 0);
             }
             request.setAttribute("wishlist", wishlist);
         }
-        
+
         request.setAttribute("addedUserIDs", addedUserIDs);
         request.setAttribute("userreviews", userreviewss);
         request.setAttribute("bookgetbyid", bookgetbyid);

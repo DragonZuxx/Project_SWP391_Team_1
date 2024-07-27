@@ -96,7 +96,8 @@
                                 <div class="book-details">
                                     <h5>${book.getTitle()}</h5>
                                     <p>Nhà xuất bản: ${book.getPublisher()}</p>
-                                    <p>Giá: <c:choose>
+                                    <p>Giá: 
+                                        <c:choose>
                                             <c:when test="${empty requestScope.promotions}">
                                                 <!-- If no promotion -->
                                                 <span class="price mt-1 fw-bold">
