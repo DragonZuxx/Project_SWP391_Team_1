@@ -158,6 +158,7 @@
                                         }
                                     }, 5000);
                                 });
+
                             </script>
 
 
@@ -199,33 +200,6 @@
                                         </table>
                                     </c:if>
                                 </div>
-                                <c:if test="${totalPages != 0}">
-                                    <nav class="mt-3 mb-5">
-                                        <ul class="pagination justify-content-center">
-                                            <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
-                                                <a class="page-link" href="?page=${currentPage - 1}">Trang trước</a>
-                                            </li>
-                                            <c:forEach begin="1" end="${totalPages}" var="i">
-                                                <c:choose>
-                                                    <c:when test="${currentPage == i}">
-                                                        <li class="page-item active">
-                                                            <a class="page-link">${i}</a>
-                                                        </li>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <li class="page-item">
-                                                            <a class="page-link" href="?page=${i}">${i}</a>
-                                                        </li>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </c:forEach>
-                                            <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
-                                                <a class="page-link" href="?page=${currentPage + 1}">Trang sau</a>
-                                            </li>
-                                            </
-                                        </ul>
-                                    </nav>
-                                </c:if>
                             </div>
                         </div>
                     </main>
@@ -263,11 +237,10 @@
                                                     <c:if test="${ship.orderId == order.id}">
                                                     <h6 class="text-muted">Hình thức thanh toán: Thanh toán khi nhận hàng</h6>
                                                     <span class="text-success">
-                                                        <i class="fab fa-lg fa-cc-visa"></i>
                                                         ${ship.shippingMethod}
                                                     </span>
                                                     <p class="lh-lg">
-                                                        Phí vận chuyển:  ₫${ship.shippingCost}
+                                                        Phí vận chuyển:  <fmt:formatNumber pattern="#,##0" value="${ship.shippingCost}"/>₫
                                                         <br>
                                                     </p>
                                                     Tổng tiền phải thanh toán:<fmt:formatNumber pattern="#,##0" value="${order.amount}"/>₫
@@ -303,7 +276,7 @@
                                                         <td>
                                                             <img src="${book.getCoverImage()}" alt="${book.getTitle()}" class="img-fluid" style="max-width: 100px; max-height: 100px;">
                                                         </td>
-                                                        <td><input type="text" class="form-control" name="unitPrice" value="${orderdetail.unitPrice}" readonly></td>
+                                                        <td><input type="text" class="form-control" name="unitPrice" value="<fmt:formatNumber pattern="#,##0" value="${orderdetail.unitPrice}"/>₫" readonly></td>
                                                         <td><input type="text" class="form-control" name="quantity" value="${orderdetail.quantity}" readonly></td>
                                                     </tr>
                                                 </c:if>
