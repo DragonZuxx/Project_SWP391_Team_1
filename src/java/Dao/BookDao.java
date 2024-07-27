@@ -114,6 +114,7 @@ public class BookDao extends DBContext {
         }
         return books;
     }
+
     public Books getBookByID(int id) {
         String sql = "SELECT * FROM Books WHERE BookID = ? AND IsBanned = 0 AND IsAvailable = 1";
         try {
@@ -143,7 +144,7 @@ public class BookDao extends DBContext {
         }
         return null;
     }
-    
+
     public Books getBookById(int id) {
         String sql = "SELECT * FROM Books WHERE BookID = ?";
         try {
@@ -173,7 +174,7 @@ public class BookDao extends DBContext {
         }
         return null;
     }
-    
+
     public int getStockByBookID(int bookID) {
         String sql = "SELECT Stock FROM Books WHERE BookID = ?";
         try {
@@ -189,6 +190,7 @@ public class BookDao extends DBContext {
         return 0;
 
     }
+
     public int getSoldQuantitybyBookID(int bookID) {
         String sql = "SELECT SoldQuantity FROM Books WHERE BookID = ?";
         try {
@@ -203,8 +205,7 @@ public class BookDao extends DBContext {
         }
         return 0;
     }
-    
- 
+
     //Chỉ lấy ra Publisher của Books và không trùng nhau (Distinct)
     public ArrayList<String> getDistinctPublisher() {
         ArrayList<String> publishers = new ArrayList<String>();
@@ -220,7 +221,7 @@ public class BookDao extends DBContext {
         }
         return publishers;
     }
-    
+
     // Create (Add new Book)
     public int addBook(Books book) {
         String sql = "INSERT INTO Books(Title, Publisher, PublicationDate, ISBN, Price, Stock, SoldQuantity, Description, CoverImage, IsAvailable, IsBanned, CreatedAt, UpdatedAt) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
@@ -480,41 +481,40 @@ public class BookDao extends DBContext {
         }
         return books;
     }
-    
+
     public void UpdateOrderQuantity(int orderId) {
-    String orderDetailsSql = "SELECT BookID, Quantity FROM OrderDetails WHERE OrderID = ?";
-    try {
-        if (connection != null) {
-            // Fetch order details
-            stm = connection.prepareStatement(orderDetailsSql);
-            stm.setInt(1, orderId);
-            rs = stm.executeQuery();
+        String orderDetailsSql = "SELECT BookID, Quantity FROM OrderDetails WHERE OrderID = ?";
+        try {
+            if (connection != null) {
+                // Fetch order details
+                stm = connection.prepareStatement(orderDetailsSql);
+                stm.setInt(1, orderId);
+                rs = stm.executeQuery();
 
-            while (rs.next()) {
-                int bookID = rs.getInt("BookID");
-                int quantity = rs.getInt("Quantity");
+                while (rs.next()) {
+                    int bookID = rs.getInt("BookID");
+                    int quantity = rs.getInt("Quantity");
 
-                // Get the current book stock and sold quantity
-                BookDao bookDao = new BookDao();
-                Books book = bookDao.getBookById(bookID);
-                if (book != null) {
-                    int newQuantityInStock = book.getStock() - quantity;
-                    int newSoldQuantity = book.getSoldQuantity() + quantity;
+                    // Get the current book stock and sold quantity
+                    BookDao bookDao = new BookDao();
+                    Books book = bookDao.getBookById(bookID);
+                    if (book != null) {
+                        int newQuantityInStock = book.getStock() - quantity;
+                        int newSoldQuantity = book.getSoldQuantity() + quantity;
 
-                    // Update the book information
-                    boolean updateSuccess = bookDao.updateQuantityInStock(bookID, newQuantityInStock, newSoldQuantity);
-                    if (!updateSuccess) {
-                        System.out.println("Failed to update book stock and sold quantity.");
+                        // Update the book information
+                        boolean updateSuccess = bookDao.updateQuantityInStock(bookID, newQuantityInStock, newSoldQuantity);
+                        if (!updateSuccess) {
+                            System.out.println("Failed to update book stock and sold quantity.");
+                        }
                     }
                 }
             }
+        } catch (Exception e) {
+            System.out.println("autoUpdateOrderStatus" + e.getMessage());
         }
-    } catch (Exception e) {
-        System.out.println("autoUpdateOrderStatus" + e.getMessage());
     }
-}
 
-    
     public boolean updateQuantityInStock(int bookId, int newQuantityInStock, int newSoldQuantity) {
         String updateQuery = "UPDATE Books SET Stock = ?, SoldQuantity = ? WHERE BookID = ?";
         try {
@@ -530,6 +530,7 @@ public class BookDao extends DBContext {
         }
         return false;
     }
+
     public void checkAndUpdateBookAvailability(int bookID) {
         String query = "SELECT Stock FROM Books WHERE BookID = ?";
         try (
@@ -553,5 +554,44 @@ public class BookDao extends DBContext {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public ArrayList<Books> getBookByCategoryID(int id) {
+        ArrayList<Books> books = new ArrayList<Books>();
+        String sql = "SELECT * \n"
+                + "FROM Books \n"
+                + "WHERE BookID IN (\n"
+                + "    SELECT BookID \n"
+                + "    FROM BookCategories \n"
+                + "    WHERE CategoryID = ? \n"
+                + "      AND IsBanned = 0 \n"
+                + "      AND IsAvailable = 1\n"
+                + ");";
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setInt(1, id);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                Books book = new Books();
+                book.setBookID(rs.getInt("BookID"));
+                book.setTitle(rs.getString("Title"));
+                book.setPublisher(rs.getString("Publisher"));
+                book.setPublicationDate(rs.getString("PublicationDate"));
+                book.setISBN(rs.getString("ISBN"));
+                book.setPrice(rs.getString("Price"));
+                book.setStock(rs.getInt("Stock"));
+                book.setSoldQuantity(rs.getInt("SoldQuantity"));
+                book.setDescription(rs.getString("Description"));
+                book.setCoverImage(rs.getString("CoverImage"));
+                book.setIsAvailable(rs.getBoolean("IsAvailable"));
+                book.setIsBanned(rs.getBoolean("IsBanned"));
+                book.setCreatedAt(rs.getTimestamp("CreatedAt").toLocalDateTime());
+                book.setUpdatedAt(rs.getTimestamp("UpdatedAt").toLocalDateTime());
+                books.add(book);
+            }
+        } catch (Exception e) {
+            System.out.println("getBookByID" + e.getMessage());
+        }
+        return books;
     }
 }

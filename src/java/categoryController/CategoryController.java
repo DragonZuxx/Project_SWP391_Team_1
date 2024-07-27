@@ -44,11 +44,12 @@ public class CategoryController extends HttpServlet {
         int count = bcd.getBookCategoriesByCategoryID(categoryId).size();
         //Lấy mảng BookID theo CategoryID
         ArrayList<BookCategories> bookcategories = bcd.getBookCategoriesByCategoryID(categoryId);
-        List<Books> books = new ArrayList<>();
-        for (BookCategories bookcategory : bookcategories) {
-            Books book = new BookDao().getBookByID(bookcategory.getBookID());
-            books.add(book);
-        }
+//        List<Books> books = new ArrayList<>();
+//        for (BookCategories bookcategory : bookcategories) {
+//            Books book = new BookDao().getBookByID(bookcategory.getBookID());
+//            books.add(book);
+//        }
+        ArrayList<Books> books = bd.getBookByCategoryID(categoryId);
         //Lấy mảng Book theo bookcategories
         ArrayList<String> publishers = bd.getDistinctPublisher();
         PromotionDao promotionDao = new PromotionDao();

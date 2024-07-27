@@ -30,7 +30,7 @@
                     <img src="${pageContext.request.contextPath}/img/banner_1.jpg" alt="Banner 2">
                 </a>
                 <a class="text-body d-flex align-items-center" href="${pageContext.request.contextPath}/home">
-                    <img src="${pageContext.request.contextPath}/img/banner_2.jpg" alt="Banner 3">
+                    <img src="${pageContext.request.contextPath}/img/banner_4.jpg" alt="Banner 3">
                 </a>
                 <button class="control-btn prev-btn">&#10094;</button>
             </div>

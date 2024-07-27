@@ -30,10 +30,7 @@
                                 <c:forEach var="category" items="${category}">
                                     <li><a class="dropdown-item" href="${pageContext.request.contextPath}/category?id=${category.getCategoryID()}">${category.getCategoryName()}</a></li>
                                     </c:forEach>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li><a class="dropdown-item" href="#">Tất cả danh mục</a></li>
+                                
                             </ul>
                         </li>
                         <li class="nav-item">

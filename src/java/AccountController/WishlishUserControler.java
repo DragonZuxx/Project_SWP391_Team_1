@@ -4,9 +4,11 @@
  */
 package AccountController;
 
+import Dao.PromotionDao;
 import Dao.WishlistDao;
 import Model.Accounts;
 import Model.Books;
+import Model.Promotions;
 import Model.Wishlist;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -27,6 +29,7 @@ import java.util.List;
 public class WishlishUserControler extends HttpServlet {
 
     private WishlistDao wishlistDao = new WishlistDao();
+    private PromotionDao promotionDao = new PromotionDao();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -82,8 +85,10 @@ public class WishlishUserControler extends HttpServlet {
         } else {
             System.out.println("Wishlist contains items for user: " + userId);
         }
+        Promotions promotions = promotionDao.getPromotionValid();
 
         request.setAttribute("wishlistProducts", wishlistProducts);
+        request.setAttribute("promotions", promotions);
         request.getRequestDispatcher("wishlistViewUser.jsp").forward(request, response);
     }
 
