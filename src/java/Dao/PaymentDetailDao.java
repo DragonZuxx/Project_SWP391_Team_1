@@ -10,6 +10,7 @@ import java.sql.Date;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.LocalDateTime;
 
 /**
  *
@@ -34,4 +35,19 @@ public boolean addPaymentDetail(PaymentDetail paymentDetail) {
         }
         return false;
     }
+public boolean updatePaymentDetail(int orderID, String newStatus, LocalDateTime update) {
+    try {
+        String sql = "UPDATE PaymentDetails SET PaymentStatus = ?,  UpdatedAt = ? WHERE OrderID = ?";
+        stm = connection.prepareStatement(sql);
+        stm.setString(1, newStatus);
+        stm.setTimestamp(2, java.sql.Timestamp.valueOf(update));
+        stm.setInt(3, orderID);
+        int result = stm.executeUpdate();
+        return result > 0;
+    } catch (Exception e) {
+        System.out.println(e);
+    }
+    return false;
+}
+
 }
