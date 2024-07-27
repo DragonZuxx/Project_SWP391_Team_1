@@ -282,34 +282,6 @@ public class ListAccountDao extends DBContext {
         return list;
     }
 
-    public List<BookRevenue> getMonthlyRevenue() {
-        List<BookRevenue> list = new ArrayList<>();
-        String sql = "SELECT \n"
-                + "	FORMAT(CreatedAt, 'MM') AS Month,\n"
-                + "    FORMAT(CreatedAt, 'yyyy') AS Year,\n"
-                + "    SUM(SoldQuantity * CAST(Price AS DECIMAL(10, 2))) AS TotalRevenue\n"
-                + "FROM \n"
-                + "    Books\n"
-                + "GROUP BY \n"
-                + "        FORMAT(CreatedAt, 'yyyy'),\n"
-                + "	FORMAT(CreatedAt, 'MM')\n"
-                + "ORDER BY \n"
-                + "    Month, Year";
-        try {
-            PreparedStatement pr = connection.prepareStatement(sql);
-            ResultSet rs = pr.executeQuery();
-            while (rs.next()) {
-                BookRevenue book = new BookRevenue(rs.getString("Month"),
-                        rs.getString("Year"),
-                        rs.getDouble("TotalRevenue"));
-                list.add(book);
-            }
-        } catch (SQLException e) {
-            System.out.println(e);
-        }
-        return list;
-    }
-
     public List<Books> getBestSelling() {
         List<Books> list = new ArrayList<>();
         String sql = "SELECT TOP 10 \n"
@@ -358,7 +330,6 @@ public class ListAccountDao extends DBContext {
         }
         return list;
     }
-
 
     public List<Books> getBestSellingByPage(int pageNumber, int pageSize) {
         List<Books> list = new ArrayList<>();
@@ -448,19 +419,19 @@ public class ListAccountDao extends DBContext {
         return list;
     }
 
-        public List<Wishlist> getWishlistBooksByPage(int pageNumber, int pageSize) {
+    public List<Wishlist> getWishlistBooksByPage(int pageNumber, int pageSize) {
         List<Wishlist> list = new ArrayList<>();
-        String sql = "SELECT \n" +
-                     "    B.BookID,\n" +
-                     "    COUNT(W.WishlistID) AS WishlistCount\n" +
-                     "FROM \n" +
-                     "    Wishlist W\n" +
-                     "    INNER JOIN Books B ON W.BookID = B.BookID\n" +
-                     "GROUP BY \n" +
-                     "    B.BookID\n" +
-                     "ORDER BY \n" +
-                     "    WishlistCount DESC\n" +
-                     "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        String sql = "SELECT \n"
+                + "    B.BookID,\n"
+                + "    COUNT(W.WishlistID) AS WishlistCount\n"
+                + "FROM \n"
+                + "    Wishlist W\n"
+                + "    INNER JOIN Books B ON W.BookID = B.BookID\n"
+                + "GROUP BY \n"
+                + "    B.BookID\n"
+                + "ORDER BY \n"
+                + "    WishlistCount DESC\n"
+                + "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
         try {
             PreparedStatement pr = connection.prepareStatement(sql);
             pr.setInt(1, (pageNumber - 1) * pageSize);
@@ -473,11 +444,11 @@ public class ListAccountDao extends DBContext {
                 list.add(wl);
             }
         } catch (SQLException e) {
-                System.out.println(e);
+            System.out.println(e);
         }
         return list;
     }
-        
+
     public List<Wishlist> getAllWishlistBooks() {
         List<Wishlist> list = new ArrayList<>();
         String sql = "SELECT TOP 10 \n"
@@ -505,7 +476,6 @@ public class ListAccountDao extends DBContext {
         }
         return list;
     }
-
 
     public List<Accounts> getUserByEmail(String txtSearch) {
         List<Accounts> list = new ArrayList<>();
@@ -573,24 +543,70 @@ public class ListAccountDao extends DBContext {
         return list;
     }
 
+    public void updateOrderStatus(int orderId, String status) {
+        String sql = "UPDATE Orders SET Status = ?, UpdatedAt = GETDATE() WHERE OrderID = ?";
+        try {
+            PreparedStatement pr = connection.prepareStatement(sql);
+            pr.setString(1, status);
+            pr.setInt(2, orderId);
+            pr.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+
     public List<BookRevenue> getMonthlyRevenueByYear(int year) {
-        List<BookRevenue> list = new ArrayList<>();
+        List<BookRevenue> revenueList = new ArrayList<>();
         String sql = "SELECT \n"
-                + "    FORMAT(CreatedAt, 'MM') AS Month,\n"
-                + "    FORMAT(CreatedAt, 'yyyy') AS Year,\n"
-                + "    SUM(Quantity * CAST(UnitPrice AS DECIMAL(10, 2))) AS TotalRevenue\n"
+                + "    FORMAT(o.CreatedAt, 'MM') AS Month,\n"
+                + "    FORMAT(o.CreatedAt, 'yyyy') AS Year,\n"
+                + "    SUM(od.Quantity * CAST(od.UnitPrice AS DECIMAL(10, 2))) AS TotalRevenue\n"
                 + "FROM \n"
-                + "    OrderDetails\n"
+                + "    Orders o\n"
+                + "JOIN \n"
+                + "    OrderDetails od ON o.OrderID = od.OrderID\n"
                 + "WHERE \n"
-                + "    FORMAT(CreatedAt, 'yyyy') = ?\n"
+                + "    FORMAT(o.CreatedAt, 'yyyy') = ?\n"
+                + "    AND o.Status = N'Đã nhận được hàng'\n"
                 + "GROUP BY \n"
-                + "    FORMAT(CreatedAt, 'yyyy'),\n"
-                + "    FORMAT(CreatedAt, 'MM')\n"
+                + "    FORMAT(o.CreatedAt, 'yyyy'),\n"
+                + "    FORMAT(o.CreatedAt, 'MM')\n"
                 + "ORDER BY \n"
-                + "    Month";
+                + "    Year";
         try {
             PreparedStatement pr = connection.prepareStatement(sql);
             pr.setInt(1, year);
+            ResultSet rs = pr.executeQuery();
+            while (rs.next()) {
+                BookRevenue bookRevenue = new BookRevenue(rs.getString("Month"), rs.getString("Year"), rs.getDouble("TotalRevenue"));
+                revenueList.add(bookRevenue);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        return revenueList;
+    }
+
+    public List<BookRevenue> getMonthlyRevenue() {
+        List<BookRevenue> list = new ArrayList<>();
+        String sql = "SELECT \n"
+                + "    FORMAT(o.CreatedAt, 'MM') AS Month,\n"
+                + "    FORMAT(o.CreatedAt, 'yyyy') AS Year,\n"
+                + "    SUM(od.Quantity * CAST(od.UnitPrice AS DECIMAL(10, 2))) AS TotalRevenue\n"
+                + "FROM \n"
+                + "    Orders o\n"
+                + "JOIN \n"
+                + "    OrderDetails od ON o.OrderID = od.OrderID\n"
+                + "WHERE \n"
+                + "    AND o.Status = N'Đã nhận được hàng'\n"
+                + "GROUP BY \n"
+                + "    FORMAT(o.CreatedAt, 'yyyy'),\n"
+                + "    FORMAT(o.CreatedAt, 'MM')\n"
+                + "ORDER BY \n"
+                + "    Year";
+        try {
+            PreparedStatement pr = connection.prepareStatement(sql);
             ResultSet rs = pr.executeQuery();
             while (rs.next()) {
                 BookRevenue book = new BookRevenue(rs.getString("Month"),
@@ -606,11 +622,15 @@ public class ListAccountDao extends DBContext {
 
     public double getTotalRevenue(int year) {
         String sql = "SELECT \n"
-                + "    SUM(Quantity * CAST(UnitPrice AS DECIMAL(10, 2))) AS TotalRevenue\n"
+                + "    SUM(od.Quantity * CAST(od.UnitPrice AS DECIMAL(10, 2))) AS TotalRevenue\n"
                 + "FROM \n"
-                + "    OrderDetails\n"
+                + "    Orders o\n"
+                + "JOIN \n"
+                + "    OrderDetails od ON o.OrderID = od.OrderID\n"
                 + "WHERE \n"
-                + "    FORMAT(CreatedAt, 'yyyy') = ?";
+                + "    o.Status = N'Đã nhận được hàng' \n"
+                + "    AND FORMAT(o.CreatedAt, 'yyyy') = ?";
+
         double totalRevenue = 0.0;
         try {
             PreparedStatement pr = connection.prepareStatement(sql);
@@ -629,7 +649,7 @@ public class ListAccountDao extends DBContext {
         ListAccountDao dal = new ListAccountDao();
         BookRevenue bok = new BookRevenue();
 
-        System.out.println(dal.getAllWishlistBooks());
+        System.out.println(dal.getTotalRevenue(2024));
 
     }
 }
