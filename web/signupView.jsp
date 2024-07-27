@@ -101,12 +101,12 @@
                         </c:if>
                       </div>-->
                         <div class="mb-3">
-                            <label for="inputPhoneNumber" class="form-label">Địa chỉ</label>
+                            <label for="address" class="form-label">Địa chỉ</label>
                             <input type="text"
                                    class="form-control ${not empty requestScope.violations.phoneNumberViolations
                                                          ? 'is-invalid' : (not empty requestScope.values.phoneNumber ? 'is-valid' : '')}"
-                                   id="inputPhoneNumber"
-                                   name="phoneNumber"
+                                   id="address"
+                                   name="address"
                                    value="${requestScope.values.phoneNumber}">
                             <c:if test="${not empty requestScope.violations.phoneNumberViolations}">
                                 <div class="invalid-feedback">
@@ -151,12 +151,12 @@
                         </c:if>
                       </div>-->
                         <div class="mb-3">
-                            <label for="inputAddress" class="form-label">Số điện thoại</label>
+                            <label for="phone" class="form-label">Số điện thoại</label>
                             <input type="text"
                                    class="form-control ${not empty requestScope.violations.addressViolations
                                                          ? 'is-invalid' : (not empty requestScope.values.address ? 'is-valid' : '')}"
-                                   id="inputAddress"
-                                   name="address"
+                                   id="phone"
+                                   name="phone"
                                    value="${requestScope.values.address}">
                             <c:if test="${not empty requestScope.violations.addressViolations}">
                                 <div class="invalid-feedback">

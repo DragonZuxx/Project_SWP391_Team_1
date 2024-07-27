@@ -94,7 +94,7 @@ public class BookController extends HttpServlet {
         String isbn = request.getParameter("isbn");
         String price = request.getParameter("price");
         int stock = Integer.parseInt(request.getParameter("stock"));
-        int soldQuantity = Integer.parseInt(request.getParameter("soldQuantity"));
+//        int soldQuantity = Integer.parseInt(request.getParameter("soldQuantity"));
         String description = request.getParameter("description");
         String coverImage = request.getParameter("coverImage");
         boolean isAvailable = Boolean.parseBoolean(request.getParameter("isAvailable"));
@@ -108,7 +108,7 @@ public class BookController extends HttpServlet {
         newBook.setISBN(isbn);
         newBook.setPrice(price);
         newBook.setStock(stock);
-        newBook.setSoldQuantity(soldQuantity);
+//        newBook.setSoldQuantity(soldQuantity);
         newBook.setDescription(description);
         newBook.setCoverImage(coverImage);
         newBook.setIsAvailable(isAvailable);
@@ -149,7 +149,7 @@ public class BookController extends HttpServlet {
         String isbn = request.getParameter("isbn");
         String price = request.getParameter("price");
         int stock = Integer.parseInt(request.getParameter("stock"));
-        int soldQuantity = Integer.parseInt(request.getParameter("soldQuantity"));
+//        int soldQuantity = Integer.parseInt(request.getParameter("soldQuantity"));
         String description = request.getParameter("description");
         String coverImage = request.getParameter("coverImage");
         boolean isAvailable = Boolean.parseBoolean(request.getParameter("isAvailable"));
@@ -163,7 +163,7 @@ public class BookController extends HttpServlet {
         book.setPublicationDate(publicationDate);
         book.setPrice(price);
         book.setStock(stock);
-        book.setSoldQuantity(soldQuantity);
+//        book.setSoldQuantity(soldQuantity);
         book.setDescription(description);
         book.setCoverImage(coverImage);
         book.setIsAvailable(isAvailable);

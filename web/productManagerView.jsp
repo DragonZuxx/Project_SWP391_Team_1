@@ -107,40 +107,26 @@
                     </table>
                 </main>
 
+
                 <c:if test="${totalPages != 0}">
                     <nav class="mt-3 mb-5">
                         <ul class="pagination justify-content-center">
                             <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
-                                <a class="page-link" href="?page=${currentPage - 1}&name=${name}">
-                                    Trang trước
-                                </a>
+                                <a class="page-link" href="?page=${currentPage - 1}">Trang trước</a>
                             </li>
-
-                            <c:forEach begin="1" end="${requestScope.totalPages}" var="i">
-                                <c:choose>
-                                    <c:when test="${currentPage == i}">
-                                        <li class="page-item active">
-                                            <a class="page-link">${i}</a>
-                                        </li>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <li class="page-item">
-                                            <a class="page-link" href="?page=${i}&name=${name}">
-                                                ${i}
-                                            </a>
-                                        </li>
-                                    </c:otherwise>
-                                </c:choose>
+                            <c:forEach begin="1" end="${totalPages}" var="i">
+                                <li class="page-item ${currentPage == i ? 'active' : ''}">
+                                    <a class="page-link" href="?page=${i}">${i}</a>
+                                </li>
                             </c:forEach>
-
-                            <li class="page-item ${requestScope.page == requestScope.totalPages ? 'disabled' : ''}">
-                                <a class="page-link" href="?page=${currentPage + 1}&name=${name}">
-                                    Trang sau
-                                </a>
+                            <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
+                                <a class="page-link" href="?page=${currentPage + 1}">Trang sau</a>
                             </li>
                         </ul>
                     </nav>
                 </c:if>
+
+
             </div> <!-- container.// -->
         </section> <!-- section-content.// -->
 
@@ -185,16 +171,21 @@
                                     <label for="stock">Tồn kho</label>
                                     <input type="number" class="form-control" id="stock" name="stock" value="${book.getStock()}" required min="0">
                                 </div>
-                                <div class="form-group d-none"">
-                                    <label for="soldQuantity">Số lượng đã bán</label>
-                                    <input type="number" class="form-control" id="soldQuantity" name="soldQuantity" value="${book.getSoldQuantity()}" required>
-                                </div>
+                                <!--                                <div class="form-group d-none"">
+                                                                    <label for="soldQuantity">Số lượng đã bán</label>
+                                                                    <input type="number" class="form-control" id="soldQuantity" name="soldQuantity" value="${book.getSoldQuantity()}" required>
+                                                                </div>-->
+                                <!--                                <div class="form-group">
+                                                                    <label for="coverImage">Hình bìa</label><br>
+                                                                    <input type="file" class="form-control" id="coverImageFile_${book.getBookID()}" accept="image/*" onchange="uploadImage2(this, ${book.getBookID()})"><br>
+                                                                    <input type="hidden" class="form-control" id="coverImage_${book.getBookID()}" name="coverImage" value="${book.getCoverImage()}">
+                                                                    <div class="mt-2" id="imagePreview_${book.getBookID()}"></div>
+                                                                </div>-->
                                 <div class="form-group">
-                                    <label for="coverImage">Hình bìa</label><br>
-                                    <input type="file" class="form-control" id="coverImageFile_${book.getBookID()}" accept="image/*" onchange="uploadImage(this, ${book.getBookID()})"><br>
-                                    <input type="hidden" class="form-control" id="coverImage_${book.getBookID()}" name="coverImage" value="${book.getCoverImage()}">
-                                    <div class="mt-2" id="imagePreview_${book.getBookID()}"></div>
+                                    <label for="coverImage">Hình bìa</label>
+                                    <input type="text" class="form-control" id="coverImage" name="coverImage" required value="${book.getCoverImage()}">
                                 </div>
+
                                 <div class="form-group">
                                     <label>Tác giả</label>
                                     <select class="authors form-control" name="authors" multiple required>
@@ -280,7 +271,7 @@
                                 <input type="text" class="form-control" id="publisher" name="publisher" required>
                             </div>
                             <div class="form-group">
-                                <label for="publicationDate">Ngày xuất bản</label>
+                                <label for="publicationDate">Năm xuất bản</label>
                                 <input type="text" class="form-control" id="publicationDate" name="publicationDate" required>
                             </div>
                             <div class="form-group">
@@ -295,16 +286,17 @@
                                 <label for="stock">Tồn kho</label>
                                 <input type="number" class="form-control" id="stock" name="stock" required min="0">
                             </div>
-                            <div class="form-group d-none">
-                                <label for="soldQuantity">Số lượng đã bán</label>
-                                <input type="number" class="form-control" id="soldQuantity" name="soldQuantity" required>
-                            </div>
+                            <!--                            <div class="form-group d-none">
+                                                            <label for="soldQuantity">Số lượng đã bán</label>
+                                                            <input type="number" class="form-control" id="soldQuantity" name="soldQuantity" required>
+                                                        </div>-->
                             <div class="form-group">
                                 <label for="coverImage">Hình bìa</label>
                                 <input type="file" class="form-control" id="coverImageFile_0" accept="image/*" onchange="uploadImage(this, 0)" required>
                                 <input type="hidden" class="form-control" id="coverImage_0" name="coverImage" value="">
                                 <div class="mt-2" id="imagePreview_0"></div>
                             </div>
+                            
                             <div class="form-group">
                                 <label>Tác giả</label>
                                 <select class="authors form-control" name="authors" multiple required>
@@ -351,12 +343,11 @@
 
         <script>
                                     async function uploadImage(input, bookID) {
+                                        previewImage(input, bookID);
 
-                                        previewImage(input, bookID)
-
-                                        const apiKey = '82b2f0b4bad5a0f8c43de992fe433a3e';
+                                        const apiKey = 'e0b9527e4bcb39c0c6fce9c5c8ed364f';
                                         const file = input.files[0];
-                                        if (bookID == 0 && !file) {
+                                        if (bookID === 0 && !file) {
                                             alert('Please select a file');
                                             return;
                                         }
@@ -373,15 +364,16 @@
 
                                             if (data.success) {
                                                 const imageUrl = data.data.url;
-                                                document.getElementById(coverImage_ + bookID).value = imageUrl;
+                                                document.getElementById('coverImage_0').value = imageUrl;
 
-//                                                const previewContainer = document.getElementById(imagePreview_ + bookID);
-//                                                previewContainer.innerHTML = <img src=" + imageUrl + " class="img-fluid" alt="Cover Image">;
+                                                // Optionally show the image in the preview container
+                                                const previewContainer = document.getElementById('imagePreview_0');
+                                                previewContainer.innerHTML = '<img src="' + imageUrl + '" class="img-fluid" alt="Cover Image">';
                                             } else {
                                                 alert('Upload failed: ' + data.error.message);
                                             }
                                         } catch (error) {
-                                            alert('Error uploading file');
+                                            alert('Lỗi up file');
                                             console.error('Error:', error);
                                         }
                                     }
@@ -394,60 +386,62 @@
 
                                         const reader = new FileReader();
                                         reader.onload = function (e) {
-                                        const imagePreview = document.getElementById(imagePreview_ + bookID);
-                                                imagePreview.innerHTML = <img src=" + e.target.result + " class="img-fluid" alt="Cover Image">;
-                                    };
-                                    reader.readAsDataURL(file);
+                                            const imagePreview = document.getElementById('imagePreview_0');
+                                            imagePreview.innerHTML = '<img src="' + e.target.result + '" class="img-fluid" alt="Cover Image">';
+                                        };
+                                        reader.readAsDataURL(file);
                                     }
-                                    </script>
+        </script>
 
-                                        <script>
-                                        document.addEventListener('DOMContentLoaded', function () {
-                                                var selects = document.querySelectorAll('.authors');
-                                                selects.forEach(function (select) {
-                                                new Choices(select, {
-                                                removeItemButton: true,
-                                                        placeholder: true,
-                                                        placeholderValue: 'Select authors',
-                                                        searchPlaceholderValue: 'Search authors',
-                                                });
-                                                });
-                                                selects = document.querySelectorAll('.categories');
-                                                selects.forEach(function (select) {
-                                                new Choices(select, {
-                                                removeItemButton: true,
-                                                        placeholder: true,
-                                                        placeholderValue: 'Select categories',
-                                                        searchPlaceholderValue: 'Search categories',
-                                                });
-                                                });
-                                        });
-                                        </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var selects = document.querySelectorAll('.authors');
+                selects.forEach(function (select) {
+                    new Choices(select, {
+                        removeItemButton: true,
+                        placeholder: true,
+                        placeholderValue: 'Chọn tác giả',
+                        searchPlaceholderValue: 'Tìm kiếm tác giả'
+                    });
+                });
+                selects = document.querySelectorAll('.categories');
+                selects.forEach(function (select) {
+                    new Choices(select, {
+                        removeItemButton: true,
+                        placeholder: true,
+                        placeholderValue: 'Chọn thể loại',
+                        searchPlaceholderValue: 'Tìm thể loại'
+                    });
+                });
+            });
+        </script>
 
-                                        <script>
-                                        function validateAndTrimForm(form) {
-                                        let isValid = true;
-                                        const elements = form.elements;
+        <script>
+            function validateAndTrimForm(form) {
+                let isValid = true;
+                const elements = form.elements;
 
-                                        for (let i = 0; i < elements.length; i++) {
-                                            if (elements[i].type === 'text' || elements[i].type === 'textarea' || elements[i].type === 'number') {
-                                                elements[i].value = elements[i].value.trim();
-                                                if (elements[i].value === '') {
-                                                    isValid = false;
-                                                    alert('Please fill out all fields');
-                                                    elements[i].focus();
-                                                    break;
-                                                }
-                                            }
-                                        }
-
-                                        return isValid;
+                for (let i = 0; i < elements.length; i++) {
+                    if (elements[i].type === 'text' || elements[i].type === 'textarea' || elements[i].type === 'number') {
+                        elements[i].value = elements[i].value.trim();
+                        if (elements[i].value === '') {
+                            isValid = false;
+                            alert('Hãy điền hết tất cả');
+                            elements[i].focus();
+                            break;
                         }
-                                        
-                            
-                            
-                            </script>
+                    }
+                }
 
-        </body>
+                return isValid;
+            }
+
+
+        </script>
+
+    </body>
 
 </html>
+
+
+
