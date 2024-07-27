@@ -18,7 +18,7 @@
 
         <c:set var="account" value="${sessionScope.account}" />
         <c:if test="${empty account or account.getRoleID() == 3}">
-            <% response.sendRedirect("Notfound.jsp"); %>
+            <% response.sendRedirect("admin401View.jsp"); %>
         </c:if>
         <section class="section-pagetop bg-light py-3">
             <div class="container">
