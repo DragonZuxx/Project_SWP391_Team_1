@@ -122,30 +122,30 @@ public class PromotionDao extends DBContext {
             System.out.println(e);
             return false;
         }
-        
+
     }
-    //update promotion by id
+
     public boolean updatePromotion(Promotions p) {
-        String sql = "UPDATE Promotions SET Title = ?, Description = ?, StartDate = ?, EndDate = ?, DiscountPercentage = ?, isActive = ? WHERE PromotionID = ?";
-        try {
-            stm = connection.prepareStatement(sql);
-            stm.setString(1, p.getTitle());
-            stm.setString(2, p.getDescription());
-            stm.setDate(3, new java.sql.Date(p.getStartDate().getTime()));
-            stm.setDate(4, new java.sql.Date(p.getEndDate().getTime()));
-            stm.setBigDecimal(5, p.getDiscountPercentage());
-            stm.setBoolean(6, p.isIsActive());
-            stm.setInt(7, p.getPromotionID());
-            stm.executeUpdate();
-            
-            int rowsAffected = stm.executeUpdate();
-            return rowsAffected > 0; // Trả về true nếu ít nhất một dòng được thêm vào
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+    String sql = "UPDATE Promotions SET Title = ?, Description = ?, StartDate = ?, EndDate = ?, DiscountPercentage = ?, isActive = ? WHERE PromotionID = ?";
+    try {
+        stm = connection.prepareStatement(sql);
+        stm.setString(1, p.getTitle());
+        stm.setString(2, p.getDescription());
+        stm.setDate(3, new java.sql.Date(p.getStartDate().getTime()));
+        stm.setDate(4, new java.sql.Date(p.getEndDate().getTime()));
+        stm.setBigDecimal(5, p.getDiscountPercentage());
+        stm.setBoolean(6, p.isIsActive());
         
+        stm.setInt(7, p.getPromotionID());
+
+        int rowsAffected = stm.executeUpdate();
+        return rowsAffected > 0; // Trả về true nếu ít nhất một dòng được cập nhật
+    } catch (Exception e) {
+        e.printStackTrace();
+        return false;
     }
+}
+
     // tìm promotion theo title và theo trang và số lượng promotion trên 1 trang
     public ArrayList<Promotions> searchPromotionByTitle(String title, int pageNumber, int pageSize) {
         ArrayList<Promotions> list = new ArrayList<>();
@@ -174,6 +174,5 @@ public class PromotionDao extends DBContext {
         }
         return list;
     }
-
 
 }

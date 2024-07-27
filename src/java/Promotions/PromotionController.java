@@ -196,90 +196,97 @@ public class PromotionController extends HttpServlet {
 
     private void updatePromotion(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         // Lấy dữ liệu từ request
-        int promotionID = Integer.parseInt(request.getParameter("promotionID"));
-        String title = request.getParameter("title");
-        String description = request.getParameter("description");
-        String startDateStr = request.getParameter("startDate");
-        String endDateStr = request.getParameter("endDate");
-        String discountPercentageStr = request.getParameter("discountPercentage");
-        boolean isActive = "on".equals(request.getParameter("isActive"));
+    int promotionID = Integer.parseInt(request.getParameter("promotionID"));
+    String title = request.getParameter("title");
+    String description = request.getParameter("description");
+    String startDateStr = request.getParameter("startDate");
+    String endDateStr = request.getParameter("endDate");
+    String discountPercentageStr = request.getParameter("discountPercentage");
 
-        // Validate promotion title
-        if (title == null || title.isEmpty()) {
-            request.getSession().setAttribute("error", "Tên chương trình khuyến mãi không được để trống!");
-            response.sendRedirect("promotionManager");
-            return;
-        }
-
-        // Validate promotion description
-        if (description == null || description.isEmpty()) {
-            request.getSession().setAttribute("error", "Mô tả không được để trống!");
-            response.sendRedirect("promotionManager");
-            return;
-        }
-
-        // Validate start date
-        if (startDateStr == null || startDateStr.isEmpty()) {
-            request.getSession().setAttribute("error", "Ngày bắt đầu không được để trống!");
-            response.sendRedirect("promotionManager");
-            return;
-        }
-
-        // Validate end date
-        if (endDateStr == null || endDateStr.isEmpty()) {
-            request.getSession().setAttribute("error", "Ngày kết thúc không được để trống!");
-            response.sendRedirect("promotionManager");
-            return;
-        }
-
-        // Validate end date is after start date
-        try {
-            java.sql.Date startDate = java.sql.Date.valueOf(startDateStr);
-            java.sql.Date endDate = java.sql.Date.valueOf(endDateStr);
-            if (startDate.after(endDate)) {
-                request.getSession().setAttribute("error", "Ngày bắt đầu phải trước ngày kết thúc!");
-                response.sendRedirect("promotionManager");
-                return;
-            }
-        } catch (IllegalArgumentException e) {
-            request.getSession().setAttribute("error", "Invalid date format");
-            response.sendRedirect("promotionManager");
-            return;
-        }
-
-        // Validate Discount Percentage
-        BigDecimal discountPercentage;
-        try {
-            discountPercentage = new BigDecimal(discountPercentageStr);
-            if (discountPercentage.compareTo(BigDecimal.ZERO) < 0 || discountPercentage.compareTo(new BigDecimal("100")) > 0) {
-                request.getSession().setAttribute("error", "Tỷ lệ chiết khấu phải trong khoảng từ 0-100");
-                response.sendRedirect("promotionManager");
-                return;
-            }
-        } catch (NumberFormatException e) {
-            request.getSession().setAttribute("error", "Invalid discount percentage format");
-            response.sendRedirect("promotionManager");
-            return;
-        }
-
-        // Cập nhật thông tin khuyến mãi
-        Promotions p = new Promotions();
-        p.setPromotionID(promotionID);
-        p.setTitle(title);
-        p.setDescription(description);
-        p.setStartDate(java.sql.Date.valueOf(startDateStr));
-        p.setEndDate(java.sql.Date.valueOf(endDateStr));
-        p.setDiscountPercentage(discountPercentage);
-        p.setIsActive(isActive);
-        p.setUpdatedAt(LocalDateTime.now());
-
-        boolean isSuccess = promotionDAO.updatePromotion(p);
-        if (isSuccess) {
-            request.getSession().setAttribute("success", "Chương trình khuyến mãi được cập nhật thành công!");
-        } else {
-            request.getSession().setAttribute("error", "Database error occurred");
-        }
+    // Validate promotion title
+    if (title == null || title.isEmpty()) {
+        request.getSession().setAttribute("error", "Tên chương trình khuyến mãi không được để trống!");
         response.sendRedirect("promotionManager");
+        return;
+    }
+
+    // Validate promotion description
+    if (description == null || description.isEmpty()) {
+        request.getSession().setAttribute("error", "Mô tả không được để trống!");
+        response.sendRedirect("promotionManager");
+        return;
+    }
+
+    // Validate start date
+    if (startDateStr == null || startDateStr.isEmpty()) {
+        request.getSession().setAttribute("error", "Ngày bắt đầu không được để trống!");
+        response.sendRedirect("promotionManager");
+        return;
+    }
+
+    // Validate end date
+    if (endDateStr == null || endDateStr.isEmpty()) {
+        request.getSession().setAttribute("error", "Ngày kết thúc không được để trống!");
+        response.sendRedirect("promotionManager");
+        return;
+    }
+
+    // Validate end date is after start date
+    java.sql.Date startDate;
+    java.sql.Date endDate;
+    try {
+        startDate = java.sql.Date.valueOf(startDateStr);
+        endDate = java.sql.Date.valueOf(endDateStr);
+        if (startDate.after(endDate)) {
+            request.getSession().setAttribute("error", "Ngày bắt đầu phải trước ngày kết thúc!");
+            response.sendRedirect("promotionManager");
+            return;
+        }
+    } catch (IllegalArgumentException e) {
+        request.getSession().setAttribute("error", "Invalid date format");
+        response.sendRedirect("promotionManager");
+        return;
+    }
+
+    // Validate Discount Percentage
+    BigDecimal discountPercentage;
+    try {
+        discountPercentage = new BigDecimal(discountPercentageStr);
+        if (discountPercentage.compareTo(BigDecimal.ZERO) < 0 || discountPercentage.compareTo(new BigDecimal("100")) > 0) {
+            request.getSession().setAttribute("error", "Tỷ lệ chiết khấu phải trong khoảng từ 0-100");
+            response.sendRedirect("promotionManager");
+            return;
+        }
+    } catch (NumberFormatException e) {
+        request.getSession().setAttribute("error", "Invalid discount percentage format");
+        response.sendRedirect("promotionManager");
+        return;
+    }
+
+    // Xác định trạng thái khuyến mãi
+    LocalDateTime now = LocalDateTime.now();
+    boolean isActive = (startDate.toLocalDate().atStartOfDay().isBefore(now) || startDate.toLocalDate().atStartOfDay().isEqual(now))
+            && (endDate.toLocalDate().atStartOfDay().isAfter(now) || endDate.toLocalDate().atStartOfDay().isEqual(now));
+
+    // Cập nhật thông tin khuyến mãi
+    Promotions p = new Promotions();
+    p.setPromotionID(promotionID);
+    p.setTitle(title);
+    p.setDescription(description);
+    p.setStartDate(startDate);
+    p.setEndDate(endDate);
+    p.setDiscountPercentage(discountPercentage);
+    p.setIsActive(isActive);
+    p.setUpdatedAt(LocalDateTime.now());
+
+    boolean isSuccess = promotionDAO.updatePromotion(p);
+    if (isSuccess) {
+        request.getSession().setAttribute("success", "Chương trình khuyến mãi được cập nhật thành công!");
+    } else {
+        request.getSession().setAttribute("error", "Database error occurred");
+    }
+
+    response.sendRedirect("promotionManager");
     }
 
     @Override
