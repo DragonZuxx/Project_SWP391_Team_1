@@ -74,7 +74,7 @@
         <jsp:include page="navbar.jsp"/>
         <section class="section-pagetop bg-light">
             <div class="container">
-<h3 class="title-page">Top sản phẩm bán chạy nhất</h3>
+                <h3 class="title-page">Top sản phẩm bán chạy nhất</h3>
             </div> 
         </section>
         <section class="section-content padding-y">
@@ -96,7 +96,26 @@
                                 <div class="book-details">
                                     <h5>${book.getTitle()}</h5>
                                     <p>Nhà xuất bản: ${book.getPublisher()}</p>
-                                    <p>Giá: <fmt:formatNumber value="${book.getPrice()}" type="currency" currencySymbol="VND"/></p>
+                                    <p>Giá: <c:choose>
+                                            <c:when test="${empty requestScope.promotions}">
+                                                <!-- If no promotion -->
+                                                <span class="price mt-1 fw-bold">
+                                                    <fmt:formatNumber pattern="#,##0" value="${book.getPrice()}"/>₫
+                                                </span>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <!-- If there is a promotion -->
+                                                <span class="price mt-1 fw-bold">
+                                                    <fmt:formatNumber pattern="#,##0" value="${book.getPrice() * (100 - requestScope.promotions.getDiscountPercentage()) / 100}"/>₫
+                                                </span>
+                                                <span class="ms-2 text-muted text-decoration-line-through">
+                                                    <fmt:formatNumber pattern="#,##0" value="${book.getPrice()}"/>₫
+                                                </span>
+                                                <span class="ms-2 badge bg-info">
+                                                    -<fmt:formatNumber pattern="#,##0" value="${requestScope.promotions.getDiscountPercentage()}"/>%
+                                                </span>
+                                            </c:otherwise>
+                                        </c:choose>
                                     <p>Số lượng đã bán: ${book.getSoldQuantity()}</p>
 
                                 </div>
@@ -123,7 +142,7 @@
                         </nav>
                     </c:if>
                 </div>
-<div class="related-products mt-5">
+                <div class="related-products mt-5">
                     <h2>Sản Phẩm Đề Xuất</h2>
                     <div class="product-list">
                         <c:forEach var="product" items="${requestScope.bookrelated}">
@@ -162,7 +181,7 @@
                         </c:forEach>
                     </div>
                 </div>
-</div>
+            </div>
         </section>
         <jsp:include page="_footer.jsp"/>
         <script src="<c:url value='/js/bootstrap.bundle.min.js'/>"></script>
