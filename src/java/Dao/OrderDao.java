@@ -566,12 +566,21 @@ public void autoUpdateOrderStatus(int orderId) {
                     timer.schedule(new TimerTask() {
                         public void run() {
                             if (updateOrderStatus(orderId, "Đã nhận được hàng")) {
-                                System.out.println("Đơn hàng " + orderId + " đã được cập nhật thành 'Đã nhận được hàng'.");
+                                  System.out.println("Order " + orderId + " has been updated to 'Đã nhận được hàng'.");
+
+                                // Also update the PaymentDetails table
+                                LocalDateTime now = LocalDateTime.now();
+                                boolean paymentUpdated = updatePaymentDetail(orderId, "Đã Thanh Toán", now);
+                                if (paymentUpdated) {
+                                    System.out.println("Payment details for order " + orderId + " have been updated.");
+                                } else {
+                                    System.out.println("Failed to update payment details for order " + orderId + ".");
+                                }
                             } else {
                                 System.out.println("Không thể cập nhật trạng thái đơn hàng " + orderId + ".");
                             }
                         }
-                    }, 10L * 24 * 60 * 60 * 1000); 
+                    }, 10L * 24 * 60 * 60 * 1000); // 1phút 1L * 60 * 1000;
                 }
             }
         } else {
@@ -595,6 +604,21 @@ private boolean updateOrderStatus(int orderId, String status) {
         System.out.println("Lỗi khi cập nhật trạng thái đơn hàng: " + e.getMessage());
         return false;
     }
+}
+
+public boolean updatePaymentDetail(int orderID, String newStatus, LocalDateTime update) {
+    try {
+        String sql = "UPDATE PaymentDetails SET PaymentStatus = ?, UpdatedAt = ? WHERE OrderID = ?";
+        stm = connection.prepareStatement(sql);
+        stm.setString(1, newStatus);
+        stm.setTimestamp(2, java.sql.Timestamp.valueOf(update));
+        stm.setInt(3, orderID);
+        int result = stm.executeUpdate();
+        return result > 0;
+    } catch (Exception e) {
+        System.out.println(e);
+    }
+    return false;
 }
 
     public static void main(String[] args) {
